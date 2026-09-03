@@ -1,0 +1,48 @@
+{
+  "meeting_id": "manual-work-ja",
+  "fixture": "evals/fixtures/manual-work-ja.jsonl",
+  "lang": "ja",
+  "pain_category": "manual_work",
+  "checkpoints": [
+    {
+      "name": "after_manual_work_detected",
+      "after_event_seq": 0,
+      "pain_category": "manual_work",
+      "known_facts": { "frequency": "毎朝" },
+      "open_gaps_exclude": ["frequency"],
+      "ask_now_gap": "business_impact",
+      "no_active_suggestion_gaps": ["frequency"]
+    },
+    {
+      "name": "after_business_impact_answered",
+      "after_event_seq": 1,
+      "known_facts": { "business_impact": "出荷レポートが遅れる" },
+      "answered_gaps": ["business_impact"],
+      "ask_now_gap": "volume"
+    },
+    {
+      "name": "after_volume_known",
+      "after_event_seq": 2,
+      "known_facts": { "volume": "200件" },
+      "ask_now_gap": "time_cost"
+    },
+    {
+      "name": "after_time_cost_known",
+      "after_event_seq": 3,
+      "known_facts": { "time_cost": "30分" },
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "after_owner_known",
+      "after_event_seq": 4,
+      "known_facts": { "owner": "山田さん" },
+      "ask_now_gap": "reason_manual"
+    },
+    {
+      "name": "after_reason_known",
+      "after_event_seq": 5,
+      "known_facts": { "reason_manual": "連携未対応" },
+      "ask_now_gap": "success_condition"
+    }
+  ]
+}

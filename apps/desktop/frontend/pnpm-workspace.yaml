@@ -1,0 +1,27 @@
+packages:
+  - "."
+
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+
+overrides:
+  axios: 1.18.0
+  browserslist: 4.28.7
+  brace-expansion: 5.0.9
+  form-data: 4.0.6
+  joi: 17.13.4
+  js-yaml: 4.3.1
+  linkify-it: 5.0.2
+  markdown-it: 14.3.0
+  nanoid: 3.3.18
+  postcss: 8.5.23
+  postcss-selector-parser: 6.1.3
+  prosemirror-model: 1.25.3
+  prosemirror-state: 1.4.3
+  prosemirror-tables: 1.8.1
+  prosemirror-transform: 1.10.4
+  prosemirror-view: 1.41.3
+  sharp: 0.35.0
+  shell-quote: 1.10.0
+  uuid: 11.1.1

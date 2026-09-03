@@ -1,0 +1,5 @@
+{"speaker": "물류 담당자", "text": "WMS와 NetSuite의 재고 데이터가 일치하지 않습니다.", "offset_ms": 0}
+{"speaker": "물류 담당자", "text": "매일 아침 수동으로 수정합니다.", "offset_ms": 8000}
+{"speaker": "PM", "text": "현재 어떤 시스템을 기준으로 사용합니까?", "offset_ms": 16000}
+{"speaker": "물류 담당자", "text": "현재 WMS 데이터를 기준 정보로 사용합니다.", "offset_ms": 24000}
+{"speaker": "물류 담당자", "text": "이 차이 때문에 출하가 지연됩니다.", "offset_ms": 32000}

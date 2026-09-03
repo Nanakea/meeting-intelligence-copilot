@@ -1,0 +1,4 @@
+{"speaker": "A", "text": "Good morning, thanks for joining.", "offset_ms": 0}
+{"speaker": "B", "text": "Good morning, can you see my screen okay?", "offset_ms": 4000}
+{"speaker": "A", "text": "Yes, looks good.", "offset_ms": 9000}
+{"speaker": "B", "text": "Great, let's get started.", "offset_ms": 13000}

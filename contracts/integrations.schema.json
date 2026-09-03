@@ -1,0 +1,896 @@
+{
+  "$defs": {
+    "DataQualityFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_id": {
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 1200,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "detected_at": {
+          "format": "date-time",
+          "title": "Detected At",
+          "type": "string"
+        },
+        "finding_id": {
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "fingerprint": {
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "status": {
+          "default": "open",
+          "enum": [
+            "open",
+            "confirmed",
+            "dismissed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "fingerprint",
+        "run_id",
+        "connector_id",
+        "rule_id",
+        "severity",
+        "title",
+        "description",
+        "source_reference"
+      ],
+      "title": "DataQualityFinding",
+      "type": "object"
+    },
+    "DataQualityFindingReview": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "confirm",
+            "dismiss"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "expected_revision",
+        "action"
+      ],
+      "title": "DataQualityFindingReview",
+      "type": "object"
+    },
+    "DataQualityRule": {
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 16,
+          "title": "Fields",
+          "type": "array"
+        },
+        "kind": {
+          "$ref": "#/$defs/DataQualityRuleKind"
+        },
+        "pack_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Pack Id",
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "maxProperties": 24,
+          "title": "Parameters",
+          "type": "object"
+        },
+        "record_type": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Record Type",
+          "type": "string"
+        },
+        "rule_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "trusted": {
+          "default": false,
+          "title": "Trusted",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rule_id",
+        "pack_id",
+        "kind",
+        "severity",
+        "record_type"
+      ],
+      "title": "DataQualityRule",
+      "type": "object"
+    },
+    "DataQualityRuleKind": {
+      "enum": [
+        "required_value",
+        "duplicate_key",
+        "code_list",
+        "broken_reference",
+        "type_mismatch",
+        "currency_mismatch",
+        "subsidiary_mismatch",
+        "document_record_conflict",
+        "schema_drift",
+        "threshold"
+      ],
+      "title": "DataQualityRuleKind",
+      "type": "string"
+    },
+    "DataQualityRulePack": {
+      "additionalProperties": false,
+      "properties": {
+        "installed_at": {
+          "format": "date-time",
+          "title": "Installed At",
+          "type": "string"
+        },
+        "issuer": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Issuer",
+          "type": "string"
+        },
+        "manifest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Manifest Sha256",
+          "type": "string"
+        },
+        "pack_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Pack Id",
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/DataQualityRule"
+          },
+          "maxItems": 2000,
+          "minItems": 1,
+          "title": "Rules",
+          "type": "array"
+        },
+        "signature": {
+          "maxLength": 512,
+          "minLength": 40,
+          "title": "Signature",
+          "type": "string"
+        },
+        "trusted": {
+          "const": true,
+          "default": true,
+          "title": "Trusted",
+          "type": "boolean"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pack_id",
+        "version",
+        "issuer",
+        "rules",
+        "manifest_sha256",
+        "signature"
+      ],
+      "title": "DataQualityRulePack",
+      "type": "object"
+    },
+    "DataQualityRun": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "connector_id": {
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "detail_code": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail Code"
+        },
+        "finding_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Finding Count",
+          "type": "integer"
+        },
+        "inspected_records": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Inspected Records",
+          "type": "integer"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "running",
+            "completed",
+            "degraded"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "connector_id",
+        "status"
+      ],
+      "title": "DataQualityRun",
+      "type": "object"
+    },
+    "DataQualityRunRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "changed_only": {
+          "default": true,
+          "title": "Changed Only",
+          "type": "boolean"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "rule_pack_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 16,
+          "title": "Rule Pack Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "connector_id"
+      ],
+      "title": "DataQualityRunRequest",
+      "type": "object"
+    },
+    "DeliveryStatus": {
+      "enum": [
+        "drafted",
+        "pending_confirmation",
+        "approved",
+        "executing",
+        "succeeded",
+        "failed",
+        "delivery_unknown",
+        "cancelled"
+      ],
+      "title": "DeliveryStatus",
+      "type": "string"
+    },
+    "DocumentRoutingAction": {
+      "enum": [
+        "copy",
+        "move"
+      ],
+      "title": "DocumentRoutingAction",
+      "type": "string"
+    },
+    "DocumentRoutingDestination": {
+      "additionalProperties": false,
+      "properties": {
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Aliases",
+          "type": "array"
+        },
+        "destination_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Destination Ref",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "partner_references": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 50,
+          "minItems": 1,
+          "title": "Partner References",
+          "type": "array"
+        }
+      },
+      "required": [
+        "destination_ref",
+        "label"
+      ],
+      "title": "DocumentRoutingDestination",
+      "type": "object"
+    },
+    "DocumentRoutingProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/DocumentRoutingAction",
+          "default": "copy"
+        },
+        "artifact_id": {
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "destination_label": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Destination Label",
+          "type": "string"
+        },
+        "destination_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Destination Ref",
+          "type": "string"
+        },
+        "partner_label": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Partner Label",
+          "type": "string"
+        },
+        "partner_reference": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Partner Reference",
+          "type": "string"
+        },
+        "proposal_id": {
+          "title": "Proposal Id",
+          "type": "string"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "source_reference": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "status": {
+          "default": "proposed",
+          "enum": [
+            "proposed",
+            "completed",
+            "failed",
+            "cancelled"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "proposal_id",
+        "artifact_id",
+        "source_reference",
+        "partner_reference",
+        "partner_label",
+        "destination_ref",
+        "destination_label",
+        "confidence"
+      ],
+      "title": "DocumentRoutingProposal",
+      "type": "object"
+    },
+    "DocumentRoutingReview": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "execute",
+            "cancel"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "routing_action": {
+          "$ref": "#/$defs/DocumentRoutingAction",
+          "default": "copy"
+        }
+      },
+      "required": [
+        "expected_revision",
+        "action"
+      ],
+      "title": "DocumentRoutingReview",
+      "type": "object"
+    },
+    "ExternalActionCreateRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "destination_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Destination Ref",
+          "type": "string"
+        },
+        "finding_id": {
+          "title": "Finding Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "connector_id",
+        "destination_ref",
+        "finding_id"
+      ],
+      "title": "ExternalActionCreateRequest",
+      "type": "object"
+    },
+    "ExternalActionDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "action_id": {
+          "title": "Action Id",
+          "type": "string"
+        },
+        "approval_origin": {
+          "anyOf": [
+            {
+              "enum": [
+                "user",
+                "trusted_rule"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approval Origin"
+        },
+        "connector_id": {
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "contains_sensitive_content": {
+          "default": false,
+          "title": "Contains Sensitive Content",
+          "type": "boolean"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "destination_label": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Destination Label",
+          "type": "string"
+        },
+        "destination_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Destination Ref",
+          "type": "string"
+        },
+        "finding_id": {
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "finding_revision": {
+          "minimum": 0,
+          "title": "Finding Revision",
+          "type": "integer"
+        },
+        "fingerprint": {
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ExternalActionKind"
+        },
+        "rendered_preview": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Rendered Preview",
+          "type": "string"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/DeliveryStatus",
+          "default": "pending_confirmation"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action_id",
+        "fingerprint",
+        "kind",
+        "connector_id",
+        "destination_ref",
+        "destination_label",
+        "finding_id",
+        "finding_revision",
+        "severity",
+        "source_reference",
+        "rendered_preview"
+      ],
+      "title": "ExternalActionDraft",
+      "type": "object"
+    },
+    "ExternalActionEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "action_id": {
+          "title": "Action Id",
+          "type": "string"
+        },
+        "approval_origin": {
+          "anyOf": [
+            {
+              "enum": [
+                "user",
+                "trusted_rule"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approval Origin"
+        },
+        "detail_code": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail Code"
+        },
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "from_status": {
+          "$ref": "#/$defs/DeliveryStatus"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "to_status": {
+          "$ref": "#/$defs/DeliveryStatus"
+        }
+      },
+      "required": [
+        "event_id",
+        "action_id",
+        "from_status",
+        "to_status",
+        "revision"
+      ],
+      "title": "ExternalActionEvent",
+      "type": "object"
+    },
+    "ExternalActionKind": {
+      "enum": [
+        "teams_notification",
+        "slack_notification",
+        "netsuite_review_record",
+        "github_issue",
+        "gitlab_issue",
+        "jira_work_item",
+        "azure_boards_work_item",
+        "servicenow_change"
+      ],
+      "title": "ExternalActionKind",
+      "type": "string"
+    },
+    "NotificationPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "cooldown_minutes": {
+          "default": 60,
+          "maximum": 10080,
+          "minimum": 5,
+          "title": "Cooldown Minutes",
+          "type": "integer"
+        },
+        "destination_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Destination Ref",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "minimum_severity": {
+          "default": "high",
+          "enum": [
+            "high",
+            "critical"
+          ],
+          "title": "Minimum Severity",
+          "type": "string"
+        },
+        "policy_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "trusted_rule_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Trusted Rule Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "policy_id",
+        "connector_id",
+        "destination_ref"
+      ],
+      "title": "NotificationPolicy",
+      "type": "object"
+    },
+    "PartnerClassification": {
+      "additionalProperties": false,
+      "properties": {
+        "ambiguous": {
+          "default": false,
+          "title": "Ambiguous",
+          "type": "boolean"
+        },
+        "artifact_id": {
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "classification_id": {
+          "title": "Classification Id",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "integer"
+        },
+        "matched_values": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 16,
+          "title": "Matched Values",
+          "type": "array"
+        },
+        "partner_label": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Partner Label",
+          "type": "string"
+        },
+        "partner_reference": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Partner Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "classification_id",
+        "artifact_id",
+        "partner_reference",
+        "partner_label",
+        "confidence"
+      ],
+      "title": "PartnerClassification",
+      "type": "object"
+    }
+  },
+  "title": "MeetingIntelligenceIntegrationContracts"
+}

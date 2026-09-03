@@ -1,0 +1,1708 @@
+{
+  "$defs": {
+    "DocumentClassification": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "classification_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Classification Id",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "integer"
+        },
+        "document_kind": {
+          "$ref": "#/$defs/DocumentKind"
+        },
+        "labels": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "maxProperties": 16,
+          "title": "Labels",
+          "type": "object"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/DocumentLifecycleState",
+          "default": "proposed"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 16,
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "reviewed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewed At"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "revision_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Revision Id",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "classification_id",
+        "artifact_id",
+        "revision_id",
+        "source_reference",
+        "document_kind",
+        "confidence"
+      ],
+      "title": "DocumentClassification",
+      "type": "object"
+    },
+    "DocumentClassificationReview": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "approve",
+            "correct",
+            "archive"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "document_kind": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DocumentKind"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "expected_revision": {
+          "minimum": 1,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "labels": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "maxProperties": 16,
+          "title": "Labels",
+          "type": "object"
+        }
+      },
+      "required": [
+        "expected_revision",
+        "action"
+      ],
+      "title": "DocumentClassificationReview",
+      "type": "object"
+    },
+    "DocumentDispositionProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "classification_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Classification Id",
+          "type": "string"
+        },
+        "collection": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Collection",
+          "type": "string"
+        },
+        "destination_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Destination Ref"
+        },
+        "disposition_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Disposition Id",
+          "type": "string"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "routing_action": {
+          "default": "copy",
+          "enum": [
+            "copy",
+            "move"
+          ],
+          "title": "Routing Action",
+          "type": "string"
+        },
+        "safe_filename": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Safe Filename",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "status": {
+          "default": "proposed",
+          "enum": [
+            "proposed",
+            "reviewed",
+            "executing",
+            "completed",
+            "failed",
+            "cancelled"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "disposition_id",
+        "classification_id",
+        "source_reference",
+        "safe_filename",
+        "collection"
+      ],
+      "title": "DocumentDispositionProposal",
+      "type": "object"
+    },
+    "DocumentDispositionReview": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "approve",
+            "cancel"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 1,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "routing_action": {
+          "default": "copy",
+          "enum": [
+            "copy",
+            "move"
+          ],
+          "title": "Routing Action",
+          "type": "string"
+        }
+      },
+      "required": [
+        "expected_revision",
+        "action"
+      ],
+      "title": "DocumentDispositionReview",
+      "type": "object"
+    },
+    "DocumentInbox": {
+      "additionalProperties": false,
+      "properties": {
+        "classifications": {
+          "items": {
+            "$ref": "#/$defs/DocumentClassification"
+          },
+          "maxItems": 5000,
+          "title": "Classifications",
+          "type": "array"
+        },
+        "dispositions": {
+          "items": {
+            "$ref": "#/$defs/DocumentDispositionProposal"
+          },
+          "maxItems": 5000,
+          "title": "Dispositions",
+          "type": "array"
+        },
+        "duplicate_groups": {
+          "items": {
+            "$ref": "#/$defs/DuplicateDocumentGroup"
+          },
+          "maxItems": 1000,
+          "title": "Duplicate Groups",
+          "type": "array"
+        }
+      },
+      "title": "DocumentInbox",
+      "type": "object"
+    },
+    "DocumentKind": {
+      "enum": [
+        "requirement",
+        "architecture",
+        "adr",
+        "interface",
+        "data_mapping",
+        "nfr_security",
+        "test",
+        "cutover",
+        "operations",
+        "general"
+      ],
+      "title": "DocumentKind",
+      "type": "string"
+    },
+    "DocumentLifecycleState": {
+      "enum": [
+        "unclassified",
+        "proposed",
+        "reviewed",
+        "approved",
+        "superseded",
+        "archived"
+      ],
+      "title": "DocumentLifecycleState",
+      "type": "string"
+    },
+    "DocumentOperationPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "default": "copy",
+          "enum": [
+            "copy",
+            "move"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "completed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "destination_ref": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Destination Ref",
+          "type": "string"
+        },
+        "disposition_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Disposition Id",
+          "type": "string"
+        },
+        "operation_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Operation Id",
+          "type": "string"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "source_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Hash",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "status": {
+          "default": "ready",
+          "enum": [
+            "ready",
+            "completed",
+            "failed",
+            "rolled_back"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation_id",
+        "disposition_id",
+        "source_reference",
+        "destination_ref",
+        "source_hash"
+      ],
+      "title": "DocumentOperationPlan",
+      "type": "object"
+    },
+    "DocumentScanPhase": {
+      "enum": [
+        "idle",
+        "scanning",
+        "ready",
+        "degraded",
+        "unavailable"
+      ],
+      "title": "DocumentScanPhase",
+      "type": "string"
+    },
+    "DocumentScanStatus": {
+      "additionalProperties": false,
+      "properties": {
+        "detail_code": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail Code"
+        },
+        "extraction_methods": {
+          "items": {
+            "enum": [
+              "native",
+              "ocr"
+            ],
+            "type": "string"
+          },
+          "maxItems": 2,
+          "title": "Extraction Methods",
+          "type": "array"
+        },
+        "failed_sources": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Failed Sources",
+          "type": "integer"
+        },
+        "indexed_revisions": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Indexed Revisions",
+          "type": "integer"
+        },
+        "last_success_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Success At"
+        },
+        "ocr_status": {
+          "default": "disabled",
+          "enum": [
+            "disabled",
+            "ready",
+            "degraded",
+            "unavailable"
+          ],
+          "title": "Ocr Status",
+          "type": "string"
+        },
+        "phase": {
+          "$ref": "#/$defs/DocumentScanPhase",
+          "default": "idle"
+        },
+        "scanned_sources": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Scanned Sources",
+          "type": "integer"
+        }
+      },
+      "title": "DocumentScanStatus",
+      "type": "object"
+    },
+    "DuplicateDocumentGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "integer"
+        },
+        "group_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Group Id",
+          "type": "string"
+        },
+        "relation": {
+          "enum": [
+            "exact_duplicate",
+            "possible_revision"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "reviewed": {
+          "default": false,
+          "title": "Reviewed",
+          "type": "boolean"
+        },
+        "source_references": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "minItems": 2,
+          "title": "Source References",
+          "type": "array"
+        }
+      },
+      "required": [
+        "group_id",
+        "source_references",
+        "relation",
+        "confidence"
+      ],
+      "title": "DuplicateDocumentGroup",
+      "type": "object"
+    },
+    "ERPControlTemplate": {
+      "additionalProperties": false,
+      "properties": {
+        "control_codes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Control Codes",
+          "type": "array"
+        },
+        "process": {
+          "$ref": "#/$defs/ERPProcess"
+        },
+        "required_record_types": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Required Record Types",
+          "type": "array"
+        },
+        "template_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Template Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "template_id",
+        "process",
+        "title",
+        "required_record_types",
+        "control_codes"
+      ],
+      "title": "ERPControlTemplate",
+      "type": "object"
+    },
+    "ERPGovernanceDashboard": {
+      "additionalProperties": false,
+      "properties": {
+        "active_processes": {
+          "items": {
+            "$ref": "#/$defs/ERPProcess"
+          },
+          "maxItems": 5,
+          "title": "Active Processes",
+          "type": "array"
+        },
+        "findings_by_severity": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Findings By Severity",
+          "type": "object"
+        },
+        "findings_by_status": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Findings By Status",
+          "type": "object"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "ownerless_findings": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Ownerless Findings",
+          "type": "integer"
+        },
+        "runs": {
+          "items": {
+            "$ref": "#/$defs/ERPGovernanceRun"
+          },
+          "maxItems": 100,
+          "title": "Runs",
+          "type": "array"
+        }
+      },
+      "title": "ERPGovernanceDashboard",
+      "type": "object"
+    },
+    "ERPGovernanceRecommendation": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "risk",
+            "action",
+            "issue_draft",
+            "mapping_change"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "recommendation_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Recommendation Id",
+          "type": "string"
+        },
+        "requires_review": {
+          "const": true,
+          "default": true,
+          "title": "Requires Review",
+          "type": "boolean"
+        },
+        "source_reference": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "recommendation_id",
+        "kind",
+        "title",
+        "source_reference",
+        "reason"
+      ],
+      "title": "ERPGovernanceRecommendation",
+      "type": "object"
+    },
+    "ERPGovernanceRun": {
+      "additionalProperties": false,
+      "properties": {
+        "active_templates": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Active Templates",
+          "type": "array"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "detail_code": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail Code"
+        },
+        "finding_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Finding Count",
+          "type": "integer"
+        },
+        "inactive_templates": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Inactive Templates",
+          "type": "array"
+        },
+        "recommendations": {
+          "items": {
+            "$ref": "#/$defs/ERPGovernanceRecommendation"
+          },
+          "maxItems": 500,
+          "title": "Recommendations",
+          "type": "array"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "degraded"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "connector_id",
+        "status"
+      ],
+      "title": "ERPGovernanceRun",
+      "type": "object"
+    },
+    "ERPGovernanceRunRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "changed_only": {
+          "default": true,
+          "title": "Changed Only",
+          "type": "boolean"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "processes": {
+          "items": {
+            "$ref": "#/$defs/ERPProcess"
+          },
+          "maxItems": 5,
+          "title": "Processes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "connector_id"
+      ],
+      "title": "ERPGovernanceRunRequest",
+      "type": "object"
+    },
+    "ERPMetadataBaseline": {
+      "additionalProperties": false,
+      "properties": {
+        "captured_at": {
+          "format": "date-time",
+          "title": "Captured At",
+          "type": "string"
+        },
+        "changed_record_types": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 200,
+          "title": "Changed Record Types",
+          "type": "array"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "metadata_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Metadata Hash",
+          "type": "string"
+        },
+        "prior_metadata_hash": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prior Metadata Hash"
+        },
+        "status": {
+          "enum": [
+            "initial",
+            "unchanged",
+            "changed"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "connector_id",
+        "metadata_hash",
+        "status"
+      ],
+      "title": "ERPMetadataBaseline",
+      "type": "object"
+    },
+    "ERPProcess": {
+      "enum": [
+        "order_to_cash",
+        "procure_to_pay",
+        "inventory",
+        "project_to_cash",
+        "financial_close"
+      ],
+      "title": "ERPProcess",
+      "type": "string"
+    },
+    "ImprovementCohortMetric": {
+      "additionalProperties": false,
+      "properties": {
+        "baseline_score": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Baseline Score",
+          "type": "number"
+        },
+        "candidate_score": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Candidate Score",
+          "type": "number"
+        },
+        "cohort": {
+          "pattern": "^[a-z0-9_.:-]{1,120}$",
+          "title": "Cohort",
+          "type": "string"
+        },
+        "regression": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Regression",
+          "type": "number"
+        },
+        "sample_count": {
+          "minimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "cohort",
+        "sample_count",
+        "baseline_score",
+        "candidate_score",
+        "regression"
+      ],
+      "title": "ImprovementCohortMetric",
+      "type": "object"
+    },
+    "ImprovementEvaluation": {
+      "additionalProperties": false,
+      "properties": {
+        "active_profile_hash": {
+          "default": "0000000000000000000000000000000000000000000000000000000000000000",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Active Profile Hash",
+          "type": "string"
+        },
+        "blocking_reasons": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Blocking Reasons",
+          "type": "array"
+        },
+        "cohort_metrics": {
+          "items": {
+            "$ref": "#/$defs/ImprovementCohortMetric"
+          },
+          "maxItems": 128,
+          "title": "Cohort Metrics",
+          "type": "array"
+        },
+        "corpus_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Corpus Hash",
+          "type": "string"
+        },
+        "detail_code": {
+          "maxLength": 80,
+          "title": "Detail Code",
+          "type": "string"
+        },
+        "eligible": {
+          "title": "Eligible",
+          "type": "boolean"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "evaluation_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Evaluation Id",
+          "type": "string"
+        },
+        "holdout_snapshot_hash": {
+          "default": "0000000000000000000000000000000000000000000000000000000000000000",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Holdout Snapshot Hash",
+          "type": "string"
+        },
+        "independent_case_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Independent Case Count",
+          "type": "integer"
+        },
+        "independent_corpus_hash": {
+          "default": "0000000000000000000000000000000000000000000000000000000000000000",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Independent Corpus Hash",
+          "type": "string"
+        },
+        "independent_pass_rate": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Independent Pass Rate",
+          "type": "number"
+        },
+        "metrics": {
+          "$ref": "#/$defs/ImprovementMetrics"
+        },
+        "proposal_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Proposal Id",
+          "type": "string"
+        },
+        "train_snapshot_hash": {
+          "default": "0000000000000000000000000000000000000000000000000000000000000000",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Train Snapshot Hash",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evaluation_id",
+        "proposal_id",
+        "corpus_hash",
+        "metrics",
+        "eligible",
+        "detail_code"
+      ],
+      "title": "ImprovementEvaluation",
+      "type": "object"
+    },
+    "ImprovementMetrics": {
+      "additionalProperties": false,
+      "properties": {
+        "baseline_ndcg_at_5": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Baseline Ndcg At 5",
+          "type": "number"
+        },
+        "candidate_ndcg_at_5": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Candidate Ndcg At 5",
+          "type": "number"
+        },
+        "holdout_count": {
+          "minimum": 0,
+          "title": "Holdout Count",
+          "type": "integer"
+        },
+        "maximum_cohort_regression": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Maximum Cohort Regression",
+          "type": "number"
+        },
+        "ndcg_improvement": {
+          "maximum": 1.0,
+          "minimum": -1.0,
+          "title": "Ndcg Improvement",
+          "type": "number"
+        },
+        "precision": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Precision",
+          "type": "number"
+        },
+        "recall": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Recall",
+          "type": "number"
+        },
+        "sample_count": {
+          "minimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "train_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Train Count",
+          "type": "integer"
+        },
+        "unauthorized_results": {
+          "minimum": 0,
+          "title": "Unauthorized Results",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sample_count",
+        "holdout_count",
+        "precision",
+        "baseline_ndcg_at_5",
+        "candidate_ndcg_at_5",
+        "ndcg_improvement",
+        "maximum_cohort_regression",
+        "unauthorized_results"
+      ],
+      "title": "ImprovementMetrics",
+      "type": "object"
+    },
+    "ImprovementPackManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "compatibility_api_version": {
+          "const": 13,
+          "default": 13,
+          "title": "Compatibility Api Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "issuer_public_key": {
+          "maxLength": 128,
+          "minLength": 40,
+          "title": "Issuer Public Key",
+          "type": "string"
+        },
+        "pack_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Pack Id",
+          "type": "string"
+        },
+        "payload_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Payload Sha256",
+          "type": "string"
+        },
+        "profile_count": {
+          "maximum": 1000,
+          "minimum": 0,
+          "title": "Profile Count",
+          "type": "integer"
+        },
+        "proposal_count": {
+          "maximum": 1000,
+          "minimum": 0,
+          "title": "Proposal Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": 2,
+          "default": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "pack_id",
+        "issuer_public_key",
+        "proposal_count",
+        "profile_count",
+        "payload_sha256"
+      ],
+      "title": "ImprovementPackManifest",
+      "type": "object"
+    },
+    "ImprovementProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "activated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Activated At"
+        },
+        "configuration": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "maxProperties": 32,
+          "title": "Configuration",
+          "type": "object"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ImprovementProposalKind"
+        },
+        "profile_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "proposal_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Proposal Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "shadow_cycles_completed": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Shadow Cycles Completed",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/ImprovementProfileStatus"
+        }
+      },
+      "required": [
+        "profile_id",
+        "proposal_id",
+        "kind",
+        "revision",
+        "status"
+      ],
+      "title": "ImprovementProfile",
+      "type": "object"
+    },
+    "ImprovementProfileStatus": {
+      "enum": [
+        "shadow",
+        "active",
+        "previous",
+        "needs_revalidation",
+        "blocked_shadow",
+        "retired"
+      ],
+      "title": "ImprovementProfileStatus",
+      "type": "string"
+    },
+    "ImprovementProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "base_profile_revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Base Profile Revision",
+          "type": "integer"
+        },
+        "changes": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "type": "object"
+              }
+            ]
+          },
+          "maxProperties": 32,
+          "title": "Changes",
+          "type": "object"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "evaluation_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evaluation Id"
+        },
+        "fingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "holdout_snapshot_hash": {
+          "default": "0000000000000000000000000000000000000000000000000000000000000000",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Holdout Snapshot Hash",
+          "type": "string"
+        },
+        "independent_corpus_hash": {
+          "default": "0000000000000000000000000000000000000000000000000000000000000000",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Independent Corpus Hash",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ImprovementProposalKind"
+        },
+        "proposal_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Proposal Id",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "rollback_profile_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rollback Profile Id"
+        },
+        "signal_count": {
+          "minimum": 1,
+          "title": "Signal Count",
+          "type": "integer"
+        },
+        "signal_snapshot_hash": {
+          "default": "0000000000000000000000000000000000000000000000000000000000000000",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Signal Snapshot Hash",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/ImprovementProposalStatus",
+          "default": "pending_evaluation"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "train_snapshot_hash": {
+          "default": "0000000000000000000000000000000000000000000000000000000000000000",
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Train Snapshot Hash",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "proposal_id",
+        "fingerprint",
+        "kind",
+        "title",
+        "rationale",
+        "signal_count"
+      ],
+      "title": "ImprovementProposal",
+      "type": "object"
+    },
+    "ImprovementProposalKind": {
+      "enum": [
+        "retrieval_weights",
+        "document_classification",
+        "assurance_rule",
+        "glossary_alias",
+        "routing_mapping",
+        "netsuite_mapping"
+      ],
+      "title": "ImprovementProposalKind",
+      "type": "string"
+    },
+    "ImprovementProposalReview": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "approve",
+            "reject"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 1,
+          "title": "Expected Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "expected_revision",
+        "action"
+      ],
+      "title": "ImprovementProposalReview",
+      "type": "object"
+    },
+    "ImprovementProposalStatus": {
+      "enum": [
+        "pending_evaluation",
+        "evaluated",
+        "approved_shadow",
+        "active",
+        "rejected",
+        "blocked",
+        "retired"
+      ],
+      "title": "ImprovementProposalStatus",
+      "type": "string"
+    },
+    "ImprovementSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "excerpt_retention_days": {
+          "default": 90,
+          "enum": [
+            30,
+            90,
+            365,
+            -1
+          ],
+          "title": "Excerpt Retention Days",
+          "type": "integer"
+        },
+        "paused": {
+          "default": false,
+          "title": "Paused",
+          "type": "boolean"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "title": "ImprovementSettings",
+      "type": "object"
+    },
+    "ImprovementShadowRun": {
+      "additionalProperties": false,
+      "properties": {
+        "comparison": {
+          "$ref": "#/$defs/ShadowComparison"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "corpus_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Corpus Hash",
+          "type": "string"
+        },
+        "cycle": {
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Cycle",
+          "type": "integer"
+        },
+        "profile_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "proposal_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Proposal Id",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "blocked"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "proposal_id",
+        "profile_id",
+        "cycle",
+        "corpus_hash",
+        "comparison",
+        "status"
+      ],
+      "title": "ImprovementShadowRun",
+      "type": "object"
+    },
+    "NetSuiteMappingIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "pattern": "^[a-z][a-z0-9_.-]{0,79}$",
+          "title": "Code",
+          "type": "string"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field"
+        },
+        "record_type": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Record Type",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "record_type",
+        "severity"
+      ],
+      "title": "NetSuiteMappingIssue",
+      "type": "object"
+    },
+    "NetSuiteMappingValidation": {
+      "additionalProperties": false,
+      "properties": {
+        "active_templates": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Active Templates",
+          "type": "array"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "issues": {
+          "items": {
+            "$ref": "#/$defs/NetSuiteMappingIssue"
+          },
+          "maxItems": 1000,
+          "title": "Issues",
+          "type": "array"
+        },
+        "metadata_hash": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metadata Hash"
+        },
+        "persisted_remote_records": {
+          "const": 0,
+          "default": 0,
+          "title": "Persisted Remote Records",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "invalid",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validated_at": {
+          "format": "date-time",
+          "title": "Validated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "connector_id",
+        "status"
+      ],
+      "title": "NetSuiteMappingValidation",
+      "type": "object"
+    },
+    "ShadowComparison": {
+      "additionalProperties": false,
+      "properties": {
+        "active_score": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Active Score",
+          "type": "number"
+        },
+        "applicable_cases": {
+          "minimum": 0,
+          "title": "Applicable Cases",
+          "type": "integer"
+        },
+        "authorization_violations": {
+          "minimum": 0,
+          "title": "Authorization Violations",
+          "type": "integer"
+        },
+        "candidate_score": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Candidate Score",
+          "type": "number"
+        },
+        "invariant_violations": {
+          "minimum": 0,
+          "title": "Invariant Violations",
+          "type": "integer"
+        },
+        "latency_regression_ms": {
+          "minimum": 0.0,
+          "title": "Latency Regression Ms",
+          "type": "number"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "privacy_violations": {
+          "minimum": 0,
+          "title": "Privacy Violations",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "applicable_cases",
+        "active_score",
+        "candidate_score",
+        "latency_regression_ms",
+        "privacy_violations",
+        "authorization_violations",
+        "invariant_violations",
+        "passed"
+      ],
+      "title": "ShadowComparison",
+      "type": "object"
+    }
+  },
+  "title": "MeetingIntelligenceImprovementContracts"
+}

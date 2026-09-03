@@ -1,0 +1,3 @@
+# Signatures cover exact bytes; never apply checkout line-ending conversion.
+frontend/src-tauri/resources/whisper-model-manifest-v1.json -text
+frontend/src-tauri/resources/whisper-model-manifest-v1.sig -text

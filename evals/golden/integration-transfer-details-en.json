@@ -1,0 +1,50 @@
+{
+  "meeting_id": "integration-transfer-details-en",
+  "fixture": "evals/fixtures/integration-transfer-details-en.jsonl",
+  "lang": "en",
+  "pain_category": "integration_failure",
+  "checkpoints": [
+    {
+      "name": "directional_transfer_is_explicit",
+      "after_event_seq": 0,
+      "pain_category": "integration_failure",
+      "known_facts": {
+        "source_system": "EC",
+        "target_system": "SAP",
+        "failure_point": "CSV import"
+      },
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "impact_promotes_owner",
+      "after_event_seq": 2,
+      "known_facts": { "business_impact": "blocks invoice posting" },
+      "no_active_suggestion_gaps": ["business_impact", "failure_point"],
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "error_and_retry_are_evidence",
+      "after_event_seq": 4,
+      "known_facts": {
+        "error_signal": "error code IMP-42",
+        "retry_behavior": "automatic retry (2 attempts)"
+      },
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "all_registered_details_answered",
+      "after_event_seq": 5,
+      "known_facts": { "owner": "integration operations team" },
+      "answered_gaps": [
+        "business_impact",
+        "failure_point",
+        "owner",
+        "retry_behavior",
+        "error_signal",
+        "source_system",
+        "target_system"
+      ],
+      "ask_now_gap": null
+    }
+  ]
+}

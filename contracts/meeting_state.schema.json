@@ -1,0 +1,598 @@
+{
+  "$defs": {
+    "ExtractionOrigin": {
+      "enum": [
+        "deterministic",
+        "semantic_confirmed"
+      ],
+      "title": "ExtractionOrigin",
+      "type": "string"
+    },
+    "FactKind": {
+      "description": "Provenance axis.",
+      "enum": [
+        "evidence",
+        "inference"
+      ],
+      "title": "FactKind",
+      "type": "string"
+    },
+    "FactStatus": {
+      "description": "Lifecycle axis.",
+      "enum": [
+        "active",
+        "superseded",
+        "contradicted"
+      ],
+      "title": "FactStatus",
+      "type": "string"
+    },
+    "GapStatus": {
+      "enum": [
+        "open",
+        "answered"
+      ],
+      "title": "GapStatus",
+      "type": "string"
+    },
+    "InformationGap": {
+      "additionalProperties": false,
+      "properties": {
+        "base_priority": {
+          "title": "Base Priority",
+          "type": "integer"
+        },
+        "gap_id": {
+          "title": "Gap Id",
+          "type": "string"
+        },
+        "meeting_id": {
+          "title": "Meeting Id",
+          "type": "string"
+        },
+        "pain_id": {
+          "title": "Pain Id",
+          "type": "string"
+        },
+        "reopen_count": {
+          "default": 0,
+          "title": "Reopen Count",
+          "type": "integer"
+        },
+        "resolved_by_fact_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resolved By Fact Id"
+        },
+        "slot": {
+          "title": "Slot",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/GapStatus",
+          "default": "open"
+        }
+      },
+      "required": [
+        "gap_id",
+        "meeting_id",
+        "pain_id",
+        "slot",
+        "base_priority"
+      ],
+      "title": "InformationGap",
+      "type": "object"
+    },
+    "Lang": {
+      "enum": [
+        "ja",
+        "en",
+        "ko"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "MeetingFact": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "default": 1.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "contradicts": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Contradicts",
+          "type": "array"
+        },
+        "created_seq": {
+          "title": "Created Seq",
+          "type": "integer"
+        },
+        "evidence_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Event Ids",
+          "type": "array"
+        },
+        "extraction_origin": {
+          "$ref": "#/$defs/ExtractionOrigin",
+          "default": "deterministic"
+        },
+        "fact_id": {
+          "title": "Fact Id",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/FactKind"
+        },
+        "meeting_id": {
+          "title": "Meeting Id",
+          "type": "string"
+        },
+        "pain_id": {
+          "title": "Pain Id",
+          "type": "string"
+        },
+        "slot": {
+          "title": "Slot",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/FactStatus",
+          "default": "active"
+        },
+        "superseded_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Superseded By"
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fact_id",
+        "meeting_id",
+        "pain_id",
+        "slot",
+        "value",
+        "kind",
+        "evidence_event_ids",
+        "created_seq"
+      ],
+      "title": "MeetingFact",
+      "type": "object"
+    },
+    "MeetingState": {
+      "additionalProperties": false,
+      "description": "Versioned aggregate pushed to the frontend as a full snapshot.",
+      "properties": {
+        "ambiguous_routing_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Ambiguous Routing Count",
+          "type": "integer"
+        },
+        "confirmed_semantic_hint_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Confirmed Semantic Hint Ids",
+          "type": "array"
+        },
+        "facts": {
+          "items": {
+            "$ref": "#/$defs/MeetingFact"
+          },
+          "title": "Facts",
+          "type": "array"
+        },
+        "gaps": {
+          "items": {
+            "$ref": "#/$defs/InformationGap"
+          },
+          "title": "Gaps",
+          "type": "array"
+        },
+        "identity_decisions": {
+          "items": {
+            "$ref": "#/$defs/ProblemIdentityDecision"
+          },
+          "title": "Identity Decisions",
+          "type": "array"
+        },
+        "last_event_seq": {
+          "default": -1,
+          "title": "Last Event Seq",
+          "type": "integer"
+        },
+        "meeting_id": {
+          "title": "Meeting Id",
+          "type": "string"
+        },
+        "pain_points": {
+          "items": {
+            "$ref": "#/$defs/PainPoint"
+          },
+          "title": "Pain Points",
+          "type": "array"
+        },
+        "suggestions": {
+          "items": {
+            "$ref": "#/$defs/QuestionSuggestion"
+          },
+          "title": "Suggestions",
+          "type": "array"
+        },
+        "transcript": {
+          "items": {
+            "$ref": "#/$defs/TranscriptEvent"
+          },
+          "title": "Transcript",
+          "type": "array"
+        },
+        "version": {
+          "default": 0,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "meeting_id"
+      ],
+      "title": "MeetingState",
+      "type": "object"
+    },
+    "PainIdentityStatus": {
+      "enum": [
+        "anchored",
+        "provisional"
+      ],
+      "title": "PainIdentityStatus",
+      "type": "string"
+    },
+    "PainPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "created_seq": {
+          "title": "Created Seq",
+          "type": "integer"
+        },
+        "evidence_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Event Ids",
+          "type": "array"
+        },
+        "identity_aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Identity Aliases",
+          "type": "array"
+        },
+        "identity_revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Identity Revision",
+          "type": "integer"
+        },
+        "identity_status": {
+          "$ref": "#/$defs/PainIdentityStatus",
+          "default": "provisional"
+        },
+        "instance_key": {
+          "default": "legacy",
+          "title": "Instance Key",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/FactKind"
+        },
+        "meeting_id": {
+          "title": "Meeting Id",
+          "type": "string"
+        },
+        "merged_into_pain_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Merged Into Pain Id"
+        },
+        "pain_id": {
+          "title": "Pain Id",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/PainStatus",
+          "default": "open"
+        },
+        "subject": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subject"
+        },
+        "template_id": {
+          "title": "Template Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pain_id",
+        "meeting_id",
+        "template_id",
+        "title",
+        "kind",
+        "evidence_event_ids",
+        "created_seq"
+      ],
+      "title": "PainPoint",
+      "type": "object"
+    },
+    "PainStatus": {
+      "enum": [
+        "open",
+        "mitigated"
+      ],
+      "title": "PainStatus",
+      "type": "string"
+    },
+    "ProblemIdentityDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "merge",
+            "keep_separate"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "created_version": {
+          "minimum": 0,
+          "title": "Created Version",
+          "type": "integer"
+        },
+        "decision_id": {
+          "title": "Decision Id",
+          "type": "string"
+        },
+        "pain_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Pain Ids",
+          "type": "array"
+        },
+        "survivor_pain_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Survivor Pain Id"
+        }
+      },
+      "required": [
+        "decision_id",
+        "action",
+        "pain_ids",
+        "created_version"
+      ],
+      "title": "ProblemIdentityDecision",
+      "type": "object"
+    },
+    "QuestionSuggestion": {
+      "additionalProperties": false,
+      "properties": {
+        "gap_id": {
+          "title": "Gap Id",
+          "type": "string"
+        },
+        "priority": {
+          "title": "Priority",
+          "type": "integer"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/$defs/SuggestionRole"
+        },
+        "status": {
+          "$ref": "#/$defs/SuggestionStatus",
+          "default": "active"
+        },
+        "suggestion_id": {
+          "title": "Suggestion Id",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "suggestion_id",
+        "gap_id",
+        "role",
+        "text",
+        "reason",
+        "priority"
+      ],
+      "title": "QuestionSuggestion",
+      "type": "object"
+    },
+    "Speaker": {
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Display Name"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "Speaker",
+      "type": "object"
+    },
+    "SuggestionRole": {
+      "enum": [
+        "ask_now",
+        "follow_up"
+      ],
+      "title": "SuggestionRole",
+      "type": "string"
+    },
+    "SuggestionStatus": {
+      "enum": [
+        "active",
+        "retracted"
+      ],
+      "title": "SuggestionStatus",
+      "type": "string"
+    },
+    "TranscriptEvent": {
+      "additionalProperties": false,
+      "description": "The only input the domain understands. Adapters translate platform payloads into this.",
+      "properties": {
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "is_final": {
+          "default": true,
+          "title": "Is Final",
+          "type": "boolean"
+        },
+        "lang": {
+          "$ref": "#/$defs/Lang"
+        },
+        "meeting_id": {
+          "title": "Meeting Id",
+          "type": "string"
+        },
+        "seq": {
+          "title": "Seq",
+          "type": "integer"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "speaker": {
+          "$ref": "#/$defs/Speaker"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "ts_end": {
+          "title": "Ts End",
+          "type": "number"
+        },
+        "ts_start": {
+          "title": "Ts Start",
+          "type": "number"
+        }
+      },
+      "required": [
+        "event_id",
+        "meeting_id",
+        "seq",
+        "speaker",
+        "text",
+        "lang",
+        "ts_start",
+        "ts_end",
+        "source"
+      ],
+      "title": "TranscriptEvent",
+      "type": "object"
+    }
+  },
+  "title": "MeetingIntelligenceCopilotContracts"
+}

@@ -1,0 +1,14 @@
+{
+  "meeting_id": "manual-work-ko",
+  "fixture": "evals/fixtures/manual-work-ko.jsonl",
+  "lang": "ko",
+  "pain_category": "manual_work",
+  "checkpoints": [
+    {
+      "name": "after_manual_work_detection",
+      "after_event_seq": 0,
+      "known_facts": {"frequency": "매일"},
+      "ask_now_gap": "business_impact"
+    }
+  ]
+}

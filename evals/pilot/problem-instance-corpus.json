@@ -1,0 +1,79 @@
+{
+  "seed": 20260827,
+  "cases_per_group": 20,
+  "hard_negative_cases_per_group": 6,
+  "groups": [
+    {
+      "category": "data_mismatch",
+      "lang": "en",
+      "problems": ["SAP and ERP inventory values do not match.", "NetSuite and Salesforce customer records do not match."],
+      "negative_events": ["SAP and ERP inventory values now match.", "Do NetSuite and Salesforce customer records not match?"]
+    },
+    {
+      "category": "data_mismatch",
+      "lang": "ja",
+      "problems": ["倉庫側とEC側の在庫に差異が出ています。", "SAP側とSalesforce側の顧客データに差異が出ています。"],
+      "negative_events": ["倉庫側とEC側の在庫は今は合っています。", "SAP側とSalesforce側の顧客データに差異がありますか？"]
+    },
+    {
+      "category": "integration_failure",
+      "lang": "en",
+      "problems": ["The order import from SAP into Salesforce fails.", "The invoice transfer from NetSuite into ERP fails."],
+      "negative_events": ["The SAP to Salesforce integration no longer fails.", "Does the invoice transfer from NetSuite into ERP fail?"]
+    },
+    {
+      "category": "integration_failure",
+      "lang": "ja",
+      "problems": ["SAPの注文をSalesforceに取り込むところで失敗しています。", "ECの請求をERPに取り込むところで失敗しています。"],
+      "negative_events": ["SAPからSalesforceへの連携は失敗していません。", "ECの請求をERPに取り込むところで失敗していますか？"]
+    },
+    {
+      "category": "manual_work",
+      "lang": "en",
+      "problems": ["Operations manually copy the order file into a spreadsheet.", "Finance manually copy the invoice file into a spreadsheet."],
+      "negative_events": ["The order file is now automated.", "Do finance staff manually copy the invoice file?"]
+    },
+    {
+      "category": "manual_work",
+      "lang": "ja",
+      "problems": ["注文ファイルを手作業で転記しています。", "請求ファイルを手作業で転記しています。"],
+      "negative_events": ["注文ファイルは自動化されました。", "請求ファイルを手作業で転記していますか？"]
+    },
+    {
+      "category": "process_delay",
+      "lang": "en",
+      "problems": ["Onboarding approval currently takes 8 business days instead of 2.", "The approval process currently takes 9 business days instead of 3."],
+      "negative_events": ["The onboarding process is not delayed.", "Does the approval process currently take 9 business days?"]
+    },
+    {
+      "category": "process_delay",
+      "lang": "ja",
+      "problems": ["承認プロセスは現在8営業日かかり、通常は2営業日です。", "onboardingプロセスは現在9営業日かかり、通常は3営業日です。"],
+      "negative_events": ["承認プロセスは遅れていません。", "onboardingプロセスは現在9営業日かかりますか？"]
+    },
+    {
+      "category": "vague_requirement",
+      "lang": "en",
+      "problems": ["We want the search screen to be easier to use.", "We want the order workflow to be easier to use."],
+      "negative_events": ["The search requirement is clear.", "Should the order workflow be easier to use?"]
+    },
+    {
+      "category": "vague_requirement",
+      "lang": "ja",
+      "problems": ["検索画面をもっと使いやすくしたいです。", "注文ワークフローをもっと使いやすくしたいです。"],
+      "negative_events": ["検索画面の要件は明確です。", "注文ワークフローをもっと使いやすくしますか？"]
+    },
+    {
+      "category": "unclear_ownership",
+      "lang": "en",
+      "problems": ["Ownership remains unclear for discount approval.", "No one is sure who owns vendor approval."],
+      "negative_events": ["Discount approval has a clear owner.", "Who owns vendor approval?"]
+    },
+    {
+      "category": "unclear_ownership",
+      "lang": "ja",
+      "problems": ["値引き承認の担当が曖昧です。", "仕入先承認の担当が曖昧です。"],
+      "negative_events": ["値引き承認の担当は明確です。", "仕入先承認は誰が担当しますか？"]
+    }
+  ]
+}

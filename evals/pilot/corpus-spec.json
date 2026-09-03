@@ -1,0 +1,291 @@
+{
+  "seed": 20260724,
+  "cases_per_category_language": 100,
+  "positive_ratio": 0.7,
+  "negative_frames": {
+    "en": [
+      "If {statement}",
+      "What if {statement}",
+      "Suppose {statement}",
+      "For example, {statement}",
+      "Imagine {statement}",
+      "\"{statement}\" would only be a hypothetical.",
+      "Is it true that {statement}"
+    ],
+    "ja": [
+      "もし{statement}",
+      "仮に{statement}",
+      "たとえば{statement}",
+      "例えば{statement}",
+      "「{statement}」という仮の説明です。",
+      "可能性として、{statement}という状況でしょうか？",
+      "{statement}という話ですか？"
+    ]
+  },
+  "neutral_context": {
+    "en": {
+      "openers": [
+        "Let us review today's operating notes.",
+        "This is the regular project checkpoint.",
+        "The agenda covers the current workflow.",
+        "We can start with the team's latest observations.",
+        "Today's discussion is about normal business operations.",
+        "The group is ready to review the process.",
+        "We have opened the working session.",
+        "The participants have joined the scheduled discussion.",
+        "Let us begin with the current-state walkthrough.",
+        "The meeting is moving to the operational review."
+      ],
+      "closers": [
+        "That covers the current update.",
+        "The team has noted the discussion.",
+        "We can continue with the next agenda item.",
+        "Those are the details available today.",
+        "The group can review the notes afterward.",
+        "That concludes this part of the discussion.",
+        "We will keep the meeting moving."
+      ]
+    },
+    "ja": {
+      "openers": [
+        "本日の業務メモを確認します。",
+        "定例のプロジェクト確認を始めます。",
+        "議題は現在の業務フローです。",
+        "チームの最新状況から確認します。",
+        "今日は通常業務について話します。",
+        "参加者が業務プロセスを確認します。",
+        "作業確認の時間になりました。",
+        "予定していた打ち合わせを始めます。",
+        "現在の流れを順番に確認します。",
+        "会議は業務状況の確認に移ります。"
+      ],
+      "closers": [
+        "現在の共有内容は以上です。",
+        "チームで話した内容を記録します。",
+        "次の議題に進みます。",
+        "本日時点の情報は以上です。",
+        "参加者は後でメモを確認できます。",
+        "この議題の説明を終わります。",
+        "引き続き会議を進めます。"
+      ]
+    }
+  },
+  "groups": [
+    {
+      "category": "data_mismatch",
+      "lang": "ja",
+      "fixture": "evals/fixtures/inventory-mismatch-ja.jsonl",
+      "golden": "evals/golden/inventory-mismatch-ja.json",
+      "positive_pain_variants": [
+        "倉庫側とEC側の在庫に差異が出ています。",
+        "最近、倉庫側とEC側の在庫に差異が出ています。",
+        "倉庫側とEC側で在庫数が合わない状態です。",
+        "倉庫側の在庫とEC側の在庫に差異があります。",
+        "倉庫側とEC側の在庫が一致せず、差異が続いています。"
+      ],
+      "hard_negatives": [
+        "倉庫側とEC側の担当者が会議に参加しています。",
+        "倉庫側とEC側で在庫が合わないのですか？",
+        "倉庫側とEC側の在庫は今は合っています。"
+      ]
+    },
+    {
+      "category": "data_mismatch",
+      "lang": "en",
+      "fixture": "evals/fixtures/data-mismatch-en.jsonl",
+      "golden": "evals/golden/data-mismatch-en.json",
+      "positive_pain_variants": [
+        "Warehouse-side and EC-side inventory counts are mismatched.",
+        "Warehouse-side and EC-side inventory counts are out of sync.",
+        "The warehouse inventory and EC inventory counts do not match.",
+        "Stock counts in the warehouse and EC are mismatched.",
+        "ERP and warehouse inventory counts don't match."
+      ],
+      "hard_negatives": [
+        "Warehouse and EC operations joined the meeting.",
+        "Do the warehouse and EC inventory counts not match?",
+        "The warehouse and EC inventory counts now match."
+      ]
+    },
+    {
+      "category": "integration_failure",
+      "lang": "ja",
+      "fixture": "evals/fixtures/integration-transfer-details-ja.jsonl",
+      "golden": "evals/golden/integration-transfer-details-ja.json",
+      "positive_pain_variants": [
+        "ECのCSVをSAPに取り込むところで失敗しています。",
+        "ECのCSVをSAPに取り込む段階で失敗しています。",
+        "EC側のCSVをSAP側に取り込む途中でエラーが出ています。",
+        "ECのCSVをSAPに取り込む時点で止まっています。",
+        "EC側のCSVをSAPに取り込むところで失敗します。"
+      ],
+      "hard_negatives": [
+        "ECとSAPはAPIで連携しています。",
+        "ECからSAPへの連携は失敗していますか？",
+        "ECからSAPへの連携は失敗していません。"
+      ]
+    },
+    {
+      "category": "integration_failure",
+      "lang": "en",
+      "fixture": "evals/fixtures/integration-transfer-details-en.jsonl",
+      "golden": "evals/golden/integration-transfer-details-en.json",
+      "positive_pain_variants": [
+        "The CSV import from EC into SAP fails before invoice posting.",
+        "The CSV import from EC into SAP stops before invoice posting.",
+        "CSV import from EC into SAP is failing during invoice posting.",
+        "The CSV import from EC to SAP fails before invoice posting.",
+        "Today, the CSV import from EC into SAP fails before invoice posting."
+      ],
+      "hard_negatives": [
+        "EC and SAP are connected by an integration.",
+        "Does the CSV import from EC into SAP fail?",
+        "The EC to SAP integration no longer fails."
+      ]
+    },
+    {
+      "category": "manual_work",
+      "lang": "ja",
+      "fixture": "evals/fixtures/manual-work-ja.jsonl",
+      "golden": "evals/golden/manual-work-ja.json",
+      "positive_pain_variants": [
+        "毎朝、CSVをエクセルに手作業で転記しています。",
+        "毎朝、CSVの行をエクセルへ手で転記しています。",
+        "毎朝、CSVファイルをExcelに手入力しています。",
+        "毎朝、CSV一覧をエクセルへ手動で貼り付けています。",
+        "毎朝、CSVをExcelにコピペする手作業があります。"
+      ],
+      "hard_negatives": [
+        "CSVとエクセルの形式を確認しました。",
+        "CSVを手作業で転記していますか？",
+        "このCSV処理は手作業ではありません。"
+      ]
+    },
+    {
+      "category": "manual_work",
+      "lang": "en",
+      "fixture": "evals/fixtures/manual-work-volume-en.jsonl",
+      "golden": "evals/golden/manual-work-volume-en.json",
+      "positive_pain_variants": [
+        "Every business day, order operations manually copy rows into a spreadsheet.",
+        "Every business day, operations manually copy the order file into a spreadsheet.",
+        "Each business day, order operations copy rows into a spreadsheet by hand.",
+        "Daily, order operations manually copy the order file into a spreadsheet.",
+        "Every day, the operations team copies order rows to a spreadsheet by hand."
+      ],
+      "hard_negatives": [
+        "The spreadsheet contains the order rows.",
+        "Do operations copy the order file by hand?",
+        "The order file is now automated."
+      ]
+    },
+    {
+      "category": "process_delay",
+      "lang": "ja",
+      "fixture": "evals/fixtures/process-delay-ja.jsonl",
+      "golden": "evals/golden/process-delay-ja.json",
+      "positive_pain_variants": [
+        "承認プロセスは現在8営業日かかり、通常は2営業日です。",
+        "承認プロセスは現在8営業日かかり、本来は2営業日です。",
+        "申請の承認は今8営業日かかっていますが、本来2営業日で終わります。",
+        "オンボーディング承認は現在8営業日で、普段は2営業日です。",
+        "承認工程は今8日かかり、通常は2日で完了します。"
+      ],
+      "hard_negatives": [
+        "承認プロセスの説明資料を更新しました。",
+        "承認プロセスは8営業日かかっていますか？",
+        "承認プロセスに遅延はありません。"
+      ]
+    },
+    {
+      "category": "process_delay",
+      "lang": "en",
+      "fixture": "evals/fixtures/process-delay-en.jsonl",
+      "golden": "evals/golden/process-delay-en.json",
+      "positive_pain_variants": [
+        "Onboarding approval currently takes 8 business days instead of 2.",
+        "The approval currently takes 8 business days instead of 2.",
+        "Customer onboarding currently takes 8 business days instead of 2.",
+        "Our onboarding process currently takes 8 business days instead of 2.",
+        "Legal approval currently takes 8 business days instead of 2."
+      ],
+      "hard_negatives": [
+        "The onboarding approval process is documented.",
+        "Does onboarding currently take eight business days?",
+        "There is no process delay in onboarding."
+      ]
+    },
+    {
+      "category": "vague_requirement",
+      "lang": "ja",
+      "fixture": "evals/fixtures/vague-requirement-ja.jsonl",
+      "golden": "evals/golden/vague-requirement-ja.json",
+      "positive_pain_variants": [
+        "検索画面をもっと使いやすくしたいです。",
+        "検索画面をもっと分かりやすくしたいです。",
+        "検索機能を改善してほしいです。",
+        "検索画面を使いやすく改善したいです。",
+        "商品検索を分かりやすくしてほしいです。"
+      ],
+      "hard_negatives": [
+        "検索画面の利用手順を共有します。",
+        "検索画面を使いやすくしてほしいですか？",
+        "検索画面は今のままで問題ありません。"
+      ]
+    },
+    {
+      "category": "vague_requirement",
+      "lang": "en",
+      "fixture": "evals/fixtures/vague-requirement-en.jsonl",
+      "golden": "evals/golden/vague-requirement-en.json",
+      "positive_pain_variants": [
+        "We want the search screen to be easier to use.",
+        "The search screen should be more intuitive.",
+        "We want search to be simpler to use.",
+        "Please improve usability of the search screen.",
+        "The product search needs to be easier to navigate."
+      ],
+      "hard_negatives": [
+        "The search screen is open.",
+        "Should the search screen be easier to use?",
+        "The search screen is already easy to use."
+      ]
+    },
+    {
+      "category": "unclear_ownership",
+      "lang": "ja",
+      "fixture": "evals/fixtures/unclear-ownership-ja.jsonl",
+      "golden": "evals/golden/unclear-ownership-ja.json",
+      "positive_pain_variants": [
+        "値引き承認は誰が担当するか決まっていません。",
+        "値引き承認は責任者が曖昧で、誰が担当するか決まっていない状態です。",
+        "価格例外は明確な担当者がいないため、判断が止まります。",
+        "値引き判断はどの部署が持つか決まっていない状況です。",
+        "価格承認は明確な責任者がいない状態です。"
+      ],
+      "hard_negatives": [
+        "値引き承認は営業部長が担当しています。",
+        "値引き承認は誰が担当するか決まっていますか？",
+        "値引き承認の担当は明確です。"
+      ]
+    },
+    {
+      "category": "unclear_ownership",
+      "lang": "en",
+      "fixture": "evals/fixtures/unclear-ownership-en.jsonl",
+      "golden": "evals/golden/unclear-ownership-en.json",
+      "positive_pain_variants": [
+        "Nobody knows who owns pricing exceptions.",
+        "Pricing exceptions have no clear owner.",
+        "No one is sure who owns pricing exception approval.",
+        "Ownership is unclear for the final pricing decision.",
+        "The pricing exception process has no clear owner."
+      ],
+      "hard_negatives": [
+        "Sales owns the pricing exception decision.",
+        "Is ownership of pricing exceptions unclear?",
+        "Ownership is now clear."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "meeting_id": "vague-requirement-en",
+  "fixture": "evals/fixtures/vague-requirement-en.jsonl",
+  "lang": "en",
+  "pain_category": "vague_requirement",
+  "checkpoints": [
+    {
+      "name": "after_pain_detection",
+      "after_event_seq": 0,
+      "pain_category": "vague_requirement",
+      "ask_now_gap": "expected_behavior"
+    },
+    {
+      "name": "after_current_problem_known",
+      "after_event_seq": 2,
+      "known_facts": {
+        "current_problem": "too many results make the right item hard to find"
+      },
+      "known_facts_absent": ["expected_behavior", "acceptance_criteria"],
+      "ask_now_gap": "expected_behavior"
+    },
+    {
+      "name": "after_expected_behavior_answered",
+      "after_event_seq": 4,
+      "known_facts": {
+        "expected_behavior": "filter results and find the right item right away"
+      },
+      "answered_gaps": ["expected_behavior"],
+      "no_active_suggestion_gaps": ["expected_behavior"],
+      "ask_now_gap": "acceptance_criteria"
+    },
+    {
+      "name": "after_acceptance_criteria_answered",
+      "after_event_seq": 5,
+      "known_facts": {
+        "acceptance_criteria": "new reps can find the item in under 10 seconds"
+      },
+      "answered_gaps": ["acceptance_criteria"],
+      "no_active_suggestion_gaps": ["acceptance_criteria"],
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "after_business_impact_answered",
+      "after_event_seq": 6,
+      "known_facts": { "business_impact": "slows quote preparation" },
+      "answered_gaps": ["business_impact"],
+      "ask_now_gap": "owner"
+    }
+  ]
+}

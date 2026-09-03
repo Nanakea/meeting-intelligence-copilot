@@ -1,0 +1,6 @@
+{"speaker": "Integration Engineer", "text": "The CSV import from EC into SAP fails before invoice posting.", "offset_ms": 0}
+{"speaker": "PM", "text": "What business impact does the integration failure cause?", "offset_ms": 8000}
+{"speaker": "Finance Operations", "text": "The failure blocks invoice posting for new orders.", "offset_ms": 16000}
+{"speaker": "Integration Engineer", "text": "The job reports error code IMP-42.", "offset_ms": 24000}
+{"speaker": "Integration Engineer", "text": "It retries 2 times automatically before operations intervenes.", "offset_ms": 32000}
+{"speaker": "Integration Engineer", "text": "The integration operations team owns this flow.", "offset_ms": 40000}

@@ -1,0 +1,6 @@
+{"speaker": "Customer Operations", "text": "Our customer onboarding approval currently takes 8 business days instead of 2.", "offset_ms": 0}
+{"speaker": "PM", "text": "Which step is the bottleneck?", "offset_ms": 8000}
+{"speaker": "Customer Operations", "text": "The bottleneck is legal review, where requests wait for the compliance team.", "offset_ms": 16000}
+{"speaker": "Sales", "text": "This delay postpones customer onboarding and contract activation.", "offset_ms": 24000}
+{"speaker": "Compliance", "text": "The compliance operations team owns the legal review.", "offset_ms": 32000}
+{"speaker": "Compliance", "text": "The delay occurs during legal review.", "offset_ms": 40000}

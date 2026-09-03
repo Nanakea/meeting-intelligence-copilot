@@ -1,0 +1,4 @@
+{"speaker": "Operations", "text": "Every morning one person downloads the order file and copies the rows into another spreadsheet.", "offset_ms": 0}
+{"speaker": "PM", "text": "How often is that process required?", "offset_ms": 8000}
+{"speaker": "Operations", "text": "It delays our morning shipping report by about an hour.", "offset_ms": 16000}
+{"speaker": "Operations", "text": "And it runs every business day.", "offset_ms": 24000}

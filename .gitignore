@@ -1,0 +1,84 @@
+# ---- Python (backend) ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.python-version
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# ---- Node / frontend ----
+node_modules/
+.pnpm-store/
+apps/web/dist/
+apps/web/.vite/
+*.tsbuildinfo
+pnpm-debug.log*
+npm-debug.log*
+yarn-error.log*
+
+# ---- Local models / runtime artifacts (future; never commit) ----
+# Local model weights, STT binaries, and captured audio must not enter git.
+models/
+*.gguf
+*.bin
+*.wav
+*.mp3
+*.pcm
+
+# ---- Meeting data (privacy: real transcripts must never be committed) ----
+# Only curated synthetic fixtures under fixtures/ are tracked; anything else is ignored.
+recordings/
+transcripts/
+data/local/
+*.local.jsonl
+
+# ---- Secrets / environment ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---- Claude Code (local, per-user) ----
+# Local permission/write-gate overrides must not be committed. Do NOT ignore all of
+# .claude/ — project-scoped agents may be committed later under .claude/agents/.
+.claude/settings.local.json
+.claude/memory/
+.claude/sessions/
+.claude/state/
+apps/api/.claude/
+
+# Local task/harness state is intentionally reviewed before future publication.
+Plans.md
+
+# ---- Editors / OS ----
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.shared.json
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Scratch ----
+scratch/
+tmp/
+*.log
+*.bundle
+
+# Upstream desktop marketing media and non-Windows icon bundles are not product source.
+apps/desktop/docs/*.png
+apps/desktop/docs/*.jpg
+apps/desktop/docs/*.gif
+apps/desktop/frontend/src-tauri/icons/*.icns

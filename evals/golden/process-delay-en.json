@@ -1,0 +1,45 @@
+{
+  "meeting_id": "process-delay-en",
+  "fixture": "evals/fixtures/process-delay-en.jsonl",
+  "lang": "en",
+  "pain_category": "process_delay",
+  "checkpoints": [
+    {
+      "name": "lead_time_delay_detected",
+      "after_event_seq": 0,
+      "pain_category": "process_delay",
+      "known_facts": {
+        "current_lead_time": "8 business days",
+        "normal_lead_time": "2 business days"
+      },
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "question_does_not_fill_bottleneck",
+      "after_event_seq": 1,
+      "known_facts_absent": ["bottleneck"],
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "impact_and_bottleneck_promote_owner",
+      "after_event_seq": 3,
+      "known_facts": {
+        "bottleneck": "legal review",
+        "business_impact": "postpones customer onboarding and contract activation"
+      },
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "owner_promotes_process_step",
+      "after_event_seq": 4,
+      "known_facts": { "owner": "compliance operations team" },
+      "ask_now_gap": "process_step"
+    },
+    {
+      "name": "all_delay_slots_answered",
+      "after_event_seq": 5,
+      "known_facts": { "process_step": "legal review" },
+      "ask_now_gap": null
+    }
+  ]
+}

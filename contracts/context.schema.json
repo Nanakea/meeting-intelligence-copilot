@@ -1,0 +1,4027 @@
+{
+  "$defs": {
+    "AccessLease": {
+      "additionalProperties": false,
+      "properties": {
+        "acl_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Acl Digest",
+          "type": "string"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "issued_at": {
+          "format": "date-time",
+          "title": "Issued At",
+          "type": "string"
+        },
+        "lease_id": {
+          "pattern": "^[a-f0-9]{32}$",
+          "title": "Lease Id",
+          "type": "string"
+        },
+        "principal_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Principal Hash",
+          "type": "string"
+        },
+        "selection_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 200,
+          "title": "Selection Ids",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/AccessLeaseStatus",
+          "default": "active"
+        }
+      },
+      "required": [
+        "lease_id",
+        "connector_id",
+        "principal_hash",
+        "acl_digest",
+        "issued_at",
+        "expires_at"
+      ],
+      "title": "AccessLease",
+      "type": "object"
+    },
+    "AccessLeaseStatus": {
+      "enum": [
+        "active",
+        "expired",
+        "revoked"
+      ],
+      "title": "AccessLeaseStatus",
+      "type": "string"
+    },
+    "AmazonFbaConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "analytics_mappings": {
+          "items": {
+            "$ref": "#/$defs/ERPAnalyticsMapping"
+          },
+          "maxItems": 40,
+          "title": "Analytics Mappings",
+          "type": "array"
+        },
+        "fulfillment_mappings": {
+          "items": {
+            "$ref": "#/$defs/FulfillmentRecordMapping"
+          },
+          "maxItems": 20,
+          "title": "Fulfillment Mappings",
+          "type": "array"
+        },
+        "inbound_lookback_days": {
+          "default": 90,
+          "maximum": 365,
+          "minimum": 1,
+          "title": "Inbound Lookback Days",
+          "type": "integer"
+        },
+        "include_inbound_shipments": {
+          "default": true,
+          "title": "Include Inbound Shipments",
+          "type": "boolean"
+        },
+        "include_inventory": {
+          "default": true,
+          "title": "Include Inventory",
+          "type": "boolean"
+        },
+        "kind": {
+          "const": "amazon_fba",
+          "title": "Kind",
+          "type": "string"
+        },
+        "lwa_client_id": {
+          "maxLength": 256,
+          "minLength": 16,
+          "title": "Lwa Client Id",
+          "type": "string"
+        },
+        "marketplace_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Marketplace Ids",
+          "type": "array"
+        },
+        "max_inbound_shipments": {
+          "default": 25,
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Max Inbound Shipments",
+          "type": "integer"
+        },
+        "max_pages": {
+          "default": 5,
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Max Pages",
+          "type": "integer"
+        },
+        "region": {
+          "enum": [
+            "na",
+            "eu",
+            "fe"
+          ],
+          "title": "Region",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "region",
+        "lwa_client_id",
+        "marketplace_ids"
+      ],
+      "title": "AmazonFbaConnectorConfig",
+      "type": "object"
+    },
+    "ConnectedQuestionBrief": {
+      "additionalProperties": false,
+      "properties": {
+        "citations": {
+          "items": {
+            "$ref": "#/$defs/PublicContextCitation"
+          },
+          "maxItems": 8,
+          "title": "Citations",
+          "type": "array"
+        },
+        "state_version": {
+          "minimum": 0,
+          "title": "State Version",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "current",
+            "stale",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "suggestion_id": {
+          "title": "Suggestion Id",
+          "type": "string"
+        },
+        "unavailable_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Unavailable Connector Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "state_version",
+        "suggestion_id"
+      ],
+      "title": "ConnectedQuestionBrief",
+      "type": "object"
+    },
+    "ConnectedQuestionContextRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Connector Ids",
+          "type": "array"
+        },
+        "limit": {
+          "default": 5,
+          "maximum": 8,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "session_id": {
+          "pattern": "^[A-Za-z0-9_-]{1,128}$",
+          "title": "Session Id",
+          "type": "string"
+        },
+        "state_version": {
+          "minimum": 0,
+          "title": "State Version",
+          "type": "integer"
+        },
+        "suggestion_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Suggestion Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id",
+        "suggestion_id",
+        "state_version"
+      ],
+      "title": "ConnectedQuestionContextRequest",
+      "type": "object"
+    },
+    "ConnectorCapabilityManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "content_persistence": {
+          "enum": [
+            "encrypted_lease",
+            "metadata_only",
+            "live_only"
+          ],
+          "title": "Content Persistence",
+          "type": "string"
+        },
+        "manifest_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Manifest Version",
+          "type": "string"
+        },
+        "maximum_response_bytes": {
+          "default": 2000000,
+          "maximum": 10000000,
+          "minimum": 1024,
+          "title": "Maximum Response Bytes",
+          "type": "integer"
+        },
+        "read_operations": {
+          "items": {
+            "enum": [
+              "GET",
+              "HEAD"
+            ],
+            "type": "string"
+          },
+          "title": "Read Operations",
+          "type": "array"
+        },
+        "signed_manifest_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Signed Manifest Sha256"
+        },
+        "source_types": {
+          "items": {
+            "$ref": "#/$defs/SourceSelectionKind"
+          },
+          "maxItems": 12,
+          "minItems": 1,
+          "title": "Source Types",
+          "type": "array"
+        },
+        "supports_incremental_sync": {
+          "default": true,
+          "title": "Supports Incremental Sync",
+          "type": "boolean"
+        },
+        "supports_webhooks": {
+          "default": false,
+          "title": "Supports Webhooks",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "connector_kind",
+        "manifest_version",
+        "source_types",
+        "content_persistence"
+      ],
+      "title": "ConnectorCapabilityManifest",
+      "type": "object"
+    },
+    "ConnectorCatalogEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "authentication": {
+          "enum": [
+            "none",
+            "oauth_pkce",
+            "github_app",
+            "oidc",
+            "certificate",
+            "integrated",
+            "secret"
+          ],
+          "title": "Authentication",
+          "type": "string"
+        },
+        "availability": {
+          "enum": [
+            "built_in",
+            "gateway",
+            "signed_extension"
+          ],
+          "title": "Availability",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "label": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "persistence": {
+          "enum": [
+            "encrypted_lease",
+            "metadata_only",
+            "live_only"
+          ],
+          "title": "Persistence",
+          "type": "string"
+        },
+        "read_only": {
+          "const": true,
+          "default": true,
+          "title": "Read Only",
+          "type": "boolean"
+        },
+        "supports_webhooks": {
+          "title": "Supports Webhooks",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "label",
+        "availability",
+        "authentication",
+        "persistence",
+        "supports_webhooks"
+      ],
+      "title": "ConnectorCatalogEntry",
+      "type": "object"
+    },
+    "ConnectorDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "base_url": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Base Url"
+        },
+        "client_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Client Id"
+        },
+        "configuration": {
+          "anyOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "amazon_fba": "#/$defs/AmazonFbaConnectorConfig",
+                  "azure_devops": "#/$defs/WorkManagementConnectorConfig",
+                  "confluence": "#/$defs/WorkManagementConnectorConfig",
+                  "dynamics365": "#/$defs/ODataConnectorConfig",
+                  "github": "#/$defs/RepositoryConnectorConfig",
+                  "gitlab": "#/$defs/RepositoryConnectorConfig",
+                  "jira": "#/$defs/WorkManagementConnectorConfig",
+                  "local_files": "#/$defs/LocalFilesConnectorConfig",
+                  "microsoft_graph": "#/$defs/MicrosoftGraphConnectorConfig",
+                  "microsoft_teams": "#/$defs/MicrosoftTeamsConnectorConfig",
+                  "netsuite": "#/$defs/NetSuiteConnectorConfig",
+                  "notion": "#/$defs/NotionConnectorConfig",
+                  "odata": "#/$defs/ODataConnectorConfig",
+                  "openapi": "#/$defs/OpenApiConnectorConfig",
+                  "sap": "#/$defs/ODataConnectorConfig",
+                  "servicenow": "#/$defs/WorkManagementConnectorConfig",
+                  "sftp": "#/$defs/SftpConnectorConfig",
+                  "slack": "#/$defs/SlackConnectorConfig",
+                  "sql": "#/$defs/SqlConnectorConfig",
+                  "wms": "#/$defs/WmsConnectorConfig"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/LocalFilesConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/MicrosoftGraphConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/ODataConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/NetSuiteConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/MicrosoftTeamsConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/SlackConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/NotionConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/WmsConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/AmazonFbaConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/RepositoryConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/WorkManagementConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/SqlConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/SftpConnectorConfig"
+                },
+                {
+                  "$ref": "#/$defs/OpenApiConnectorConfig"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configuration"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "display_name": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Display Name",
+          "type": "string"
+        },
+        "entities": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "maxProperties": 20,
+          "title": "Entities",
+          "type": "object"
+        },
+        "entity_mappings": {
+          "items": {
+            "$ref": "#/$defs/EntityMapping"
+          },
+          "maxItems": 20,
+          "title": "Entity Mappings",
+          "type": "array"
+        },
+        "graph_drive_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Graph Drive Ids",
+          "type": "array"
+        },
+        "kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "principal_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Principal Id",
+          "type": "string"
+        },
+        "root_path": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Root Path"
+        },
+        "source_authority": {
+          "default": 50,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Source Authority",
+          "type": "integer"
+        },
+        "tenant_id": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9.-]{1,128}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tenant Id"
+        }
+      },
+      "required": [
+        "connector_id",
+        "kind",
+        "display_name",
+        "principal_id"
+      ],
+      "title": "ConnectorDefinition",
+      "type": "object"
+    },
+    "ConnectorHealth": {
+      "additionalProperties": false,
+      "properties": {
+        "auth_enabled": {
+          "title": "Auth Enabled",
+          "type": "boolean"
+        },
+        "connector_id": {
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "detail_code": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail Code"
+        },
+        "display_name": {
+          "title": "Display Name",
+          "type": "string"
+        },
+        "indexed_documents": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Indexed Documents",
+          "type": "integer"
+        },
+        "kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "last_success_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Success At"
+        },
+        "phase": {
+          "$ref": "#/$defs/ConnectorPhase"
+        },
+        "retry_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Retry At"
+        },
+        "scope_summary": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope Summary"
+        }
+      },
+      "required": [
+        "connector_id",
+        "kind",
+        "display_name",
+        "phase",
+        "auth_enabled"
+      ],
+      "title": "ConnectorHealth",
+      "type": "object"
+    },
+    "ConnectorKind": {
+      "enum": [
+        "local_files",
+        "microsoft_graph",
+        "odata",
+        "sap",
+        "dynamics365",
+        "netsuite",
+        "microsoft_teams",
+        "slack",
+        "notion",
+        "wms",
+        "amazon_fba",
+        "github",
+        "gitlab",
+        "jira",
+        "confluence",
+        "azure_devops",
+        "servicenow",
+        "sql",
+        "sftp",
+        "openapi"
+      ],
+      "title": "ConnectorKind",
+      "type": "string"
+    },
+    "ConnectorPhase": {
+      "enum": [
+        "disconnected",
+        "connecting",
+        "ready",
+        "degraded",
+        "auth_required",
+        "unavailable"
+      ],
+      "title": "ConnectorPhase",
+      "type": "string"
+    },
+    "ConnectorSyncPhase": {
+      "enum": [
+        "idle",
+        "synchronizing",
+        "reconciling",
+        "ready",
+        "degraded",
+        "revoked"
+      ],
+      "title": "ConnectorSyncPhase",
+      "type": "string"
+    },
+    "ContextDiagnostics": {
+      "additionalProperties": false,
+      "properties": {
+        "circuit_opened": {
+          "minimum": 0,
+          "title": "Circuit Opened",
+          "type": "integer"
+        },
+        "citation_feedback_records": {
+          "minimum": 0,
+          "title": "Citation Feedback Records",
+          "type": "integer"
+        },
+        "citation_results": {
+          "minimum": 0,
+          "title": "Citation Results",
+          "type": "integer"
+        },
+        "local_index_documents": {
+          "minimum": 0,
+          "title": "Local Index Documents",
+          "type": "integer"
+        },
+        "max_search_latency_ms": {
+          "minimum": 0,
+          "title": "Max Search Latency Ms",
+          "type": "integer"
+        },
+        "search_requests": {
+          "minimum": 0,
+          "title": "Search Requests",
+          "type": "integer"
+        },
+        "unavailable_provider_results": {
+          "minimum": 0,
+          "title": "Unavailable Provider Results",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "search_requests",
+        "citation_results",
+        "unavailable_provider_results",
+        "circuit_opened",
+        "max_search_latency_ms",
+        "local_index_documents",
+        "citation_feedback_records"
+      ],
+      "title": "ContextDiagnostics",
+      "type": "object"
+    },
+    "ContextDocument": {
+      "additionalProperties": false,
+      "description": "Adapter-internal retrieved content with an explicit access boundary.",
+      "properties": {
+        "allowed_principals": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Allowed Principals",
+          "type": "array"
+        },
+        "connector_id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "content": {
+          "maxLength": 100000,
+          "title": "Content",
+          "type": "string"
+        },
+        "document_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Document Id",
+          "type": "string"
+        },
+        "entity_type": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Entity Type",
+          "type": "string"
+        },
+        "record_id": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Record Id",
+          "type": "string"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "source_kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "source_reference": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Reference"
+        },
+        "structured_values": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "maxProperties": 64,
+          "title": "Structured Values",
+          "type": "object"
+        },
+        "title": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updated At"
+        },
+        "uri": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uri"
+        }
+      },
+      "required": [
+        "document_id",
+        "connector_id",
+        "source_kind",
+        "record_id",
+        "title",
+        "content",
+        "entity_type",
+        "allowed_principals"
+      ],
+      "title": "ContextDocument",
+      "type": "object"
+    },
+    "ContextRelation": {
+      "enum": [
+        "supporting",
+        "conflicting",
+        "reference"
+      ],
+      "title": "ContextRelation",
+      "type": "string"
+    },
+    "ContextSearchQuery": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Connector Ids",
+          "type": "array"
+        },
+        "entity_types": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Entity Types",
+          "type": "array"
+        },
+        "known_values": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "maxProperties": 32,
+          "title": "Known Values",
+          "type": "object"
+        },
+        "limit": {
+          "default": 8,
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "preferred_entity_types": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Preferred Entity Types",
+          "type": "array"
+        },
+        "principal_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Principal Id",
+          "type": "string"
+        },
+        "source_selection_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 200,
+          "title": "Source Selection Ids",
+          "type": "array"
+        },
+        "target_slot": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Slot"
+        },
+        "text": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "principal_id"
+      ],
+      "title": "ContextSearchQuery",
+      "type": "object"
+    },
+    "ContextSearchResult": {
+      "additionalProperties": false,
+      "properties": {
+        "citations": {
+          "items": {
+            "$ref": "#/$defs/PublicContextCitation"
+          },
+          "maxItems": 20,
+          "title": "Citations",
+          "type": "array"
+        },
+        "unavailable_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Unavailable Connector Ids",
+          "type": "array"
+        }
+      },
+      "title": "ContextSearchResult",
+      "type": "object"
+    },
+    "ERPAnalyticsBucket": {
+      "enum": [
+        "day",
+        "week",
+        "month"
+      ],
+      "title": "ERPAnalyticsBucket",
+      "type": "string"
+    },
+    "ERPAnalyticsMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "aggregation": {
+          "$ref": "#/$defs/ERPMetricAggregation"
+        },
+        "currency_field": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currency Field"
+        },
+        "dimension_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Dimension Fields",
+          "type": "array"
+        },
+        "entity_name": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Entity Name",
+          "type": "string"
+        },
+        "fixed_currency": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z]{3}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fixed Currency"
+        },
+        "metric_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Metric Id",
+          "type": "string"
+        },
+        "metric_kind": {
+          "$ref": "#/$defs/ERPMetricKind"
+        },
+        "timestamp_field": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Timestamp Field",
+          "type": "string"
+        },
+        "unit": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "value_field": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Value Field",
+          "type": "string"
+        },
+        "weight_field": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Weight Field"
+        }
+      },
+      "required": [
+        "metric_id",
+        "metric_kind",
+        "entity_name",
+        "value_field",
+        "timestamp_field",
+        "aggregation",
+        "unit"
+      ],
+      "title": "ERPAnalyticsMapping",
+      "type": "object"
+    },
+    "ERPAnalyticsRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "bucket": {
+          "$ref": "#/$defs/ERPAnalyticsBucket",
+          "default": "week"
+        },
+        "connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Connector Ids",
+          "type": "array"
+        },
+        "discrepancy_threshold_percent": {
+          "default": 5.0,
+          "maximum": 100.0,
+          "minimum": 0.1,
+          "title": "Discrepancy Threshold Percent",
+          "type": "number"
+        },
+        "metric_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 80,
+          "title": "Metric Ids",
+          "type": "array"
+        },
+        "period_end": {
+          "format": "date-time",
+          "title": "Period End",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date-time",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "stable_threshold_percent": {
+          "default": 1.0,
+          "maximum": 25.0,
+          "minimum": 0.0,
+          "title": "Stable Threshold Percent",
+          "type": "number"
+        }
+      },
+      "required": [
+        "connector_ids"
+      ],
+      "title": "ERPAnalyticsRequest",
+      "type": "object"
+    },
+    "ERPAnalyticsRun": {
+      "additionalProperties": false,
+      "properties": {
+        "bucket": {
+          "$ref": "#/$defs/ERPAnalyticsBucket"
+        },
+        "discrepancies": {
+          "items": {
+            "$ref": "#/$defs/ERPMetricDiscrepancy"
+          },
+          "maxItems": 1000,
+          "title": "Discrepancies",
+          "type": "array"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "period_end": {
+          "format": "date-time",
+          "title": "Period End",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date-time",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "persisted_remote_records": {
+          "const": 0,
+          "default": 0,
+          "title": "Persisted Remote Records",
+          "type": "integer"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "series": {
+          "items": {
+            "$ref": "#/$defs/ERPTrendSeries"
+          },
+          "maxItems": 200,
+          "title": "Series",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "current",
+            "partial",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unavailable_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 8,
+          "title": "Unavailable Connector Ids",
+          "type": "array"
+        },
+        "warnings": {
+          "items": {
+            "$ref": "#/$defs/ERPAnalyticsWarning"
+          },
+          "maxItems": 1000,
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "run_id",
+        "status",
+        "period_start",
+        "period_end",
+        "bucket"
+      ],
+      "title": "ERPAnalyticsRun",
+      "type": "object"
+    },
+    "ERPAnalyticsWarning": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "connector_unavailable",
+            "metric_not_configured",
+            "invalid_timestamp",
+            "out_of_range",
+            "invalid_value",
+            "invalid_weight",
+            "missing_currency",
+            "invalid_currency",
+            "series_limit_reached"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "metric_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metric Id"
+        },
+        "skipped_records": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Skipped Records",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "connector_id",
+        "code"
+      ],
+      "title": "ERPAnalyticsWarning",
+      "type": "object"
+    },
+    "ERPMetricAggregation": {
+      "enum": [
+        "average",
+        "weighted_average",
+        "sum",
+        "minimum",
+        "maximum",
+        "latest"
+      ],
+      "title": "ERPMetricAggregation",
+      "type": "string"
+    },
+    "ERPMetricDiscrepancy": {
+      "additionalProperties": false,
+      "properties": {
+        "absolute_difference": {
+          "title": "Absolute Difference",
+          "type": "number"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z]{3}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currency"
+        },
+        "difference_percent": {
+          "minimum": 0.0,
+          "title": "Difference Percent",
+          "type": "number"
+        },
+        "dimensions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "maxProperties": 4,
+          "title": "Dimensions",
+          "type": "object"
+        },
+        "discrepancy_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Discrepancy Id",
+          "type": "string"
+        },
+        "explanation": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        },
+        "left_connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Left Connector Id",
+          "type": "string"
+        },
+        "left_value": {
+          "title": "Left Value",
+          "type": "number"
+        },
+        "metric_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Metric Id",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date-time",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "requires_review": {
+          "const": true,
+          "default": true,
+          "title": "Requires Review",
+          "type": "boolean"
+        },
+        "right_connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Right Connector Id",
+          "type": "string"
+        },
+        "right_value": {
+          "title": "Right Value",
+          "type": "number"
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "unit": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "discrepancy_id",
+        "metric_id",
+        "left_connector_id",
+        "right_connector_id",
+        "period_start",
+        "unit",
+        "left_value",
+        "right_value",
+        "absolute_difference",
+        "difference_percent",
+        "severity",
+        "explanation"
+      ],
+      "title": "ERPMetricDiscrepancy",
+      "type": "object"
+    },
+    "ERPMetricKind": {
+      "enum": [
+        "unit_price",
+        "extended_amount",
+        "quantity_on_hand",
+        "inventory_value",
+        "order_volume",
+        "fulfillment_lead_time",
+        "pick_cycle_time",
+        "fill_rate",
+        "stockout_rate",
+        "custom"
+      ],
+      "title": "ERPMetricKind",
+      "type": "string"
+    },
+    "ERPTrendDirection": {
+      "enum": [
+        "increasing",
+        "decreasing",
+        "stable",
+        "insufficient_data"
+      ],
+      "title": "ERPTrendDirection",
+      "type": "string"
+    },
+    "ERPTrendPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "period_end": {
+          "format": "date-time",
+          "title": "Period End",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date-time",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "sample_count": {
+          "minimum": 1,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "period_start",
+        "period_end",
+        "value",
+        "sample_count"
+      ],
+      "title": "ERPTrendPoint",
+      "type": "object"
+    },
+    "ERPTrendSeries": {
+      "additionalProperties": false,
+      "properties": {
+        "bucket": {
+          "$ref": "#/$defs/ERPAnalyticsBucket"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z]{3}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currency"
+        },
+        "dimensions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "maxProperties": 4,
+          "title": "Dimensions",
+          "type": "object"
+        },
+        "entity_name": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Entity Name",
+          "type": "string"
+        },
+        "metric_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Metric Id",
+          "type": "string"
+        },
+        "metric_kind": {
+          "$ref": "#/$defs/ERPMetricKind"
+        },
+        "persisted_remote_records": {
+          "const": 0,
+          "default": 0,
+          "title": "Persisted Remote Records",
+          "type": "integer"
+        },
+        "points": {
+          "items": {
+            "$ref": "#/$defs/ERPTrendPoint"
+          },
+          "maxItems": 731,
+          "title": "Points",
+          "type": "array"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "series_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Series Id",
+          "type": "string"
+        },
+        "source_kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "source_label": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Source Label",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "summary": {
+          "$ref": "#/$defs/ERPTrendSummary"
+        },
+        "unit": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "series_id",
+        "connector_id",
+        "source_kind",
+        "source_label",
+        "source_reference",
+        "metric_id",
+        "metric_kind",
+        "entity_name",
+        "unit",
+        "bucket",
+        "summary"
+      ],
+      "title": "ERPTrendSeries",
+      "type": "object"
+    },
+    "ERPTrendSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "absolute_change": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Absolute Change"
+        },
+        "direction": {
+          "$ref": "#/$defs/ERPTrendDirection"
+        },
+        "first_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Value"
+        },
+        "last_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Value"
+        },
+        "percent_change": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Percent Change"
+        },
+        "point_count": {
+          "minimum": 0,
+          "title": "Point Count",
+          "type": "integer"
+        },
+        "sample_count": {
+          "minimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "direction",
+        "point_count",
+        "sample_count"
+      ],
+      "title": "ERPTrendSummary",
+      "type": "object"
+    },
+    "EnterpriseSearchCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "access_expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Access Expires At"
+        },
+        "citation_id": {
+          "pattern": "^[a-f0-9]{24}$",
+          "title": "Citation Id",
+          "type": "string"
+        },
+        "entity_type": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Entity Type",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 600,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "freshness": {
+          "default": "unknown",
+          "enum": [
+            "current",
+            "stale",
+            "unknown"
+          ],
+          "title": "Freshness",
+          "type": "string"
+        },
+        "local_indexed": {
+          "default": false,
+          "title": "Local Indexed",
+          "type": "boolean"
+        },
+        "not_stated_in_meeting": {
+          "const": true,
+          "default": true,
+          "title": "Not Stated In Meeting",
+          "type": "boolean"
+        },
+        "rank": {
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "relation": {
+          "$ref": "#/$defs/ContextRelation",
+          "default": "reference"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "score_reasons": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 8,
+          "title": "Score Reasons",
+          "type": "array"
+        },
+        "source_kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "source_label": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Source Label",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "source_updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Updated At"
+        },
+        "uri": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uri"
+        }
+      },
+      "required": [
+        "citation_id",
+        "source_kind",
+        "source_label",
+        "source_reference",
+        "entity_type",
+        "excerpt",
+        "retrieved_at",
+        "rank"
+      ],
+      "title": "EnterpriseSearchCitation",
+      "type": "object"
+    },
+    "EnterpriseSearchRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Connector Ids",
+          "type": "array"
+        },
+        "date_from": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Date From"
+        },
+        "date_to": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Date To"
+        },
+        "deadline_ms": {
+          "default": 10000,
+          "maximum": 10000,
+          "minimum": 250,
+          "title": "Deadline Ms",
+          "type": "integer"
+        },
+        "entity_types": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Entity Types",
+          "type": "array"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "source_kinds": {
+          "items": {
+            "$ref": "#/$defs/ConnectorKind"
+          },
+          "maxItems": 32,
+          "title": "Source Kinds",
+          "type": "array"
+        },
+        "source_selection_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 200,
+          "title": "Source Selection Ids",
+          "type": "array"
+        },
+        "text": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "title": "EnterpriseSearchRequest",
+      "type": "object"
+    },
+    "EnterpriseSearchResult": {
+      "additionalProperties": false,
+      "properties": {
+        "citations": {
+          "items": {
+            "$ref": "#/$defs/EnterpriseSearchCitation"
+          },
+          "maxItems": 50,
+          "title": "Citations",
+          "type": "array"
+        },
+        "elapsed_ms": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Elapsed Ms",
+          "type": "integer"
+        },
+        "expired_lease_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Expired Lease Connector Ids",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "current",
+            "partial",
+            "timeout",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unavailable_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Unavailable Connector Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "EnterpriseSearchResult",
+      "type": "object"
+    },
+    "EntityMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "display_field": {
+          "pattern": "^[A-Za-z0-9_]{1,128}$",
+          "title": "Display Field",
+          "type": "string"
+        },
+        "entity_name": {
+          "pattern": "^[A-Za-z0-9_]{1,128}$",
+          "title": "Entity Name",
+          "type": "string"
+        },
+        "key_field": {
+          "pattern": "^[A-Za-z0-9_]{1,128}$",
+          "title": "Key Field",
+          "type": "string"
+        },
+        "projected_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Projected Fields",
+          "type": "array"
+        },
+        "search_mode": {
+          "$ref": "#/$defs/EntitySearchMode",
+          "default": "server_filter"
+        },
+        "searchable_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Searchable Fields",
+          "type": "array"
+        }
+      },
+      "required": [
+        "entity_name",
+        "key_field",
+        "display_field",
+        "searchable_fields",
+        "projected_fields"
+      ],
+      "title": "EntityMapping",
+      "type": "object"
+    },
+    "EntitySearchMode": {
+      "enum": [
+        "server_filter",
+        "bounded_scan"
+      ],
+      "title": "EntitySearchMode",
+      "type": "string"
+    },
+    "FulfillmentGapKind": {
+      "enum": [
+        "missing_downstream_record",
+        "missing_upstream_record",
+        "quantity_mismatch",
+        "duplicate_handoff_key"
+      ],
+      "title": "FulfillmentGapKind",
+      "type": "string"
+    },
+    "FulfillmentReconciliationFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "absolute_difference": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Absolute Difference"
+        },
+        "difference_percent": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Difference Percent"
+        },
+        "dimensions": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Dimensions",
+          "type": "array"
+        },
+        "downstream_quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Downstream Quantity"
+        },
+        "downstream_source_label": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Downstream Source Label",
+          "type": "string"
+        },
+        "downstream_updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Downstream Updated At"
+        },
+        "explanation": {
+          "maxLength": 700,
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        },
+        "finding_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "flow_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Flow Id",
+          "type": "string"
+        },
+        "handoff_reference": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Handoff Reference"
+        },
+        "kind": {
+          "$ref": "#/$defs/FulfillmentGapKind"
+        },
+        "recommended_check": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Recommended Check",
+          "type": "string"
+        },
+        "requires_review": {
+          "const": true,
+          "default": true,
+          "title": "Requires Review",
+          "type": "boolean"
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "sku_reference": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Sku Reference",
+          "type": "string"
+        },
+        "transition": {
+          "enum": [
+            "netsuite_to_wms",
+            "wms_to_amazon_fba"
+          ],
+          "title": "Transition",
+          "type": "string"
+        },
+        "upstream_quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Upstream Quantity"
+        },
+        "upstream_source_label": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Upstream Source Label",
+          "type": "string"
+        },
+        "upstream_updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Upstream Updated At"
+        }
+      },
+      "required": [
+        "finding_id",
+        "kind",
+        "flow_id",
+        "transition",
+        "severity",
+        "sku_reference",
+        "upstream_source_label",
+        "downstream_source_label",
+        "explanation",
+        "recommended_check"
+      ],
+      "title": "FulfillmentReconciliationFinding",
+      "type": "object"
+    },
+    "FulfillmentReconciliationRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "absolute_quantity_tolerance": {
+          "default": 0.0,
+          "maximum": 1000000,
+          "minimum": 0.0,
+          "title": "Absolute Quantity Tolerance",
+          "type": "number"
+        },
+        "amazon_fba_connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Amazon Fba Connector Id",
+          "type": "string"
+        },
+        "flow_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Flow Ids",
+          "type": "array"
+        },
+        "netsuite_connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Netsuite Connector Id",
+          "type": "string"
+        },
+        "relative_quantity_tolerance_percent": {
+          "default": 0.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Relative Quantity Tolerance Percent",
+          "type": "number"
+        },
+        "wms_connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Wms Connector Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "netsuite_connector_id",
+        "wms_connector_id",
+        "amazon_fba_connector_id"
+      ],
+      "title": "FulfillmentReconciliationRequest",
+      "type": "object"
+    },
+    "FulfillmentReconciliationRun": {
+      "additionalProperties": false,
+      "properties": {
+        "findings": {
+          "items": {
+            "$ref": "#/$defs/FulfillmentReconciliationFinding"
+          },
+          "maxItems": 1000,
+          "title": "Findings",
+          "type": "array"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "inspected_records": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Inspected Records",
+          "type": "integer"
+        },
+        "persisted_remote_records": {
+          "const": 0,
+          "default": 0,
+          "title": "Persisted Remote Records",
+          "type": "integer"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "current",
+            "partial",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "$ref": "#/$defs/FulfillmentReconciliationWarning"
+          },
+          "maxItems": 200,
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "run_id",
+        "status"
+      ],
+      "title": "FulfillmentReconciliationRun",
+      "type": "object"
+    },
+    "FulfillmentReconciliationWarning": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "connector_unavailable",
+            "mapping_not_configured",
+            "flow_not_shared",
+            "invalid_record",
+            "finding_limit_reached"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "connector_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Connector Id"
+        },
+        "count": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Count",
+          "type": "integer"
+        },
+        "flow_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Flow Id"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "title": "FulfillmentReconciliationWarning",
+      "type": "object"
+    },
+    "FulfillmentRecordMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "dimension_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Dimension Fields",
+          "type": "array"
+        },
+        "entity_name": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Entity Name",
+          "type": "string"
+        },
+        "flow_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Flow Id",
+          "type": "string"
+        },
+        "quantity_field": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Quantity Field",
+          "type": "string"
+        },
+        "reference_field": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reference Field"
+        },
+        "sku_field": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Sku Field",
+          "type": "string"
+        },
+        "timestamp_field": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timestamp Field"
+        }
+      },
+      "required": [
+        "flow_id",
+        "entity_name",
+        "sku_field",
+        "quantity_field"
+      ],
+      "title": "FulfillmentRecordMapping",
+      "type": "object"
+    },
+    "IssueExportOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "azure_work_item_type": {
+          "default": "Task",
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Azure Work Item Type",
+          "type": "string"
+        },
+        "include_connected_excerpts": {
+          "default": false,
+          "title": "Include Connected Excerpts",
+          "type": "boolean"
+        },
+        "jira_work_type": {
+          "default": "Task",
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Jira Work Type",
+          "type": "string"
+        }
+      },
+      "title": "IssueExportOptions",
+      "type": "object"
+    },
+    "IssueFact": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Evidence Event Ids",
+          "type": "array"
+        },
+        "extraction_origin": {
+          "default": "deterministic",
+          "enum": [
+            "deterministic",
+            "semantic_confirmed"
+          ],
+          "title": "Extraction Origin",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "evidence",
+            "inference"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "slot": {
+          "title": "Slot",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "slot",
+        "value",
+        "kind",
+        "evidence_event_ids"
+      ],
+      "title": "IssueFact",
+      "type": "object"
+    },
+    "IssueHistoryWarning": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Evidence Event Ids",
+          "type": "array"
+        },
+        "slot": {
+          "title": "Slot",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "superseded",
+            "contradicted"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "slot",
+        "value",
+        "status",
+        "evidence_event_ids"
+      ],
+      "title": "IssueHistoryWarning",
+      "type": "object"
+    },
+    "IssueQuestion": {
+      "additionalProperties": false,
+      "properties": {
+        "priority": {
+          "minimum": 0,
+          "title": "Priority",
+          "type": "integer"
+        },
+        "question": {
+          "title": "Question",
+          "type": "string"
+        },
+        "slot": {
+          "title": "Slot",
+          "type": "string"
+        }
+      },
+      "required": [
+        "slot",
+        "question",
+        "priority"
+      ],
+      "title": "IssueQuestion",
+      "type": "object"
+    },
+    "IssueReadiness": {
+      "enum": [
+        "needs_clarification",
+        "ready_for_review"
+      ],
+      "title": "IssueReadiness",
+      "type": "string"
+    },
+    "LocalFilesConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "local_files",
+          "title": "Kind",
+          "type": "string"
+        },
+        "root_path": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Root Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "root_path"
+      ],
+      "title": "LocalFilesConnectorConfig",
+      "type": "object"
+    },
+    "MicrosoftGraphConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "client_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Client Id"
+        },
+        "drive_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Drive Ids",
+          "type": "array"
+        },
+        "kind": {
+          "const": "microsoft_graph",
+          "title": "Kind",
+          "type": "string"
+        },
+        "tenant_id": {
+          "default": "organizations",
+          "pattern": "^[A-Za-z0-9.-]{1,128}$",
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "MicrosoftGraphConnectorConfig",
+      "type": "object"
+    },
+    "MicrosoftTeamsConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "certificate_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Certificate Id",
+          "type": "string"
+        },
+        "client_id": {
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "title": "Client Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "microsoft_teams",
+          "title": "Kind",
+          "type": "string"
+        },
+        "selected_space_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 50,
+          "title": "Selected Space Ids",
+          "type": "array"
+        },
+        "tenant_id": {
+          "pattern": "^[A-Za-z0-9.-]{1,128}$",
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "tenant_id",
+        "client_id",
+        "certificate_id"
+      ],
+      "title": "MicrosoftTeamsConnectorConfig",
+      "type": "object"
+    },
+    "NetSuiteConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "account_id": {
+          "pattern": "^[A-Za-z0-9_-]{2,64}$",
+          "title": "Account Id",
+          "type": "string"
+        },
+        "analytics_mappings": {
+          "items": {
+            "$ref": "#/$defs/ERPAnalyticsMapping"
+          },
+          "maxItems": 80,
+          "title": "Analytics Mappings",
+          "type": "array"
+        },
+        "certificate_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Certificate Id",
+          "type": "string"
+        },
+        "client_id": {
+          "maxLength": 256,
+          "minLength": 8,
+          "title": "Client Id",
+          "type": "string"
+        },
+        "entity_mappings": {
+          "items": {
+            "$ref": "#/$defs/NetSuiteEntityMapping"
+          },
+          "maxItems": 40,
+          "minItems": 1,
+          "title": "Entity Mappings",
+          "type": "array"
+        },
+        "fulfillment_mappings": {
+          "items": {
+            "$ref": "#/$defs/FulfillmentRecordMapping"
+          },
+          "maxItems": 20,
+          "title": "Fulfillment Mappings",
+          "type": "array"
+        },
+        "kind": {
+          "const": "netsuite",
+          "title": "Kind",
+          "type": "string"
+        },
+        "review_target": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NetSuiteReviewTargetMapping"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "kind",
+        "account_id",
+        "client_id",
+        "certificate_id",
+        "entity_mappings"
+      ],
+      "title": "NetSuiteConnectorConfig",
+      "type": "object"
+    },
+    "NetSuiteEntityMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "display_field": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Display Field",
+          "type": "string"
+        },
+        "key_field": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Key Field",
+          "type": "string"
+        },
+        "modified_field": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "lastmodifieddate",
+          "title": "Modified Field"
+        },
+        "projected_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 48,
+          "minItems": 1,
+          "title": "Projected Fields",
+          "type": "array"
+        },
+        "record_type": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Record Type",
+          "type": "string"
+        },
+        "searchable_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 24,
+          "minItems": 1,
+          "title": "Searchable Fields",
+          "type": "array"
+        }
+      },
+      "required": [
+        "record_type",
+        "key_field",
+        "display_field",
+        "searchable_fields",
+        "projected_fields"
+      ],
+      "title": "NetSuiteEntityMapping",
+      "type": "object"
+    },
+    "NetSuiteReviewTargetMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "external_id_field": {
+          "pattern": "^custrecord_[a-z0-9_]{1,110}$",
+          "title": "External Id Field",
+          "type": "string"
+        },
+        "record_type": {
+          "pattern": "^customrecord_[a-z0-9_]{1,110}$",
+          "title": "Record Type",
+          "type": "string"
+        },
+        "severity_field": {
+          "pattern": "^custrecord_[a-z0-9_]{1,110}$",
+          "title": "Severity Field",
+          "type": "string"
+        },
+        "source_reference_field": {
+          "pattern": "^custrecord_[a-z0-9_]{1,110}$",
+          "title": "Source Reference Field",
+          "type": "string"
+        },
+        "status_field": {
+          "anyOf": [
+            {
+              "pattern": "^custrecord_[a-z0-9_]{1,110}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status Field"
+        },
+        "title_field": {
+          "pattern": "^custrecord_[a-z0-9_]{1,110}$",
+          "title": "Title Field",
+          "type": "string"
+        }
+      },
+      "required": [
+        "record_type",
+        "external_id_field",
+        "title_field",
+        "severity_field",
+        "source_reference_field"
+      ],
+      "title": "NetSuiteReviewTargetMapping",
+      "type": "object"
+    },
+    "NotionConnectorConfig": {
+      "additionalProperties": false,
+      "description": "Read-only Notion connection; selected page IDs stay in encrypted storage.",
+      "properties": {
+        "kind": {
+          "const": "notion",
+          "title": "Kind",
+          "type": "string"
+        },
+        "workspace_label": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Workspace Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "workspace_label"
+      ],
+      "title": "NotionConnectorConfig",
+      "type": "object"
+    },
+    "ODataConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "base_url": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Base Url",
+          "type": "string"
+        },
+        "entity_mappings": {
+          "items": {
+            "$ref": "#/$defs/EntityMapping"
+          },
+          "maxItems": 20,
+          "title": "Entity Mappings",
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "odata",
+            "sap",
+            "dynamics365"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "base_url"
+      ],
+      "title": "ODataConnectorConfig",
+      "type": "object"
+    },
+    "OpenApiConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "approved_operation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Approved Operation Ids",
+          "type": "array"
+        },
+        "base_url": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Base Url",
+          "type": "string"
+        },
+        "gateway_url": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gateway Url"
+        },
+        "kind": {
+          "const": "openapi",
+          "title": "Kind",
+          "type": "string"
+        },
+        "specification_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Specification Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "base_url",
+        "specification_sha256",
+        "approved_operation_ids"
+      ],
+      "title": "OpenApiConnectorConfig",
+      "type": "object"
+    },
+    "PublicContextCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "citation_id": {
+          "title": "Citation Id",
+          "type": "string"
+        },
+        "connector_id": {
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "entity_type": {
+          "title": "Entity Type",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 600,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "rank": {
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "relation": {
+          "$ref": "#/$defs/ContextRelation",
+          "default": "reference"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "source_kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "source_label": {
+          "title": "Source Label",
+          "type": "string"
+        },
+        "source_reference": {
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "stale": {
+          "default": false,
+          "title": "Stale",
+          "type": "boolean"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updated At"
+        },
+        "uri": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uri"
+        }
+      },
+      "required": [
+        "citation_id",
+        "connector_id",
+        "source_kind",
+        "source_label",
+        "source_reference",
+        "entity_type",
+        "excerpt",
+        "retrieved_at",
+        "rank"
+      ],
+      "title": "PublicContextCitation",
+      "type": "object"
+    },
+    "RepositoryArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "end_line": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Line"
+        },
+        "language": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Language"
+        },
+        "path": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "repository_label": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Repository Label",
+          "type": "string"
+        },
+        "revision": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Revision",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "start_line": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Line"
+        },
+        "symbol": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Symbol"
+        }
+      },
+      "required": [
+        "source_reference",
+        "repository_label",
+        "revision",
+        "path"
+      ],
+      "title": "RepositoryArtifact",
+      "type": "object"
+    },
+    "RepositoryConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "base_url": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Base Url",
+          "type": "string"
+        },
+        "client_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Client Id",
+          "type": "string"
+        },
+        "gateway_url": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gateway Url"
+        },
+        "include_code": {
+          "default": true,
+          "title": "Include Code",
+          "type": "boolean"
+        },
+        "include_delivery_data": {
+          "default": true,
+          "title": "Include Delivery Data",
+          "type": "boolean"
+        },
+        "kind": {
+          "enum": [
+            "github",
+            "gitlab"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "selected_source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 200,
+          "title": "Selected Source Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "base_url",
+        "client_id"
+      ],
+      "title": "RepositoryConnectorConfig",
+      "type": "object"
+    },
+    "SftpConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "approved_roots": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 50,
+          "minItems": 1,
+          "title": "Approved Roots",
+          "type": "array"
+        },
+        "gateway_url": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gateway Url"
+        },
+        "host": {
+          "pattern": "^[A-Za-z0-9.-]{1,253}$",
+          "title": "Host",
+          "type": "string"
+        },
+        "host_key_sha256": {
+          "pattern": "^SHA256:[A-Za-z0-9+/]{20,88}={0,2}$",
+          "title": "Host Key Sha256",
+          "type": "string"
+        },
+        "kind": {
+          "const": "sftp",
+          "title": "Kind",
+          "type": "string"
+        },
+        "port": {
+          "default": 22,
+          "maximum": 65535,
+          "minimum": 1,
+          "title": "Port",
+          "type": "integer"
+        },
+        "username": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Username",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "host",
+        "username",
+        "host_key_sha256",
+        "approved_roots"
+      ],
+      "title": "SftpConnectorConfig",
+      "type": "object"
+    },
+    "SlackConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "client_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Client Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "slack",
+          "title": "Kind",
+          "type": "string"
+        },
+        "selected_space_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 50,
+          "title": "Selected Space Ids",
+          "type": "array"
+        },
+        "team_id": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z0-9]{5,32}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Team Id"
+        }
+      },
+      "required": [
+        "kind",
+        "client_id"
+      ],
+      "title": "SlackConnectorConfig",
+      "type": "object"
+    },
+    "SourceChangeEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "event_id": {
+          "pattern": "^[a-f0-9]{32}$",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "operation": {
+          "enum": [
+            "upsert",
+            "delete",
+            "reconcile"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "resource_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Resource Hash",
+          "type": "string"
+        },
+        "source_revision": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Revision"
+        },
+        "source_selection_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Source Selection Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "connector_id",
+        "source_selection_id",
+        "operation",
+        "resource_hash",
+        "occurred_at"
+      ],
+      "title": "SourceChangeEvent",
+      "type": "object"
+    },
+    "SourceSelection": {
+      "additionalProperties": false,
+      "description": "UI-safe source scope; provider identifiers remain encrypted.",
+      "properties": {
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "kind": {
+          "$ref": "#/$defs/SourceSelectionKind"
+        },
+        "label": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "selection_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Selection Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "selection_id",
+        "connector_id",
+        "kind",
+        "label"
+      ],
+      "title": "SourceSelection",
+      "type": "object"
+    },
+    "SourceSelectionKind": {
+      "enum": [
+        "repository",
+        "project",
+        "space",
+        "table",
+        "folder",
+        "service"
+      ],
+      "title": "SourceSelectionKind",
+      "type": "string"
+    },
+    "SqlConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "approved_views": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Approved Views",
+          "type": "array"
+        },
+        "gateway_url": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gateway Url"
+        },
+        "kind": {
+          "const": "sql",
+          "title": "Kind",
+          "type": "string"
+        },
+        "query_template_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Query Template Ids",
+          "type": "array"
+        },
+        "server_label": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Server Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "server_label",
+        "approved_views"
+      ],
+      "title": "SqlConnectorConfig",
+      "type": "object"
+    },
+    "StructuredIssueDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptance_criteria": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Acceptance Criteria",
+          "type": "array"
+        },
+        "affected_systems": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Systems",
+          "type": "array"
+        },
+        "context_citations": {
+          "items": {
+            "$ref": "#/$defs/PublicContextCitation"
+          },
+          "maxItems": 20,
+          "title": "Context Citations",
+          "type": "array"
+        },
+        "context_status": {
+          "enum": [
+            "not_requested",
+            "current",
+            "unavailable",
+            "timeout"
+          ],
+          "title": "Context Status",
+          "type": "string"
+        },
+        "draft_id": {
+          "title": "Draft Id",
+          "type": "string"
+        },
+        "facts": {
+          "items": {
+            "$ref": "#/$defs/IssueFact"
+          },
+          "title": "Facts",
+          "type": "array"
+        },
+        "history_warnings": {
+          "items": {
+            "$ref": "#/$defs/IssueHistoryWarning"
+          },
+          "title": "History Warnings",
+          "type": "array"
+        },
+        "impact": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Impact",
+          "type": "array"
+        },
+        "language": {
+          "enum": [
+            "ja",
+            "en",
+            "ko"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "missing_required_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Required Fields",
+          "type": "array"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        },
+        "pain_id": {
+          "title": "Pain Id",
+          "type": "string"
+        },
+        "problem": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Problem",
+          "type": "array"
+        },
+        "readiness": {
+          "$ref": "#/$defs/IssueReadiness"
+        },
+        "scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Scope",
+          "type": "array"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "state_version": {
+          "minimum": 0,
+          "title": "State Version",
+          "type": "integer"
+        },
+        "template_id": {
+          "title": "Template Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "unresolved_questions": {
+          "items": {
+            "$ref": "#/$defs/IssueQuestion"
+          },
+          "title": "Unresolved Questions",
+          "type": "array"
+        },
+        "workaround": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Workaround",
+          "type": "array"
+        }
+      },
+      "required": [
+        "draft_id",
+        "session_id",
+        "pain_id",
+        "state_version",
+        "template_id",
+        "language",
+        "title",
+        "context_status",
+        "readiness"
+      ],
+      "title": "StructuredIssueDraft",
+      "type": "object"
+    },
+    "StructuredIssueDraftBatch": {
+      "additionalProperties": false,
+      "properties": {
+        "drafts": {
+          "items": {
+            "$ref": "#/$defs/StructuredIssueDraft"
+          },
+          "maxItems": 50,
+          "title": "Drafts",
+          "type": "array"
+        },
+        "state_version": {
+          "minimum": 0,
+          "title": "State Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "state_version",
+        "drafts"
+      ],
+      "title": "StructuredIssueDraftBatch",
+      "type": "object"
+    },
+    "SyncCursor": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "cursor_hash": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cursor Hash"
+        },
+        "detail_code": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail Code"
+        },
+        "last_success_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Success At"
+        },
+        "phase": {
+          "$ref": "#/$defs/ConnectorSyncPhase",
+          "default": "idle"
+        },
+        "revision": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "source_selection_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Source Selection Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "connector_id",
+        "source_selection_id"
+      ],
+      "title": "SyncCursor",
+      "type": "object"
+    },
+    "WmsConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "analytics_mappings": {
+          "items": {
+            "$ref": "#/$defs/ERPAnalyticsMapping"
+          },
+          "maxItems": 80,
+          "title": "Analytics Mappings",
+          "type": "array"
+        },
+        "base_url": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Base Url",
+          "type": "string"
+        },
+        "entity_mappings": {
+          "items": {
+            "$ref": "#/$defs/WmsEntityMapping"
+          },
+          "maxItems": 40,
+          "minItems": 1,
+          "title": "Entity Mappings",
+          "type": "array"
+        },
+        "environment": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Environment",
+          "type": "string"
+        },
+        "fulfillment_mappings": {
+          "items": {
+            "$ref": "#/$defs/FulfillmentRecordMapping"
+          },
+          "maxItems": 20,
+          "title": "Fulfillment Mappings",
+          "type": "array"
+        },
+        "kind": {
+          "const": "wms",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "base_url",
+        "environment",
+        "entity_mappings"
+      ],
+      "title": "WmsConnectorConfig",
+      "type": "object"
+    },
+    "WmsEntityMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "cursor_parameter": {
+          "default": "cursor",
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Cursor Parameter",
+          "type": "string"
+        },
+        "display_field": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Display Field",
+          "type": "string"
+        },
+        "endpoint_path": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Endpoint Path",
+          "type": "string"
+        },
+        "entity_name": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Entity Name",
+          "type": "string"
+        },
+        "field_types": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "maxProperties": 64,
+          "title": "Field Types",
+          "type": "object"
+        },
+        "items_field": {
+          "default": "items",
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Items Field",
+          "type": "string"
+        },
+        "key_field": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Key Field",
+          "type": "string"
+        },
+        "limit_parameter": {
+          "default": "limit",
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Limit Parameter",
+          "type": "string"
+        },
+        "max_pages": {
+          "default": 5,
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Max Pages",
+          "type": "integer"
+        },
+        "modified_since_parameter": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Modified Since Parameter"
+        },
+        "next_cursor_field": {
+          "default": "next_cursor",
+          "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+          "title": "Next Cursor Field",
+          "type": "string"
+        },
+        "page_size": {
+          "default": 100,
+          "maximum": 200,
+          "minimum": 1,
+          "title": "Page Size",
+          "type": "integer"
+        },
+        "projected_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Projected Fields",
+          "type": "array"
+        },
+        "search_parameter": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "query",
+          "title": "Search Parameter"
+        },
+        "searchable_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 24,
+          "minItems": 1,
+          "title": "Searchable Fields",
+          "type": "array"
+        }
+      },
+      "required": [
+        "entity_name",
+        "endpoint_path",
+        "key_field",
+        "display_field",
+        "searchable_fields",
+        "projected_fields"
+      ],
+      "title": "WmsEntityMapping",
+      "type": "object"
+    },
+    "WorkItemArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "item_type": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Item Type",
+          "type": "string"
+        },
+        "project_label": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Project Label",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updated At"
+        }
+      },
+      "required": [
+        "source_reference",
+        "project_label",
+        "item_type"
+      ],
+      "title": "WorkItemArtifact",
+      "type": "object"
+    },
+    "WorkManagementConnectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "base_url": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Base Url",
+          "type": "string"
+        },
+        "client_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Client Id",
+          "type": "string"
+        },
+        "gateway_url": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gateway Url"
+        },
+        "kind": {
+          "enum": [
+            "jira",
+            "confluence",
+            "azure_devops",
+            "servicenow"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "selected_source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 200,
+          "title": "Selected Source Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "base_url",
+        "client_id"
+      ],
+      "title": "WorkManagementConnectorConfig",
+      "type": "object"
+    }
+  },
+  "title": "MeetingIntelligenceContextContracts"
+}

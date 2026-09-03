@@ -1,0 +1,38 @@
+{
+  "meeting_id": "owner-answer-ja",
+  "fixture": "evals/fixtures/owner-answer-ja.jsonl",
+  "lang": "ja",
+  "pain_category": "data_mismatch",
+  "checkpoints": [
+    {
+      "name": "owner_question_is_promoted",
+      "after_event_seq": 2,
+      "pain_category": "data_mismatch",
+      "known_facts": {
+        "source_of_truth": "倉庫側",
+        "business_impact": "出荷作業の遅延"
+      },
+      "open_gaps_include": ["owner"],
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "pm_owner_question_does_not_self_answer",
+      "after_event_seq": 3,
+      "known_facts_absent": ["owner"],
+      "open_gaps_include": ["owner"],
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "split_owner_answer_retracts_and_promotes",
+      "after_event_seq": 4,
+      "known_facts": {
+        "owner": "一次対応: 山田さん / 最終確認: 情シス",
+        "source_of_truth": "倉庫側",
+        "business_impact": "出荷作業の遅延"
+      },
+      "answered_gaps": ["owner"],
+      "no_active_suggestion_gaps": ["owner"],
+      "ask_now_gap": "affected_scope"
+    }
+  ]
+}

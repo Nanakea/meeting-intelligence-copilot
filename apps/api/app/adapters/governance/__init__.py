@@ -1,0 +1,1 @@
+"""Local solution-governance adapters."""

@@ -1,0 +1,18 @@
+{
+  "meeting_id": "integration-failure-ko",
+  "fixture": "evals/fixtures/integration-failure-ko.jsonl",
+  "lang": "ko",
+  "pain_category": "integration_failure",
+  "checkpoints": [
+    {
+      "name": "after_failure_detection",
+      "after_event_seq": 0,
+      "known_facts": {
+        "source_system": "NetSuite",
+        "target_system": "WMS",
+        "failure_point": "주문 전송"
+      },
+      "ask_now_gap": "business_impact"
+    }
+  ]
+}

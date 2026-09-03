@@ -1,0 +1,45 @@
+{
+  "meeting_id": "manual-work-volume-en",
+  "fixture": "evals/fixtures/manual-work-volume-en.jsonl",
+  "lang": "en",
+  "pain_category": "manual_work",
+  "checkpoints": [
+    {
+      "name": "daily_manual_handoff_detected",
+      "after_event_seq": 0,
+      "pain_category": "manual_work",
+      "known_facts": { "frequency": "every business day" },
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "volume_and_time_cost_are_explicit",
+      "after_event_seq": 1,
+      "known_facts": {
+        "frequency": "every business day",
+        "volume": "1,200 orders",
+        "time_cost": "45 minutes per run"
+      },
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "impact_answer_promotes_owner",
+      "after_event_seq": 3,
+      "known_facts": {
+        "business_impact": "delays same-day shipment release by 45 minutes",
+        "frequency": "every business day",
+        "volume": "1,200 orders",
+        "time_cost": "45 minutes per run"
+      },
+      "no_active_suggestion_gaps": ["business_impact", "frequency", "volume", "time_cost"],
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "owner_answer_promotes_reason",
+      "after_event_seq": 4,
+      "known_facts": { "owner": "order operations team" },
+      "answered_gaps": ["owner"],
+      "no_active_suggestion_gaps": ["owner"],
+      "ask_now_gap": "reason_manual"
+    }
+  ]
+}

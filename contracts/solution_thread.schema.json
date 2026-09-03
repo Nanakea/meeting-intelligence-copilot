@@ -1,0 +1,1753 @@
+{
+  "$defs": {
+    "ActionPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "due_date": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Due Date"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        },
+        "payload_type": {
+          "const": "action",
+          "default": "action",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "task": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Task",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "title": "ActionPayload",
+      "type": "object"
+    },
+    "ArchitectureImpactPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_entities": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Affected Entities",
+          "type": "array"
+        },
+        "change": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Change",
+          "type": "string"
+        },
+        "decision_required": {
+          "default": false,
+          "title": "Decision Required",
+          "type": "boolean"
+        },
+        "impact_areas": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Impact Areas",
+          "type": "array"
+        },
+        "payload_type": {
+          "const": "architecture_impact",
+          "default": "architecture_impact",
+          "title": "Payload Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "change"
+      ],
+      "title": "ArchitectureImpactPayload",
+      "type": "object"
+    },
+    "ArtifactLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "cell_range": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cell Range"
+        },
+        "end_line": {
+          "anyOf": [
+            {
+              "maximum": 10000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Line"
+        },
+        "heading": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Heading"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "maximum": 100000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "paragraph": {
+          "anyOf": [
+            {
+              "maximum": 1000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Paragraph"
+        },
+        "sheet": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sheet"
+        },
+        "start_line": {
+          "anyOf": [
+            {
+              "maximum": 10000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Line"
+        }
+      },
+      "title": "ArtifactLocator",
+      "type": "object"
+    },
+    "AssumptionPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "payload_type": {
+          "const": "assumption",
+          "default": "assumption",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "validation_due": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Validation Due"
+        },
+        "validation_owner": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Validation Owner"
+        }
+      },
+      "required": [
+        "statement"
+      ],
+      "title": "AssumptionPayload",
+      "type": "object"
+    },
+    "AssuranceFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "document_kind": {
+          "$ref": "#/$defs/DocumentKind"
+        },
+        "finding_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "fingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "locator": {
+          "$ref": "#/$defs/ArtifactLocator"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "revision_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Revision Id",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/AssuranceSeverity"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/AssuranceFindingStatus",
+          "default": "open"
+        },
+        "suggested_governance_kind": {
+          "anyOf": [
+            {
+              "enum": [
+                "risk",
+                "action",
+                "dependency",
+                "constraint",
+                "architecture_impact"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Suggested Governance Kind"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "fingerprint",
+        "run_id",
+        "rule_id",
+        "artifact_id",
+        "revision_id",
+        "source_reference",
+        "document_kind",
+        "title",
+        "description",
+        "severity"
+      ],
+      "title": "AssuranceFinding",
+      "type": "object"
+    },
+    "AssuranceFindingStatus": {
+      "enum": [
+        "open",
+        "confirmed",
+        "dismissed",
+        "resolved",
+        "superseded"
+      ],
+      "title": "AssuranceFindingStatus",
+      "type": "string"
+    },
+    "AssuranceSeverity": {
+      "enum": [
+        "info",
+        "warning",
+        "high",
+        "critical"
+      ],
+      "title": "AssuranceSeverity",
+      "type": "string"
+    },
+    "ConstraintPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_scope": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Affected Scope",
+          "type": "array"
+        },
+        "exception_path": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exception Path"
+        },
+        "payload_type": {
+          "const": "constraint",
+          "default": "constraint",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "statement"
+      ],
+      "title": "ConstraintPayload",
+      "type": "object"
+    },
+    "DecisionPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "alternatives": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Alternatives",
+          "type": "array"
+        },
+        "approver": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approver"
+        },
+        "payload_type": {
+          "const": "decision",
+          "default": "decision",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rationale"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "statement"
+      ],
+      "title": "DecisionPayload",
+      "type": "object"
+    },
+    "DependencyPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "consumer": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Consumer"
+        },
+        "deliverable": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Deliverable"
+        },
+        "fallback": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fallback"
+        },
+        "needed_by": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Needed By"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        },
+        "payload_type": {
+          "const": "dependency",
+          "default": "dependency",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "statement"
+      ],
+      "title": "DependencyPayload",
+      "type": "object"
+    },
+    "DocumentKind": {
+      "enum": [
+        "requirement",
+        "architecture",
+        "adr",
+        "interface",
+        "data_mapping",
+        "nfr_security",
+        "test",
+        "cutover",
+        "operations",
+        "general"
+      ],
+      "title": "DocumentKind",
+      "type": "string"
+    },
+    "FieldProvenance": {
+      "enum": [
+        "transcript",
+        "user"
+      ],
+      "title": "FieldProvenance",
+      "type": "string"
+    },
+    "GovernanceAlert": {
+      "additionalProperties": false,
+      "properties": {
+        "alert_id": {
+          "title": "Alert Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "ownerless",
+            "overdue",
+            "aging_decision",
+            "critical_dependency",
+            "provenance_review"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "record_id": {
+          "title": "Record Id",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "alert_id",
+        "record_id",
+        "kind",
+        "severity",
+        "label"
+      ],
+      "title": "GovernanceAlert",
+      "type": "object"
+    },
+    "GovernanceEvidenceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Evidence Event Ids",
+          "type": "array"
+        },
+        "session_id": {
+          "pattern": "^[A-Za-z0-9_-]{1,128}$",
+          "title": "Session Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id",
+        "evidence_event_ids"
+      ],
+      "title": "GovernanceEvidenceRef",
+      "type": "object"
+    },
+    "GovernanceKind": {
+      "enum": [
+        "decision",
+        "risk",
+        "dependency",
+        "action",
+        "assumption",
+        "constraint",
+        "architecture_impact",
+        "responsibility"
+      ],
+      "title": "GovernanceKind",
+      "type": "string"
+    },
+    "GovernanceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/GovernanceEvidenceRef"
+          },
+          "maxItems": 100,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "field_provenance": {
+          "additionalProperties": {
+            "$ref": "#/$defs/FieldProvenance"
+          },
+          "maxProperties": 64,
+          "title": "Field Provenance",
+          "type": "object"
+        },
+        "kind": {
+          "$ref": "#/$defs/GovernanceKind"
+        },
+        "linked_entity_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Linked Entity Ids",
+          "type": "array"
+        },
+        "linked_pain_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Linked Pain Ids",
+          "type": "array"
+        },
+        "needs_provenance_review": {
+          "default": false,
+          "title": "Needs Provenance Review",
+          "type": "boolean"
+        },
+        "payload": {
+          "discriminator": {
+            "mapping": {
+              "action": "#/$defs/ActionPayload",
+              "architecture_impact": "#/$defs/ArchitectureImpactPayload",
+              "assumption": "#/$defs/AssumptionPayload",
+              "constraint": "#/$defs/ConstraintPayload",
+              "decision": "#/$defs/DecisionPayload",
+              "dependency": "#/$defs/DependencyPayload",
+              "responsibility": "#/$defs/ResponsibilityPayload",
+              "risk": "#/$defs/RiskPayload"
+            },
+            "propertyName": "payload_type"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/DecisionPayload"
+            },
+            {
+              "$ref": "#/$defs/RiskPayload"
+            },
+            {
+              "$ref": "#/$defs/DependencyPayload"
+            },
+            {
+              "$ref": "#/$defs/ActionPayload"
+            },
+            {
+              "$ref": "#/$defs/AssumptionPayload"
+            },
+            {
+              "$ref": "#/$defs/ConstraintPayload"
+            },
+            {
+              "$ref": "#/$defs/ArchitectureImpactPayload"
+            },
+            {
+              "$ref": "#/$defs/ResponsibilityPayload"
+            }
+          ],
+          "title": "Payload"
+        },
+        "record_id": {
+          "title": "Record Id",
+          "type": "string"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "source_session_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Source Session Ids",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/GovernanceRecordStatus",
+          "default": "open"
+        },
+        "superseded_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Superseded By"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "record_id",
+        "workspace_id",
+        "kind",
+        "title",
+        "payload"
+      ],
+      "title": "GovernanceRecord",
+      "type": "object"
+    },
+    "GovernanceRecordStatus": {
+      "enum": [
+        "open",
+        "monitoring",
+        "resolved",
+        "superseded"
+      ],
+      "title": "GovernanceRecordStatus",
+      "type": "string"
+    },
+    "ResponsibilityPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "accountable": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Accountable",
+          "type": "array"
+        },
+        "consulted": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Consulted",
+          "type": "array"
+        },
+        "informed": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Informed",
+          "type": "array"
+        },
+        "payload_type": {
+          "const": "responsibility",
+          "default": "responsibility",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "responsible": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Responsible",
+          "type": "array"
+        },
+        "subject": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Subject",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject"
+      ],
+      "title": "ResponsibilityPayload",
+      "type": "object"
+    },
+    "RiskPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cause": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cause"
+        },
+        "impact": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Impact"
+        },
+        "likelihood": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Likelihood"
+        },
+        "mitigation": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mitigation"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        },
+        "payload_type": {
+          "const": "risk",
+          "default": "risk",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "critical"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Severity"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "target_date": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Date"
+        }
+      },
+      "required": [
+        "statement"
+      ],
+      "title": "RiskPayload",
+      "type": "object"
+    },
+    "SolutionEdgeKind": {
+      "enum": [
+        "documents",
+        "implements",
+        "implemented_by",
+        "deployed_as",
+        "depends_on",
+        "validated_by",
+        "conflicts_with",
+        "supersedes",
+        "affects",
+        "owned_by",
+        "references"
+      ],
+      "title": "SolutionEdgeKind",
+      "type": "string"
+    },
+    "SolutionLeadDashboard": {
+      "additionalProperties": false,
+      "properties": {
+        "architecture_conflict_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Architecture Conflict Count",
+          "type": "integer"
+        },
+        "assurance_status": {
+          "default": "ready",
+          "enum": [
+            "ready",
+            "degraded",
+            "unavailable"
+          ],
+          "title": "Assurance Status",
+          "type": "string"
+        },
+        "erp_schema_drift_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Erp Schema Drift Count",
+          "type": "integer"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "governance_alerts": {
+          "items": {
+            "$ref": "#/$defs/GovernanceAlert"
+          },
+          "maxItems": 100,
+          "title": "Governance Alerts",
+          "type": "array"
+        },
+        "governance_records": {
+          "items": {
+            "$ref": "#/$defs/GovernanceRecord"
+          },
+          "maxItems": 500,
+          "title": "Governance Records",
+          "type": "array"
+        },
+        "meetings_requiring_review": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Meetings Requiring Review",
+          "type": "integer"
+        },
+        "missing_traceability": {
+          "$ref": "#/$defs/TraceabilityMatrix"
+        },
+        "new_findings": {
+          "items": {
+            "$ref": "#/$defs/AssuranceFinding"
+          },
+          "maxItems": 200,
+          "title": "New Findings",
+          "type": "array"
+        }
+      },
+      "title": "SolutionLeadDashboard",
+      "type": "object"
+    },
+    "SolutionMindMap": {
+      "additionalProperties": false,
+      "properties": {
+        "counts_by_kind": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts By Kind",
+          "type": "object"
+        },
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/SolutionMindMapEdge"
+          },
+          "maxItems": 2000,
+          "title": "Edges",
+          "type": "array"
+        },
+        "focus": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Focus"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "mermaid": {
+          "maxLength": 100000,
+          "title": "Mermaid",
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/SolutionMindMapNode"
+          },
+          "maxItems": 500,
+          "title": "Nodes",
+          "type": "array"
+        },
+        "outline": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 500,
+          "title": "Outline",
+          "type": "array"
+        },
+        "query_hints": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Query Hints",
+          "type": "array"
+        },
+        "root_public_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Root Public Ids",
+          "type": "array"
+        },
+        "source_fingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Fingerprint",
+          "type": "string"
+        },
+        "suggested_edge_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Suggested Edge Count",
+          "type": "integer"
+        },
+        "truncated": {
+          "default": false,
+          "title": "Truncated",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "source_fingerprint",
+        "mermaid"
+      ],
+      "title": "SolutionMindMap",
+      "type": "object"
+    },
+    "SolutionMindMapEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "public_id": {
+          "pattern": "^e_[a-f0-9]{16}$",
+          "title": "Public Id",
+          "type": "string"
+        },
+        "relation": {
+          "$ref": "#/$defs/SolutionEdgeKind"
+        },
+        "source_public_id": {
+          "pattern": "^m_[a-f0-9]{16}$",
+          "title": "Source Public Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "confirmed",
+            "suggested"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "target_public_id": {
+          "pattern": "^m_[a-f0-9]{16}$",
+          "title": "Target Public Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "public_id",
+        "source_public_id",
+        "target_public_id",
+        "relation",
+        "status"
+      ],
+      "title": "SolutionMindMapEdge",
+      "type": "object"
+    },
+    "SolutionMindMapNode": {
+      "additionalProperties": false,
+      "properties": {
+        "confirmed": {
+          "title": "Confirmed",
+          "type": "boolean"
+        },
+        "degree": {
+          "default": 0,
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Degree",
+          "type": "integer"
+        },
+        "kind": {
+          "$ref": "#/$defs/SolutionNodeKind"
+        },
+        "label": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "public_id": {
+          "pattern": "^m_[a-f0-9]{16}$",
+          "title": "Public Id",
+          "type": "string"
+        },
+        "root": {
+          "default": false,
+          "title": "Root",
+          "type": "boolean"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "source_revision": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Revision"
+        }
+      },
+      "required": [
+        "public_id",
+        "kind",
+        "label",
+        "source_reference",
+        "confirmed"
+      ],
+      "title": "SolutionMindMapNode",
+      "type": "object"
+    },
+    "SolutionMindMapRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "depth": {
+          "default": 2,
+          "maximum": 3,
+          "minimum": 1,
+          "title": "Depth",
+          "type": "integer"
+        },
+        "focus": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Focus"
+        },
+        "include_suggested": {
+          "default": true,
+          "title": "Include Suggested",
+          "type": "boolean"
+        },
+        "kinds": {
+          "items": {
+            "$ref": "#/$defs/SolutionNodeKind"
+          },
+          "maxItems": 16,
+          "title": "Kinds",
+          "type": "array"
+        },
+        "max_nodes": {
+          "default": 150,
+          "maximum": 500,
+          "minimum": 10,
+          "title": "Max Nodes",
+          "type": "integer"
+        }
+      },
+      "title": "SolutionMindMapRequest",
+      "type": "object"
+    },
+    "SolutionNodeKind": {
+      "enum": [
+        "requirement",
+        "document",
+        "revision",
+        "decision",
+        "risk",
+        "problem",
+        "system",
+        "interface",
+        "data_object",
+        "erp_entity",
+        "nfr",
+        "test",
+        "cutover_control",
+        "action",
+        "governance_record"
+      ],
+      "title": "SolutionNodeKind",
+      "type": "string"
+    },
+    "SolutionThreadEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "confirmed": {
+          "default": false,
+          "title": "Confirmed",
+          "type": "boolean"
+        },
+        "edge_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Edge Id",
+          "type": "string"
+        },
+        "provenance_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Provenance Fields",
+          "type": "array"
+        },
+        "relation": {
+          "$ref": "#/$defs/SolutionEdgeKind"
+        },
+        "review_status": {
+          "default": "suggested",
+          "enum": [
+            "suggested",
+            "confirmed",
+            "dismissed"
+          ],
+          "title": "Review Status",
+          "type": "string"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "source_node_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Node Id",
+          "type": "string"
+        },
+        "source_revision": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Revision"
+        },
+        "target_node_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Target Node Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "edge_id",
+        "source_node_id",
+        "target_node_id",
+        "relation"
+      ],
+      "title": "SolutionThreadEdge",
+      "type": "object"
+    },
+    "SolutionThreadEdgeProposal": {
+      "additionalProperties": false,
+      "properties": {
+        "edge_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Edge Id",
+          "type": "string"
+        },
+        "relation": {
+          "$ref": "#/$defs/SolutionEdgeKind"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "source_label": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Source Label",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "target_label": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Target Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "edge_id",
+        "source_label",
+        "target_label",
+        "source_reference",
+        "relation",
+        "revision"
+      ],
+      "title": "SolutionThreadEdgeProposal",
+      "type": "object"
+    },
+    "SolutionThreadEdgeReviewRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "confirm",
+            "dismiss"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 1,
+          "title": "Expected Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "expected_revision",
+        "action"
+      ],
+      "title": "SolutionThreadEdgeReviewRequest",
+      "type": "object"
+    },
+    "SolutionThreadImpact": {
+      "additionalProperties": false,
+      "properties": {
+        "depth": {
+          "default": 2,
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Depth",
+          "type": "integer"
+        },
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/SolutionThreadEdge"
+          },
+          "maxItems": 5000,
+          "title": "Edges",
+          "type": "array"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/SolutionThreadNode"
+          },
+          "maxItems": 2000,
+          "title": "Nodes",
+          "type": "array"
+        },
+        "paths": {
+          "items": {
+            "$ref": "#/$defs/ThreadImpactPath"
+          },
+          "maxItems": 2000,
+          "title": "Paths",
+          "type": "array"
+        },
+        "root_node_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Root Node Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "root_node_id"
+      ],
+      "title": "SolutionThreadImpact",
+      "type": "object"
+    },
+    "SolutionThreadImpactRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "depth": {
+          "default": 2,
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Depth",
+          "type": "integer"
+        },
+        "root_node_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Root Node Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "root_node_id"
+      ],
+      "title": "SolutionThreadImpactRequest",
+      "type": "object"
+    },
+    "SolutionThreadNode": {
+      "additionalProperties": false,
+      "properties": {
+        "confirmed": {
+          "default": false,
+          "title": "Confirmed",
+          "type": "boolean"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/SolutionNodeKind"
+        },
+        "label": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "node_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Node Id",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "source_revision": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Revision"
+        }
+      },
+      "required": [
+        "node_id",
+        "kind",
+        "label",
+        "source_reference"
+      ],
+      "title": "SolutionThreadNode",
+      "type": "object"
+    },
+    "ThreadImpactPath": {
+      "additionalProperties": false,
+      "properties": {
+        "edge_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Edge Ids",
+          "type": "array"
+        },
+        "node_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 1,
+          "title": "Node Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "node_ids"
+      ],
+      "title": "ThreadImpactPath",
+      "type": "object"
+    },
+    "TraceabilityMatrix": {
+      "additionalProperties": false,
+      "properties": {
+        "missing_design_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Missing Design Count",
+          "type": "integer"
+        },
+        "missing_test_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Missing Test Count",
+          "type": "integer"
+        },
+        "rows": {
+          "items": {
+            "$ref": "#/$defs/TraceabilityRow"
+          },
+          "maxItems": 10000,
+          "title": "Rows",
+          "type": "array"
+        }
+      },
+      "title": "TraceabilityMatrix",
+      "type": "object"
+    },
+    "TraceabilityRow": {
+      "additionalProperties": false,
+      "properties": {
+        "design_node_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Design Node Ids",
+          "type": "array"
+        },
+        "finding_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Finding Ids",
+          "type": "array"
+        },
+        "requirement_node_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Requirement Node Id",
+          "type": "string"
+        },
+        "test_node_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Test Node Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "requirement_node_id"
+      ],
+      "title": "TraceabilityRow",
+      "type": "object"
+    }
+  },
+  "title": "MeetingIntelligenceSolutionThreadContracts"
+}

@@ -1,0 +1,13 @@
+{
+  "meeting_id": "small-talk-no-pain-en",
+  "fixture": "evals/fixtures/small-talk-no-pain-en.jsonl",
+  "lang": "en",
+  "pain_category": null,
+  "checkpoints": [
+    {
+      "name": "no_pain_false_positive_guard",
+      "after_event_seq": 3,
+      "expect_empty": true
+    }
+  ]
+}

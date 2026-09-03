@@ -1,0 +1,5 @@
+{"speaker": "Warehouse Ops", "text": "Inventory counts between the warehouse side and the EC side do not match.", "offset_ms": 0}
+{"speaker": "Warehouse Ops", "text": "We manually correct it every morning before shipping.", "offset_ms": 8000}
+{"speaker": "PM", "text": "Which system is the source of truth right now?", "offset_ms": 16000}
+{"speaker": "Warehouse Ops", "text": "The warehouse side is the source of truth.", "offset_ms": 24000}
+{"speaker": "Ops Manager", "text": "When it drifts, shipping gets delayed.", "offset_ms": 32000}

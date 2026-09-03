@@ -1,0 +1,13 @@
+{
+  "meeting_id": "vague-requirement-ko",
+  "fixture": "evals/fixtures/vague-requirement-ko.jsonl",
+  "lang": "ko",
+  "pain_category": "vague_requirement",
+  "checkpoints": [
+    {
+      "name": "after_vague_requirement_detection",
+      "after_event_seq": 0,
+      "ask_now_gap": "expected_behavior"
+    }
+  ]
+}

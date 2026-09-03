@@ -1,0 +1,43 @@
+{
+  "meeting_id": "integration-failure-mixed-terms-ja",
+  "fixture": "evals/fixtures/integration-failure-mixed-terms-ja.jsonl",
+  "lang": "ja",
+  "pain_category": "integration_failure",
+  "checkpoints": [
+    {
+      "name": "pain_detected_with_embedded_english_terms",
+      "after_event_seq": 0,
+      "pain_category": "integration_failure"
+    },
+    {
+      "name": "error_signal_extracted",
+      "after_event_seq": 2,
+      "known_facts": {"error_signal": "エラーなし"},
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "retry_behavior_extracted",
+      "after_event_seq": 3,
+      "known_facts": {"retry_behavior": "手動で登録"},
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "business_impact_answers_top_gap_promotes_failure_point",
+      "after_event_seq": 4,
+      "known_facts": {"business_impact": "出荷遅延・配送影響"},
+      "known_facts_absent": ["source_system", "target_system"],
+      "ask_now_gap": "failure_point"
+    },
+    {
+      "name": "mixed_english_technical_terms_line_does_not_corrupt_state",
+      "after_event_seq": 5,
+      "known_facts": {
+        "error_signal": "エラーなし",
+        "retry_behavior": "手動で登録",
+        "business_impact": "出荷遅延・配送影響"
+      },
+      "known_facts_absent": ["source_system", "target_system"],
+      "ask_now_gap": "failure_point"
+    }
+  ]
+}

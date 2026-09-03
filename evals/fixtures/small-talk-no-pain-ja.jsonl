@@ -1,0 +1,5 @@
+{"speaker": "A", "text": "おはようございます。", "offset_ms": 0}
+{"speaker": "B", "text": "おはようございます。よろしくお願いします。", "offset_ms": 4000}
+{"speaker": "A", "text": "画面は見えていますか？", "offset_ms": 9000}
+{"speaker": "B", "text": "はい、見えています。", "offset_ms": 13000}
+{"speaker": "A", "text": "では始めましょう。", "offset_ms": 18000}

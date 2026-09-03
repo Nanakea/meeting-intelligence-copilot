@@ -1,0 +1,1418 @@
+{
+  "$defs": {
+    "ActionPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "due_date": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Due Date"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        },
+        "payload_type": {
+          "const": "action",
+          "default": "action",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "task": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Task",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "title": "ActionPayload",
+      "type": "object"
+    },
+    "ArchitectureImpactPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_entities": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Affected Entities",
+          "type": "array"
+        },
+        "change": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Change",
+          "type": "string"
+        },
+        "decision_required": {
+          "default": false,
+          "title": "Decision Required",
+          "type": "boolean"
+        },
+        "impact_areas": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Impact Areas",
+          "type": "array"
+        },
+        "payload_type": {
+          "const": "architecture_impact",
+          "default": "architecture_impact",
+          "title": "Payload Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "change"
+      ],
+      "title": "ArchitectureImpactPayload",
+      "type": "object"
+    },
+    "AssumptionPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "payload_type": {
+          "const": "assumption",
+          "default": "assumption",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "validation_due": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Validation Due"
+        },
+        "validation_owner": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Validation Owner"
+        }
+      },
+      "required": [
+        "statement"
+      ],
+      "title": "AssumptionPayload",
+      "type": "object"
+    },
+    "ConnectorKind": {
+      "enum": [
+        "local_files",
+        "microsoft_graph",
+        "odata",
+        "sap",
+        "dynamics365",
+        "netsuite",
+        "microsoft_teams",
+        "slack",
+        "notion",
+        "wms",
+        "amazon_fba",
+        "github",
+        "gitlab",
+        "jira",
+        "confluence",
+        "azure_devops",
+        "servicenow",
+        "sql",
+        "sftp",
+        "openapi"
+      ],
+      "title": "ConnectorKind",
+      "type": "string"
+    },
+    "ConstraintPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_scope": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Affected Scope",
+          "type": "array"
+        },
+        "exception_path": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exception Path"
+        },
+        "payload_type": {
+          "const": "constraint",
+          "default": "constraint",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "statement"
+      ],
+      "title": "ConstraintPayload",
+      "type": "object"
+    },
+    "ContextRelation": {
+      "enum": [
+        "supporting",
+        "conflicting",
+        "reference"
+      ],
+      "title": "ContextRelation",
+      "type": "string"
+    },
+    "DecisionPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "alternatives": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Alternatives",
+          "type": "array"
+        },
+        "approver": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approver"
+        },
+        "payload_type": {
+          "const": "decision",
+          "default": "decision",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rationale"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "statement"
+      ],
+      "title": "DecisionPayload",
+      "type": "object"
+    },
+    "DependencyPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "consumer": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Consumer"
+        },
+        "deliverable": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Deliverable"
+        },
+        "fallback": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fallback"
+        },
+        "needed_by": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Needed By"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        },
+        "payload_type": {
+          "const": "dependency",
+          "default": "dependency",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        }
+      },
+      "required": [
+        "statement"
+      ],
+      "title": "DependencyPayload",
+      "type": "object"
+    },
+    "FieldProvenance": {
+      "enum": [
+        "transcript",
+        "user"
+      ],
+      "title": "FieldProvenance",
+      "type": "string"
+    },
+    "GovernanceAlert": {
+      "additionalProperties": false,
+      "properties": {
+        "alert_id": {
+          "title": "Alert Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "ownerless",
+            "overdue",
+            "aging_decision",
+            "critical_dependency",
+            "provenance_review"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "record_id": {
+          "title": "Record Id",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "alert_id",
+        "record_id",
+        "kind",
+        "severity",
+        "label"
+      ],
+      "title": "GovernanceAlert",
+      "type": "object"
+    },
+    "GovernanceCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": {
+          "title": "Candidate Id",
+          "type": "string"
+        },
+        "created_seq": {
+          "minimum": 0,
+          "title": "Created Seq",
+          "type": "integer"
+        },
+        "evidence_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Evidence Event Ids",
+          "type": "array"
+        },
+        "fingerprint": {
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/GovernanceKind"
+        },
+        "language": {
+          "enum": [
+            "ja",
+            "en",
+            "ko"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "linked_entity_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Linked Entity Ids",
+          "type": "array"
+        },
+        "linked_pain_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Linked Pain Ids",
+          "type": "array"
+        },
+        "payload": {
+          "discriminator": {
+            "mapping": {
+              "action": "#/$defs/ActionPayload",
+              "architecture_impact": "#/$defs/ArchitectureImpactPayload",
+              "assumption": "#/$defs/AssumptionPayload",
+              "constraint": "#/$defs/ConstraintPayload",
+              "decision": "#/$defs/DecisionPayload",
+              "dependency": "#/$defs/DependencyPayload",
+              "responsibility": "#/$defs/ResponsibilityPayload",
+              "risk": "#/$defs/RiskPayload"
+            },
+            "propertyName": "payload_type"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/DecisionPayload"
+            },
+            {
+              "$ref": "#/$defs/RiskPayload"
+            },
+            {
+              "$ref": "#/$defs/DependencyPayload"
+            },
+            {
+              "$ref": "#/$defs/ActionPayload"
+            },
+            {
+              "$ref": "#/$defs/AssumptionPayload"
+            },
+            {
+              "$ref": "#/$defs/ConstraintPayload"
+            },
+            {
+              "$ref": "#/$defs/ArchitectureImpactPayload"
+            },
+            {
+              "$ref": "#/$defs/ResponsibilityPayload"
+            }
+          ],
+          "title": "Payload"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "state_version": {
+          "minimum": 0,
+          "title": "State Version",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/GovernanceCandidateStatus",
+          "default": "pending"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "workspace_id",
+        "session_id",
+        "state_version",
+        "kind",
+        "title",
+        "payload",
+        "language",
+        "fingerprint",
+        "evidence_event_ids",
+        "created_seq"
+      ],
+      "title": "GovernanceCandidate",
+      "type": "object"
+    },
+    "GovernanceCandidateStatus": {
+      "enum": [
+        "pending",
+        "confirmed",
+        "dismissed"
+      ],
+      "title": "GovernanceCandidateStatus",
+      "type": "string"
+    },
+    "GovernanceEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "created",
+            "updated",
+            "status_changed",
+            "linked",
+            "unlinked",
+            "superseded",
+            "provenance_removed"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "changed_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Changed Fields",
+          "type": "array"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/FieldProvenance"
+        },
+        "record_id": {
+          "title": "Record Id",
+          "type": "string"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "event_id",
+        "record_id",
+        "revision",
+        "action",
+        "provenance"
+      ],
+      "title": "GovernanceEvent",
+      "type": "object"
+    },
+    "GovernanceEvidenceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Evidence Event Ids",
+          "type": "array"
+        },
+        "session_id": {
+          "pattern": "^[A-Za-z0-9_-]{1,128}$",
+          "title": "Session Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id",
+        "evidence_event_ids"
+      ],
+      "title": "GovernanceEvidenceRef",
+      "type": "object"
+    },
+    "GovernanceExportOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "azure_work_item_type": {
+          "default": "Task",
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Azure Work Item Type",
+          "type": "string"
+        },
+        "include_connected_excerpts": {
+          "default": false,
+          "title": "Include Connected Excerpts",
+          "type": "boolean"
+        },
+        "include_transcript_excerpts": {
+          "default": false,
+          "title": "Include Transcript Excerpts",
+          "type": "boolean"
+        },
+        "jira_work_type": {
+          "default": "Task",
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Jira Work Type",
+          "type": "string"
+        }
+      },
+      "title": "GovernanceExportOptions",
+      "type": "object"
+    },
+    "GovernanceKind": {
+      "enum": [
+        "decision",
+        "risk",
+        "dependency",
+        "action",
+        "assumption",
+        "constraint",
+        "architecture_impact",
+        "responsibility"
+      ],
+      "title": "GovernanceKind",
+      "type": "string"
+    },
+    "GovernanceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/GovernanceEvidenceRef"
+          },
+          "maxItems": 100,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "field_provenance": {
+          "additionalProperties": {
+            "$ref": "#/$defs/FieldProvenance"
+          },
+          "maxProperties": 64,
+          "title": "Field Provenance",
+          "type": "object"
+        },
+        "kind": {
+          "$ref": "#/$defs/GovernanceKind"
+        },
+        "linked_entity_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Linked Entity Ids",
+          "type": "array"
+        },
+        "linked_pain_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Linked Pain Ids",
+          "type": "array"
+        },
+        "needs_provenance_review": {
+          "default": false,
+          "title": "Needs Provenance Review",
+          "type": "boolean"
+        },
+        "payload": {
+          "discriminator": {
+            "mapping": {
+              "action": "#/$defs/ActionPayload",
+              "architecture_impact": "#/$defs/ArchitectureImpactPayload",
+              "assumption": "#/$defs/AssumptionPayload",
+              "constraint": "#/$defs/ConstraintPayload",
+              "decision": "#/$defs/DecisionPayload",
+              "dependency": "#/$defs/DependencyPayload",
+              "responsibility": "#/$defs/ResponsibilityPayload",
+              "risk": "#/$defs/RiskPayload"
+            },
+            "propertyName": "payload_type"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/DecisionPayload"
+            },
+            {
+              "$ref": "#/$defs/RiskPayload"
+            },
+            {
+              "$ref": "#/$defs/DependencyPayload"
+            },
+            {
+              "$ref": "#/$defs/ActionPayload"
+            },
+            {
+              "$ref": "#/$defs/AssumptionPayload"
+            },
+            {
+              "$ref": "#/$defs/ConstraintPayload"
+            },
+            {
+              "$ref": "#/$defs/ArchitectureImpactPayload"
+            },
+            {
+              "$ref": "#/$defs/ResponsibilityPayload"
+            }
+          ],
+          "title": "Payload"
+        },
+        "record_id": {
+          "title": "Record Id",
+          "type": "string"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "source_session_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Source Session Ids",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/GovernanceRecordStatus",
+          "default": "open"
+        },
+        "superseded_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Superseded By"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "workspace_id": {
+          "title": "Workspace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "record_id",
+        "workspace_id",
+        "kind",
+        "title",
+        "payload"
+      ],
+      "title": "GovernanceRecord",
+      "type": "object"
+    },
+    "GovernanceRecordStatus": {
+      "enum": [
+        "open",
+        "monitoring",
+        "resolved",
+        "superseded"
+      ],
+      "title": "GovernanceRecordStatus",
+      "type": "string"
+    },
+    "ImpactAnalysis": {
+      "additionalProperties": false,
+      "properties": {
+        "context_citations": {
+          "items": {
+            "$ref": "#/$defs/PublicContextCitation"
+          },
+          "maxItems": 20,
+          "title": "Context Citations",
+          "type": "array"
+        },
+        "context_status": {
+          "default": "not_requested",
+          "enum": [
+            "not_requested",
+            "current",
+            "unavailable",
+            "timeout"
+          ],
+          "title": "Context Status",
+          "type": "string"
+        },
+        "entities": {
+          "items": {
+            "$ref": "#/$defs/SystemEntity"
+          },
+          "maxItems": 100,
+          "title": "Entities",
+          "type": "array"
+        },
+        "paths": {
+          "items": {
+            "$ref": "#/$defs/ImpactPath"
+          },
+          "maxItems": 100,
+          "title": "Paths",
+          "type": "array"
+        },
+        "relationships": {
+          "items": {
+            "$ref": "#/$defs/SystemRelationship"
+          },
+          "maxItems": 200,
+          "title": "Relationships",
+          "type": "array"
+        },
+        "root_entity_id": {
+          "title": "Root Entity Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "root_entity_id"
+      ],
+      "title": "ImpactAnalysis",
+      "type": "object"
+    },
+    "ImpactPath": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "title": "Entity Ids",
+          "type": "array"
+        },
+        "relationship_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 2,
+          "title": "Relationship Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "entity_ids"
+      ],
+      "title": "ImpactPath",
+      "type": "object"
+    },
+    "PublicContextCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "citation_id": {
+          "title": "Citation Id",
+          "type": "string"
+        },
+        "connector_id": {
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "entity_type": {
+          "title": "Entity Type",
+          "type": "string"
+        },
+        "excerpt": {
+          "maxLength": 600,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "rank": {
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "relation": {
+          "$ref": "#/$defs/ContextRelation",
+          "default": "reference"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "source_kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "source_label": {
+          "title": "Source Label",
+          "type": "string"
+        },
+        "source_reference": {
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "stale": {
+          "default": false,
+          "title": "Stale",
+          "type": "boolean"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updated At"
+        },
+        "uri": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uri"
+        }
+      },
+      "required": [
+        "citation_id",
+        "connector_id",
+        "source_kind",
+        "source_label",
+        "source_reference",
+        "entity_type",
+        "excerpt",
+        "retrieved_at",
+        "rank"
+      ],
+      "title": "PublicContextCitation",
+      "type": "object"
+    },
+    "ResponsibilityPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "accountable": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Accountable",
+          "type": "array"
+        },
+        "consulted": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Consulted",
+          "type": "array"
+        },
+        "informed": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 40,
+          "title": "Informed",
+          "type": "array"
+        },
+        "payload_type": {
+          "const": "responsibility",
+          "default": "responsibility",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "responsible": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Responsible",
+          "type": "array"
+        },
+        "subject": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Subject",
+          "type": "string"
+        }
+      },
+      "required": [
+        "subject"
+      ],
+      "title": "ResponsibilityPayload",
+      "type": "object"
+    },
+    "RiskPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "cause": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cause"
+        },
+        "impact": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Impact"
+        },
+        "likelihood": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Likelihood"
+        },
+        "mitigation": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mitigation"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        },
+        "payload_type": {
+          "const": "risk",
+          "default": "risk",
+          "title": "Payload Type",
+          "type": "string"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "critical"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Severity"
+        },
+        "statement": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "target_date": {
+          "anyOf": [
+            {
+              "maxLength": 40,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Date"
+        }
+      },
+      "required": [
+        "statement"
+      ],
+      "title": "RiskPayload",
+      "type": "object"
+    },
+    "SolutionBrief": {
+      "additionalProperties": false,
+      "properties": {
+        "alerts": {
+          "items": {
+            "$ref": "#/$defs/GovernanceAlert"
+          },
+          "maxItems": 50,
+          "title": "Alerts",
+          "type": "array"
+        },
+        "context_citations": {
+          "items": {
+            "$ref": "#/$defs/PublicContextCitation"
+          },
+          "maxItems": 20,
+          "title": "Context Citations",
+          "type": "array"
+        },
+        "context_status": {
+          "default": "not_requested",
+          "enum": [
+            "not_requested",
+            "current",
+            "unavailable",
+            "timeout"
+          ],
+          "title": "Context Status",
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "ja",
+            "en",
+            "ko"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "records": {
+          "items": {
+            "$ref": "#/$defs/GovernanceRecord"
+          },
+          "maxItems": 100,
+          "title": "Records",
+          "type": "array"
+        }
+      },
+      "required": [
+        "language"
+      ],
+      "title": "SolutionBrief",
+      "type": "object"
+    },
+    "SolutionPortfolio": {
+      "additionalProperties": false,
+      "properties": {
+        "alerts": {
+          "items": {
+            "$ref": "#/$defs/GovernanceAlert"
+          },
+          "maxItems": 100,
+          "title": "Alerts",
+          "type": "array"
+        },
+        "counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "object"
+        },
+        "records": {
+          "items": {
+            "$ref": "#/$defs/GovernanceRecord"
+          },
+          "maxItems": 500,
+          "title": "Records",
+          "type": "array"
+        }
+      },
+      "title": "SolutionPortfolio",
+      "type": "object"
+    },
+    "SystemEntity": {
+      "additionalProperties": false,
+      "properties": {
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Aliases",
+          "type": "array"
+        },
+        "confirmed": {
+          "default": true,
+          "title": "Confirmed",
+          "type": "boolean"
+        },
+        "entity_id": {
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/SystemEntityKind"
+        },
+        "label": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "entity_id",
+        "kind",
+        "label"
+      ],
+      "title": "SystemEntity",
+      "type": "object"
+    },
+    "SystemEntityKind": {
+      "enum": [
+        "system",
+        "interface",
+        "process",
+        "data_object",
+        "business_capability",
+        "team",
+        "region",
+        "environment",
+        "standard",
+        "architecture_pattern"
+      ],
+      "title": "SystemEntityKind",
+      "type": "string"
+    },
+    "SystemRelationship": {
+      "additionalProperties": false,
+      "properties": {
+        "confirmed": {
+          "default": false,
+          "title": "Confirmed",
+          "type": "boolean"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/GovernanceEvidenceRef"
+          },
+          "maxItems": 50,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "relation": {
+          "enum": [
+            "integrates_with",
+            "depends_on",
+            "owns",
+            "source_of_truth",
+            "exchanges",
+            "supports",
+            "governed_by"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "relationship_id": {
+          "title": "Relationship Id",
+          "type": "string"
+        },
+        "source_entity_id": {
+          "title": "Source Entity Id",
+          "type": "string"
+        },
+        "target_entity_id": {
+          "title": "Target Entity Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "relationship_id",
+        "source_entity_id",
+        "target_entity_id",
+        "relation"
+      ],
+      "title": "SystemRelationship",
+      "type": "object"
+    }
+  },
+  "title": "MeetingIntelligenceGovernanceContracts"
+}

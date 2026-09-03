@@ -1,0 +1,33 @@
+{
+  "meeting_id": "vague-requirement-ja",
+  "fixture": "evals/fixtures/vague-requirement-ja.jsonl",
+  "lang": "ja",
+  "pain_category": "vague_requirement",
+  "checkpoints": [
+    {
+      "name": "after_pain_detection",
+      "after_event_seq": 0,
+      "pain_category": "vague_requirement",
+      "ask_now_gap": "expected_behavior"
+    },
+    {
+      "name": "after_current_problem_known",
+      "after_event_seq": 2,
+      "known_facts": { "current_problem": "検索結果が多く時間がかかる" },
+      "known_facts_absent": ["expected_behavior", "acceptance_criteria"],
+      "open_gaps_include": ["expected_behavior", "acceptance_criteria"],
+      "ask_now_gap": "expected_behavior"
+    },
+    {
+      "name": "after_expected_behavior_answered",
+      "after_event_seq": 4,
+      "known_facts": {
+        "expected_behavior": "検索結果を絞り込みすぐ見つけられる状態",
+        "current_problem": "検索結果が多く時間がかかる"
+      },
+      "answered_gaps": ["expected_behavior"],
+      "no_active_suggestion_gaps": ["expected_behavior"],
+      "ask_now_gap": "acceptance_criteria"
+    }
+  ]
+}

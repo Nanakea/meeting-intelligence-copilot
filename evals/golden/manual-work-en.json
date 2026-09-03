@@ -1,0 +1,54 @@
+{
+  "meeting_id": "manual-work-en",
+  "fixture": "evals/fixtures/manual-work-en.jsonl",
+  "lang": "en",
+  "pain_category": "manual_work",
+  "checkpoints": [
+    {
+      "name": "after_first_event_frequency_is_explicit",
+      "after_event_seq": 0,
+      "pain_category": "manual_work",
+      "known_facts": { "frequency": "every morning" },
+      "known_facts_absent": ["business_impact", "volume", "time_cost"],
+      "open_gaps_exclude": ["frequency"],
+      "ask_now_gap": "business_impact",
+      "no_active_suggestion_gaps": ["frequency"]
+    },
+    {
+      "name": "pm_frequency_question_does_not_mutate",
+      "after_event_seq": 1,
+      "known_facts": { "frequency": "every morning" },
+      "open_gaps_exclude": ["frequency"],
+      "ask_now_gap": "business_impact",
+      "no_active_suggestion_gaps": ["frequency"]
+    },
+    {
+      "name": "after_business_impact_answered_volume_promoted",
+      "after_event_seq": 2,
+      "known_facts": {
+        "business_impact": "delays morning shipping report by ~1h",
+        "frequency": "every morning"
+      },
+      "answered_gaps": ["business_impact"],
+      "open_gaps_exclude": ["frequency"],
+      "ask_now_gap": "volume",
+      "no_active_suggestion_gaps": ["frequency"]
+    },
+    {
+      "name": "after_frequency_refined_supersedes",
+      "after_event_seq": 3,
+      "known_facts": {
+        "frequency": "every business day",
+        "business_impact": "delays morning shipping report by ~1h"
+      },
+      "facts_history": [
+        { "slot": "frequency", "value": "every morning", "status": "superseded" }
+      ],
+      "known_facts_absent": ["volume", "time_cost"],
+      "open_gaps_exclude": ["frequency"],
+      "answered_gaps": ["business_impact"],
+      "ask_now_gap": "volume",
+      "no_active_suggestion_gaps": ["frequency"]
+    }
+  ]
+}

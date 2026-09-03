@@ -1,0 +1,1573 @@
+{
+  "$defs": {
+    "ApprovedException": {
+      "additionalProperties": false,
+      "properties": {
+        "approved_at": {
+          "format": "date-time",
+          "title": "Approved At",
+          "type": "string"
+        },
+        "exception_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Exception Id",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "finding_fingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Finding Fingerprint",
+          "type": "string"
+        },
+        "owner_role": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner Role"
+        },
+        "reason": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "exception_id",
+        "finding_fingerprint",
+        "reason",
+        "expires_at"
+      ],
+      "title": "ApprovedException",
+      "type": "object"
+    },
+    "ArtifactLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "cell_range": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cell Range"
+        },
+        "end_line": {
+          "anyOf": [
+            {
+              "maximum": 10000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Line"
+        },
+        "heading": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Heading"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "maximum": 100000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "paragraph": {
+          "anyOf": [
+            {
+              "maximum": 1000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Paragraph"
+        },
+        "sheet": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sheet"
+        },
+        "start_line": {
+          "anyOf": [
+            {
+              "maximum": 10000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Line"
+        }
+      },
+      "title": "ArtifactLocator",
+      "type": "object"
+    },
+    "AssuranceSeverity": {
+      "enum": [
+        "info",
+        "warning",
+        "high",
+        "critical"
+      ],
+      "title": "AssuranceSeverity",
+      "type": "string"
+    },
+    "AuthorityPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "$ref": "#/$defs/AuthoritySide",
+          "default": "neutral"
+        },
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Environment"
+        },
+        "label": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "policy_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Policy Id",
+          "type": "string"
+        },
+        "priority": {
+          "default": 100,
+          "maximum": 10000,
+          "minimum": 0,
+          "title": "Priority",
+          "type": "integer"
+        },
+        "property_pattern": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Property Pattern",
+          "type": "string"
+        },
+        "reviewed_at": {
+          "format": "date-time",
+          "title": "Reviewed At",
+          "type": "string"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "subject_pattern": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Subject Pattern",
+          "type": "string"
+        }
+      },
+      "required": [
+        "policy_id",
+        "label",
+        "subject_pattern",
+        "property_pattern"
+      ],
+      "title": "AuthorityPolicy",
+      "type": "object"
+    },
+    "AuthoritySide": {
+      "enum": [
+        "neutral",
+        "documentation",
+        "observed_system"
+      ],
+      "title": "AuthoritySide",
+      "type": "string"
+    },
+    "ClaimOrigin": {
+      "enum": [
+        "deterministic",
+        "semantic_suggested",
+        "semantic_confirmed"
+      ],
+      "title": "ClaimOrigin",
+      "type": "string"
+    },
+    "ClaimStatus": {
+      "enum": [
+        "proposed",
+        "confirmed",
+        "dismissed"
+      ],
+      "title": "ClaimStatus",
+      "type": "string"
+    },
+    "ConnectorKind": {
+      "enum": [
+        "local_files",
+        "microsoft_graph",
+        "odata",
+        "sap",
+        "dynamics365",
+        "netsuite",
+        "microsoft_teams",
+        "slack",
+        "notion",
+        "wms",
+        "amazon_fba",
+        "github",
+        "gitlab",
+        "jira",
+        "confluence",
+        "azure_devops",
+        "servicenow",
+        "sql",
+        "sftp",
+        "openapi"
+      ],
+      "title": "ConnectorKind",
+      "type": "string"
+    },
+    "ConsistencyAttribution": {
+      "enum": [
+        "neutral",
+        "documentation_drift",
+        "implementation_drift",
+        "configuration_drift",
+        "release_drift",
+        "approved_exception",
+        "ambiguous",
+        "access_incomplete"
+      ],
+      "title": "ConsistencyAttribution",
+      "type": "string"
+    },
+    "ConsistencyCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Environment"
+        },
+        "freshness": {
+          "default": "unknown",
+          "enum": [
+            "current",
+            "stale",
+            "unknown"
+          ],
+          "title": "Freshness",
+          "type": "string"
+        },
+        "locator": {
+          "$ref": "#/$defs/ArtifactLocator"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "source_kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "source_label": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Source Label",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "source_revision": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Source Revision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "connector_id",
+        "source_kind",
+        "source_label",
+        "source_reference",
+        "source_revision"
+      ],
+      "title": "ConsistencyCitation",
+      "type": "object"
+    },
+    "ConsistencyClaimReviewRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "confirm",
+            "dismiss"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 1,
+          "title": "Expected Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "expected_revision",
+        "action"
+      ],
+      "title": "ConsistencyClaimReviewRequest",
+      "type": "object"
+    },
+    "ConsistencyComparison": {
+      "additionalProperties": false,
+      "properties": {
+        "attribution": {
+          "$ref": "#/$defs/ConsistencyAttribution",
+          "default": "neutral"
+        },
+        "authority_policy_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Authority Policy Id"
+        },
+        "comparison_rule": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Comparison Rule",
+          "type": "string"
+        },
+        "expected_value": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Value"
+        },
+        "expected_value_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Expected Value Sha256",
+          "type": "string"
+        },
+        "explanation": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        },
+        "likely_impact": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Likely Impact",
+          "type": "string"
+        },
+        "observed_value": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Value"
+        },
+        "observed_value_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Observed Value Sha256",
+          "type": "string"
+        },
+        "recommended_verification": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Recommended Verification",
+          "type": "string"
+        }
+      },
+      "required": [
+        "expected_value_sha256",
+        "observed_value_sha256",
+        "comparison_rule",
+        "explanation",
+        "likely_impact",
+        "recommended_verification"
+      ],
+      "title": "ConsistencyComparison",
+      "type": "object"
+    },
+    "ConsistencyDashboard": {
+      "additionalProperties": false,
+      "properties": {
+        "ambiguous_findings": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Ambiguous Findings",
+          "type": "integer"
+        },
+        "approved_exceptions": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Approved Exceptions",
+          "type": "integer"
+        },
+        "by_attribution": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "maxProperties": 16,
+          "title": "By Attribution",
+          "type": "object"
+        },
+        "by_mismatch_kind": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "maxProperties": 32,
+          "title": "By Mismatch Kind",
+          "type": "object"
+        },
+        "by_severity": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "maxProperties": 8,
+          "title": "By Severity",
+          "type": "object"
+        },
+        "confirmed_findings": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Confirmed Findings",
+          "type": "integer"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "open_findings": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Open Findings",
+          "type": "integer"
+        },
+        "proposed_semantic_claims": {
+          "items": {
+            "$ref": "#/$defs/DocumentClaim"
+          },
+          "maxItems": 100,
+          "title": "Proposed Semantic Claims",
+          "type": "array"
+        },
+        "recent_findings": {
+          "items": {
+            "$ref": "#/$defs/ConsistencyFinding"
+          },
+          "maxItems": 200,
+          "title": "Recent Findings",
+          "type": "array"
+        }
+      },
+      "title": "ConsistencyDashboard",
+      "type": "object"
+    },
+    "ConsistencyExport": {
+      "additionalProperties": false,
+      "properties": {
+        "direct_submission_enabled": {
+          "const": false,
+          "default": false,
+          "title": "Direct Submission Enabled",
+          "type": "boolean"
+        },
+        "filename": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Filename",
+          "type": "string"
+        },
+        "media_type": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "payload_base64": {
+          "maxLength": 8000000,
+          "minLength": 1,
+          "title": "Payload Base64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filename",
+        "media_type",
+        "payload_base64"
+      ],
+      "title": "ConsistencyExport",
+      "type": "object"
+    },
+    "ConsistencyExportRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "draft_kind": {
+          "default": "issue",
+          "enum": [
+            "issue",
+            "risk",
+            "action",
+            "adr",
+            "mapping_change"
+          ],
+          "title": "Draft Kind",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "markdown",
+            "canonical_json",
+            "jira_csv",
+            "azure_boards_csv"
+          ],
+          "title": "Format",
+          "type": "string"
+        }
+      },
+      "required": [
+        "format"
+      ],
+      "title": "ConsistencyExportRequest",
+      "type": "object"
+    },
+    "ConsistencyFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "affected_solution_node_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Affected Solution Node Ids",
+          "type": "array"
+        },
+        "comparison": {
+          "$ref": "#/$defs/ConsistencyComparison"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "document_claim": {
+          "$ref": "#/$defs/DocumentClaim"
+        },
+        "finding_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "fingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "mismatch_kind": {
+          "$ref": "#/$defs/ConsistencyMismatchKind"
+        },
+        "observed_fact": {
+          "$ref": "#/$defs/ObservedSystemFact"
+        },
+        "owner_role": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner Role"
+        },
+        "property_name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Property Name",
+          "type": "string"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/AssuranceSeverity"
+        },
+        "status": {
+          "$ref": "#/$defs/ConsistencyFindingStatus",
+          "default": "open"
+        },
+        "subject": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Subject",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "fingerprint",
+        "run_id",
+        "mismatch_kind",
+        "severity",
+        "subject",
+        "property_name",
+        "document_claim",
+        "observed_fact",
+        "comparison"
+      ],
+      "title": "ConsistencyFinding",
+      "type": "object"
+    },
+    "ConsistencyFindingFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "document": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Document"
+        },
+        "document_kind": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Document Kind"
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Environment"
+        },
+        "limit": {
+          "default": 200,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "mismatch_kind": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConsistencyMismatchKind"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "owner_role": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner Role"
+        },
+        "project": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Project"
+        },
+        "repository": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Repository"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AssuranceSeverity"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConsistencyFindingStatus"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "system": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "System"
+        }
+      },
+      "title": "ConsistencyFindingFilter",
+      "type": "object"
+    },
+    "ConsistencyFindingReviewRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "confirm",
+            "dismiss",
+            "resolve",
+            "reopen",
+            "classify",
+            "assign",
+            "request_refresh",
+            "mark_exception"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "attribution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConsistencyAttribution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "exception_expires_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exception Expires At"
+        },
+        "exception_reason": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exception Reason"
+        },
+        "expected_revision": {
+          "minimum": 1,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "owner_role": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner Role"
+        }
+      },
+      "required": [
+        "expected_revision",
+        "action"
+      ],
+      "title": "ConsistencyFindingReviewRequest",
+      "type": "object"
+    },
+    "ConsistencyFindingStatus": {
+      "enum": [
+        "open",
+        "confirmed",
+        "dismissed",
+        "resolved",
+        "approved_exception",
+        "superseded"
+      ],
+      "title": "ConsistencyFindingStatus",
+      "type": "string"
+    },
+    "ConsistencyMismatchKind": {
+      "enum": [
+        "missing_entity",
+        "missing_field",
+        "undocumented_implementation",
+        "value_mismatch",
+        "type_mismatch",
+        "requiredness_mismatch",
+        "key_mismatch",
+        "code_list_mismatch",
+        "api_version_drift",
+        "schema_version_drift",
+        "environment_drift",
+        "configuration_drift",
+        "missing_test",
+        "missing_deployment",
+        "deployment_lag",
+        "ownership_conflict",
+        "control_conflict",
+        "ambiguous_match"
+      ],
+      "title": "ConsistencyMismatchKind",
+      "type": "string"
+    },
+    "ConsistencyReviewEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "confirm",
+            "dismiss",
+            "resolve",
+            "reopen",
+            "classify",
+            "assign",
+            "request_refresh",
+            "mark_exception"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "event_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 1,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "finding_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "resulting_revision": {
+          "minimum": 2,
+          "title": "Resulting Revision",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "event_id",
+        "finding_id",
+        "expected_revision",
+        "resulting_revision",
+        "action"
+      ],
+      "title": "ConsistencyReviewEvent",
+      "type": "object"
+    },
+    "ConsistencyRun": {
+      "additionalProperties": false,
+      "properties": {
+        "ambiguous_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Ambiguous Count",
+          "type": "integer"
+        },
+        "claim_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Claim Count",
+          "type": "integer"
+        },
+        "completed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "detail_code": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail Code"
+        },
+        "document_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Document Connector Ids",
+          "type": "array"
+        },
+        "finding_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Finding Count",
+          "type": "integer"
+        },
+        "language": {
+          "default": "en",
+          "enum": [
+            "ja",
+            "en",
+            "ko"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "observation_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Observation Count",
+          "type": "integer"
+        },
+        "observed_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Observed Connector Ids",
+          "type": "array"
+        },
+        "reused_run_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reused Run Id"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "source_fingerprint": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Fingerprint"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/ConsistencyRunStatus"
+        },
+        "unavailable_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Unavailable Connector Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "run_id",
+        "document_connector_ids",
+        "observed_connector_ids",
+        "status"
+      ],
+      "title": "ConsistencyRun",
+      "type": "object"
+    },
+    "ConsistencyRunRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 200,
+          "title": "Artifact Ids",
+          "type": "array"
+        },
+        "changed_only": {
+          "default": true,
+          "title": "Changed Only",
+          "type": "boolean"
+        },
+        "detect_undocumented": {
+          "default": true,
+          "title": "Detect Undocumented",
+          "type": "boolean"
+        },
+        "document_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Document Connector Ids",
+          "type": "array"
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Environment"
+        },
+        "language": {
+          "default": "en",
+          "enum": [
+            "ja",
+            "en",
+            "ko"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "observed_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Observed Connector Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "document_connector_ids",
+        "observed_connector_ids"
+      ],
+      "title": "ConsistencyRunRequest",
+      "type": "object"
+    },
+    "ConsistencyRunStatus": {
+      "enum": [
+        "running",
+        "completed",
+        "degraded",
+        "failed"
+      ],
+      "title": "ConsistencyRunStatus",
+      "type": "string"
+    },
+    "DocumentClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_property": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Canonical Property",
+          "type": "string"
+        },
+        "canonical_subject": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Canonical Subject",
+          "type": "string"
+        },
+        "citation": {
+          "$ref": "#/$defs/ConsistencyCitation"
+        },
+        "claim_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Claim Id",
+          "type": "string"
+        },
+        "confidence": {
+          "default": 1.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "document_kind": {
+          "$ref": "#/$defs/DocumentKind"
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Environment"
+        },
+        "expected_value": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Value"
+        },
+        "expected_value_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Expected Value Sha256",
+          "type": "string"
+        },
+        "fingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "impact_flags": {
+          "items": {
+            "enum": [
+              "production",
+              "security",
+              "regulatory",
+              "customer",
+              "financial_close"
+            ],
+            "type": "string"
+          },
+          "maxItems": 5,
+          "title": "Impact Flags",
+          "type": "array"
+        },
+        "language": {
+          "default": "en",
+          "enum": [
+            "ja",
+            "en",
+            "ko"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "origin": {
+          "$ref": "#/$defs/ClaimOrigin",
+          "default": "deterministic"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/ClaimStatus",
+          "default": "confirmed"
+        },
+        "value_type": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value Type"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        }
+      },
+      "required": [
+        "claim_id",
+        "fingerprint",
+        "canonical_subject",
+        "canonical_property",
+        "expected_value_sha256",
+        "document_kind",
+        "citation"
+      ],
+      "title": "DocumentClaim",
+      "type": "object"
+    },
+    "DocumentKind": {
+      "enum": [
+        "requirement",
+        "architecture",
+        "adr",
+        "interface",
+        "data_mapping",
+        "nfr_security",
+        "test",
+        "cutover",
+        "operations",
+        "general"
+      ],
+      "title": "DocumentKind",
+      "type": "string"
+    },
+    "ObservationPersistence": {
+      "enum": [
+        "metadata_safe",
+        "encrypted_lease",
+        "live_only"
+      ],
+      "title": "ObservationPersistence",
+      "type": "string"
+    },
+    "ObservedSystemFact": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_property": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Canonical Property",
+          "type": "string"
+        },
+        "canonical_subject": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Canonical Subject",
+          "type": "string"
+        },
+        "citation": {
+          "$ref": "#/$defs/ConsistencyCitation"
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Environment"
+        },
+        "fact_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fact Id",
+          "type": "string"
+        },
+        "observed_value": {
+          "anyOf": [
+            {
+              "maxLength": 1000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Value"
+        },
+        "observed_value_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Observed Value Sha256",
+          "type": "string"
+        },
+        "persistence": {
+          "$ref": "#/$defs/ObservationPersistence",
+          "default": "metadata_safe"
+        },
+        "scope_complete": {
+          "default": false,
+          "title": "Scope Complete",
+          "type": "boolean"
+        },
+        "value_type": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value Type"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        }
+      },
+      "required": [
+        "fact_id",
+        "canonical_subject",
+        "canonical_property",
+        "observed_value_sha256",
+        "citation"
+      ],
+      "title": "ObservedSystemFact",
+      "type": "object"
+    }
+  },
+  "title": "MeetingIntelligenceConsistencyContracts"
+}

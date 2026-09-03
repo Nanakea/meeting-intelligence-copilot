@@ -1,0 +1,15 @@
+[advisories]
+# sqlx-mysql is retained in Cargo.lock for SQLx's optional feature graph, but
+# Meetily disables SQLx defaults and enables SQLite only. `cargo tree -i rsa`
+# is empty for the Windows pilot target, and RustSec provides no fixed release.
+#
+# rust_decimal similarly records its optional rkyv 0.7 integration in the
+# lockfile even though byte-unit enables only rust_decimal's std feature.
+# `cargo tree --locked -i rkyv@0.7.46` is empty for the pilot build. Keep this
+# exception only while that feature remains absent from the resolved graph.
+#
+# glib 0.18 is reachable only through Tauri's Linux GTK stack. The supported
+# Windows 11 target does not compile that graph (`cargo tree --target all` is
+# intentionally broader than the release target). Remove this exception when
+# Tauri moves its Linux stack to glib >= 0.20 or Linux becomes supported.
+ignore = ["RUSTSEC-2023-0071", "RUSTSEC-2024-0429", "RUSTSEC-2026-0235"]

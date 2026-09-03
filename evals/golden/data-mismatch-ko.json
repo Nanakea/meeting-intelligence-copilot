@@ -1,0 +1,46 @@
+{
+  "meeting_id": "data-mismatch-ko",
+  "fixture": "evals/fixtures/data-mismatch-ko.jsonl",
+  "lang": "ko",
+  "pain_category": "data_mismatch",
+  "checkpoints": [
+    {
+      "name": "after_pain_detection",
+      "after_event_seq": 0,
+      "pain_category": "data_mismatch",
+      "ask_now_gap": "source_of_truth"
+    },
+    {
+      "name": "after_manual_correction_known",
+      "after_event_seq": 1,
+      "known_facts": {
+        "correction_process": "수동 수정",
+        "frequency": "매일 아침"
+      },
+      "open_gaps_exclude": ["correction_process", "frequency"],
+      "ask_now_gap": "source_of_truth"
+    },
+    {
+      "name": "question_does_not_self_answer",
+      "after_event_seq": 2,
+      "known_facts_absent": ["source_of_truth"],
+      "ask_now_gap": "source_of_truth"
+    },
+    {
+      "name": "after_source_answered",
+      "after_event_seq": 3,
+      "known_facts": {"source_of_truth": "WMS"},
+      "answered_gaps": ["source_of_truth"],
+      "no_active_suggestion_gaps": ["source_of_truth"],
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "after_impact_answered",
+      "after_event_seq": 4,
+      "known_facts": {"business_impact": "이 차이 때문에 출하가 지연됩니다."},
+      "answered_gaps": ["business_impact"],
+      "no_active_suggestion_gaps": ["business_impact"],
+      "ask_now_gap": "owner"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "meeting_id": "vendor-integration-failure-ja",
+  "fixture": "evals/fixtures/vendor-integration-failure-ja.jsonl",
+  "lang": "ja",
+  "pain_category": "integration_failure",
+  "checkpoints": [
+    {
+      "name": "after_pain_detection",
+      "after_event_seq": 0,
+      "pain_category": "integration_failure",
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "after_error_and_retry_known",
+      "after_event_seq": 3,
+      "known_facts": { "error_signal": "エラーなし", "retry_behavior": "手動で登録" },
+      "known_facts_absent": ["business_impact", "source_system", "target_system"],
+      "open_gaps_include": ["business_impact", "source_system", "target_system"],
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "after_business_impact_answered",
+      "after_event_seq": 5,
+      "known_facts": {
+        "business_impact": "出荷遅延・配送影響",
+        "error_signal": "エラーなし",
+        "retry_behavior": "手動で登録"
+      },
+      "known_facts_absent": ["source_system", "target_system"],
+      "answered_gaps": ["business_impact"],
+      "no_active_suggestion_gaps": ["business_impact"],
+      "ask_now_gap": "failure_point"
+    }
+  ]
+}

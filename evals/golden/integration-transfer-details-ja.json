@@ -1,0 +1,46 @@
+{
+  "meeting_id": "integration-transfer-details-ja",
+  "fixture": "evals/fixtures/integration-transfer-details-ja.jsonl",
+  "lang": "ja",
+  "pain_category": "integration_failure",
+  "checkpoints": [
+    {
+      "name": "directional_transfer_fills_explicit_system_and_failure_details",
+      "after_event_seq": 0,
+      "pain_category": "integration_failure",
+      "known_facts": {
+        "source_system": "EC",
+        "target_system": "SAP",
+        "failure_point": "CSV取り込み"
+      },
+      "answered_gaps": ["source_system", "target_system", "failure_point"],
+      "no_active_suggestion_gaps": ["source_system", "target_system", "failure_point"],
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "business_impact_promotes_owner_without_reasking_details",
+      "after_event_seq": 1,
+      "known_facts": {
+        "business_impact": "出荷遅延・配送影響",
+        "source_system": "EC",
+        "target_system": "SAP",
+        "failure_point": "CSV取り込み"
+      },
+      "no_active_suggestion_gaps": ["business_impact", "source_system", "target_system", "failure_point"],
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "owner_answer_promotes_retry_behavior",
+      "after_event_seq": 2,
+      "known_facts": {
+        "business_impact": "出荷遅延・配送影響",
+        "failure_point": "CSV取り込み",
+        "owner": "連携チーム",
+        "source_system": "EC",
+        "target_system": "SAP"
+      },
+      "no_active_suggestion_gaps": ["owner", "source_system", "target_system", "failure_point"],
+      "ask_now_gap": "retry_behavior"
+    }
+  ]
+}

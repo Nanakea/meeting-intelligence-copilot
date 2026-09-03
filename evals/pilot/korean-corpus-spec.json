@@ -1,0 +1,157 @@
+{
+  "seed": 20260902,
+  "cases_per_category": 30,
+  "positive_cases_per_category": 21,
+  "neutral_openers": [
+    "오늘 운영 현황을 확인하겠습니다.",
+    "정기 프로젝트 점검을 시작합니다.",
+    "현재 업무 흐름을 검토하겠습니다.",
+    "팀의 최신 상황을 공유하겠습니다.",
+    "회의의 다음 안건으로 이동합니다.",
+    "현재 상태를 순서대로 살펴보겠습니다.",
+    "참석자들이 업무 현황을 검토합니다."
+  ],
+  "neutral_closers": [
+    "현재 공유할 내용은 여기까지입니다.",
+    "다음 안건으로 넘어가겠습니다.",
+    "팀에서 이 내용을 기록하겠습니다."
+  ],
+  "negative_frames": [
+    "만약 {statement}",
+    "가령 {statement}",
+    "예를 들어 {statement}",
+    "\"{statement}\"라고 가정한 설명입니다."
+  ],
+  "groups": [
+    {
+      "category": "data_mismatch",
+      "positive_statement": "WMS와 NetSuite의 재고 데이터가 일치하지 않습니다.",
+      "expected_facts": {},
+      "expected_ask_slot": "source_of_truth",
+      "hard_negatives": [
+        "WMS와 NetSuite의 재고 데이터가 일치하지 않습니까?",
+        "WMS와 NetSuite의 재고 데이터는 지금은 일치합니다.",
+        "WMS와 NetSuite 담당자가 회의에 참석했습니다.",
+        "WMS와 NetSuite의 재고 데이터를 비교할 예정입니다.",
+        "WMS NetSuite 재고 데이터"
+      ]
+    },
+    {
+      "category": "integration_failure",
+      "positive_statement": "NetSuite에서 주문을 WMS로 전송하는 단계에서 실패합니다.",
+      "expected_facts": {"source_system": "NetSuite", "target_system": "WMS", "failure_point": "주문 전송"},
+      "expected_ask_slot": "business_impact",
+      "hard_negatives": [
+        "NetSuite에서 주문을 WMS로 전송하는 단계에서 실패합니까?",
+        "NetSuite와 WMS는 정상 연계됩니다.",
+        "NetSuite에서 WMS로 전송할 계획입니다.",
+        "연계 인터페이스 문서를 검토했습니다.",
+        "NetSuite WMS 주문 전송"
+      ]
+    },
+    {
+      "category": "manual_work",
+      "positive_statement": "매일 CSV 데이터를 수작업으로 복사합니다.",
+      "expected_facts": {"frequency": "매일"},
+      "expected_ask_slot": "business_impact",
+      "hard_negatives": [
+        "매일 CSV 데이터를 수작업으로 복사합니까?",
+        "CSV 데이터 복사는 자동화되었습니다.",
+        "CSV 파일 형식을 검토했습니다.",
+        "직접 커피를 준비합니다.",
+        "CSV 수작업 복사"
+      ]
+    },
+    {
+      "category": "process_delay",
+      "positive_statement": "승인 프로세스가 지연되어 현재 8영업일이 걸립니다.",
+      "expected_facts": {},
+      "expected_ask_slot": "business_impact",
+      "hard_negatives": [
+        "승인 프로세스가 지연되어 현재 8영업일이 걸립니까?",
+        "승인 프로세스는 정상 처리됩니다.",
+        "승인 프로세스를 문서화했습니다.",
+        "현재 8영업일 일정을 계획했습니다.",
+        "승인 프로세스 8영업일"
+      ]
+    },
+    {
+      "category": "vague_requirement",
+      "positive_statement": "검색 화면을 더 쉽게 사용하게 해 주세요.",
+      "expected_facts": {},
+      "expected_ask_slot": "expected_behavior",
+      "hard_negatives": [
+        "검색 화면을 더 쉽게 사용하게 해야 합니까?",
+        "검색 화면 요구사항이 명확합니다.",
+        "검색 화면의 색상을 검토했습니다.",
+        "사용자는 검색 화면을 사용합니다.",
+        "검색 화면 개선"
+      ]
+    },
+    {
+      "category": "unclear_ownership",
+      "positive_statement": "할인 승인 담당자가 정해지지 않았습니다.",
+      "expected_facts": {},
+      "expected_ask_slot": "owner",
+      "hard_negatives": [
+        "할인 승인 담당자가 정해지지 않았습니까?",
+        "할인 승인 책임자가 정해졌습니다.",
+        "할인 승인 담당자가 명확합니다.",
+        "할인 승인 절차를 검토했습니다.",
+        "할인 승인 담당자"
+      ]
+    },
+    {
+      "category": "nonfunctional_requirement",
+      "positive_statement": "성능 요구사항이 불명확합니다.",
+      "expected_facts": {"quality_attribute": "성능"},
+      "expected_ask_slot": "measurable_target",
+      "hard_negatives": [
+        "성능 요구사항이 불명확합니까?",
+        "성능 요구사항이 명확합니다.",
+        "측정 가능한 성능 목표가 있습니다.",
+        "성능 테스트 결과를 검토했습니다.",
+        "성능 요구사항"
+      ]
+    },
+    {
+      "category": "architecture_constraint",
+      "positive_statement": "아키텍처 제약으로 SAP를 사용해야 합니다.",
+      "expected_facts": {"constraint": "SAP"},
+      "expected_ask_slot": "rationale_source",
+      "hard_negatives": [
+        "아키텍처 제약으로 SAP를 사용해야 합니까?",
+        "아키텍처 제약이 없습니다.",
+        "SAP 사용이 필수가 아닙니다.",
+        "SAP 사용 현황을 검토했습니다.",
+        "SAP 아키텍처"
+      ]
+    },
+    {
+      "category": "security_control_gap",
+      "positive_statement": "고객 데이터가 암호화되지 않아 보안 통제가 없습니다.",
+      "expected_facts": {"threat_control_gap": "암호화되지 않음", "affected_asset_data": "고객 데이터"},
+      "expected_ask_slot": "business_impact",
+      "hard_negatives": [
+        "고객 데이터가 암호화되지 않아 보안 통제가 없습니까?",
+        "고객 데이터는 암호화되어 있습니다.",
+        "고객 데이터에 보안 통제가 있습니다.",
+        "보안 통제 검토 회의를 열었습니다.",
+        "고객 데이터 보안"
+      ]
+    },
+    {
+      "category": "dependency_blocker",
+      "positive_statement": "플랫폼 팀의 대응을 기다리는 중입니다.",
+      "expected_facts": {"provider": "플랫폼"},
+      "expected_ask_slot": "consumer",
+      "hard_negatives": [
+        "플랫폼 팀의 대응을 기다리는 중입니까?",
+        "플랫폼 팀의 대응을 더 이상 대기하지 않습니다.",
+        "플랫폼 팀의 대응이 완료되었습니다.",
+        "버스를 기다리는 중입니다.",
+        "플랫폼 팀 대응"
+      ]
+    }
+  ]
+}

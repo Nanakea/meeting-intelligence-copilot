@@ -1,0 +1,5 @@
+{"speaker": "Order Operations", "text": "Every business day, order operations copies the order file into a spreadsheet by hand.", "offset_ms": 0}
+{"speaker": "Order Operations", "text": "Each run covers 1,200 orders and takes about 45 minutes per run.", "offset_ms": 8000}
+{"speaker": "PM", "text": "What business impact does this handoff have?", "offset_ms": 16000}
+{"speaker": "Order Operations", "text": "The handoff delays same-day shipment release by 45 minutes.", "offset_ms": 24000}
+{"speaker": "Order Operations", "text": "The order operations team owns this handoff.", "offset_ms": 32000}

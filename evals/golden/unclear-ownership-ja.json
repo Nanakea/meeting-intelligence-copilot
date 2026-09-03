@@ -1,0 +1,61 @@
+{
+  "meeting_id": "unclear-ownership-ja",
+  "fixture": "evals/fixtures/unclear-ownership-ja.jsonl",
+  "lang": "ja",
+  "pain_category": "unclear_ownership",
+  "checkpoints": [
+    {
+      "name": "after_ownership_problem_detected",
+      "after_event_seq": 0,
+      "pain_category": "unclear_ownership",
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "after_business_impact_known",
+      "after_event_seq": 1,
+      "known_facts": {
+        "business_impact": "そのため承認が止まり、顧客対応が進まない状態です"
+      },
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "after_stakeholders_known",
+      "after_event_seq": 2,
+      "known_facts": {
+        "stakeholders": "営業、法務、財務"
+      },
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "after_decision_process_known",
+      "after_event_seq": 3,
+      "known_facts": {
+        "decision_process": "価格会議"
+      },
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "after_escalation_known",
+      "after_event_seq": 4,
+      "known_facts": {
+        "escalation_path": "COO"
+      },
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "after_owner_known",
+      "after_event_seq": 5,
+      "known_facts": {
+        "owner": "営業部長"
+      },
+      "ask_now_gap": "current_status"
+    },
+    {
+      "name": "after_current_status_known",
+      "after_event_seq": 6,
+      "known_facts": {
+        "current_status": "初回の価格会議を待っています"
+      }
+    }
+  ]
+}

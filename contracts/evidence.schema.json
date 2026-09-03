@@ -1,0 +1,640 @@
+{
+  "$defs": {
+    "ArtifactLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "cell_range": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cell Range"
+        },
+        "end_line": {
+          "anyOf": [
+            {
+              "maximum": 10000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Line"
+        },
+        "heading": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Heading"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "maximum": 100000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "paragraph": {
+          "anyOf": [
+            {
+              "maximum": 1000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Paragraph"
+        },
+        "sheet": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sheet"
+        },
+        "start_line": {
+          "anyOf": [
+            {
+              "maximum": 10000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Line"
+        }
+      },
+      "title": "ArtifactLocator",
+      "type": "object"
+    },
+    "ArtifactSection": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_principals": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Allowed Principals",
+          "type": "array"
+        },
+        "artifact_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "content": {
+          "maxLength": 20000,
+          "minLength": 1,
+          "title": "Content",
+          "type": "string"
+        },
+        "content_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "locator": {
+          "$ref": "#/$defs/ArtifactLocator"
+        },
+        "ordinal": {
+          "maximum": 100000,
+          "minimum": 0,
+          "title": "Ordinal",
+          "type": "integer"
+        },
+        "revision_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Revision Id",
+          "type": "string"
+        },
+        "section_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Section Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "section_id",
+        "artifact_id",
+        "revision_id",
+        "ordinal",
+        "title",
+        "content",
+        "content_hash",
+        "allowed_principals"
+      ],
+      "title": "ArtifactSection",
+      "type": "object"
+    },
+    "ConnectorKind": {
+      "enum": [
+        "local_files",
+        "microsoft_graph",
+        "odata",
+        "sap",
+        "dynamics365",
+        "netsuite",
+        "microsoft_teams",
+        "slack",
+        "notion",
+        "wms",
+        "amazon_fba",
+        "github",
+        "gitlab",
+        "jira",
+        "confluence",
+        "azure_devops",
+        "servicenow",
+        "sql",
+        "sftp",
+        "openapi"
+      ],
+      "title": "ConnectorKind",
+      "type": "string"
+    },
+    "DocumentArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "current_revision_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Current Revision Id",
+          "type": "string"
+        },
+        "document_kind": {
+          "$ref": "#/$defs/DocumentKind",
+          "default": "general"
+        },
+        "indexed_at": {
+          "format": "date-time",
+          "title": "Indexed At",
+          "type": "string"
+        },
+        "source_kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updated At"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "connector_id",
+        "source_kind",
+        "title",
+        "source_reference",
+        "current_revision_id"
+      ],
+      "title": "DocumentArtifact",
+      "type": "object"
+    },
+    "DocumentKind": {
+      "enum": [
+        "requirement",
+        "architecture",
+        "adr",
+        "interface",
+        "data_mapping",
+        "nfr_security",
+        "test",
+        "cutover",
+        "operations",
+        "general"
+      ],
+      "title": "DocumentKind",
+      "type": "string"
+    },
+    "DocumentRevision": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "content_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "revision_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Revision Id",
+          "type": "string"
+        },
+        "section_count": {
+          "maximum": 100000,
+          "minimum": 0,
+          "title": "Section Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "revision_id",
+        "artifact_id",
+        "content_hash",
+        "section_count"
+      ],
+      "title": "DocumentRevision",
+      "type": "object"
+    },
+    "EmbeddingProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "dimensions": {
+          "maximum": 16384,
+          "minimum": 1,
+          "title": "Dimensions",
+          "type": "integer"
+        },
+        "model_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "model_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Model Sha256",
+          "type": "string"
+        },
+        "runtime": {
+          "const": "onnx-cpu",
+          "default": "onnx-cpu",
+          "title": "Runtime",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model_id",
+        "model_sha256",
+        "dimensions"
+      ],
+      "title": "EmbeddingProfile",
+      "type": "object"
+    },
+    "EvidenceBundle": {
+      "additionalProperties": false,
+      "properties": {
+        "citations": {
+          "items": {
+            "$ref": "#/$defs/EvidenceCitation"
+          },
+          "maxItems": 20,
+          "title": "Citations",
+          "type": "array"
+        },
+        "elapsed_ms": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Elapsed Ms",
+          "type": "integer"
+        },
+        "lexical_only": {
+          "default": true,
+          "title": "Lexical Only",
+          "type": "boolean"
+        },
+        "status": {
+          "default": "current",
+          "enum": [
+            "current",
+            "unavailable",
+            "timeout"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unavailable_connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Unavailable Connector Ids",
+          "type": "array"
+        }
+      },
+      "title": "EvidenceBundle",
+      "type": "object"
+    },
+    "EvidenceCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "citation_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Citation Id",
+          "type": "string"
+        },
+        "connector_id": {
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "document_kind": {
+          "$ref": "#/$defs/DocumentKind"
+        },
+        "excerpt": {
+          "maxLength": 600,
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "locator": {
+          "$ref": "#/$defs/ArtifactLocator"
+        },
+        "rank": {
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "relation": {
+          "default": "reference",
+          "enum": [
+            "supporting",
+            "conflicting",
+            "reference"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "score": {
+          "$ref": "#/$defs/RetrievalScore"
+        },
+        "source_kind": {
+          "$ref": "#/$defs/ConnectorKind"
+        },
+        "source_label": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Source Label",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updated At"
+        },
+        "uri": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uri"
+        }
+      },
+      "required": [
+        "citation_id",
+        "connector_id",
+        "source_kind",
+        "source_label",
+        "source_reference",
+        "document_kind",
+        "excerpt",
+        "rank",
+        "score"
+      ],
+      "title": "EvidenceCitation",
+      "type": "object"
+    },
+    "RetrievalRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "business_keys": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Business Keys",
+          "type": "array"
+        },
+        "connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Connector Ids",
+          "type": "array"
+        },
+        "document_kinds": {
+          "items": {
+            "$ref": "#/$defs/DocumentKind"
+          },
+          "maxItems": 16,
+          "title": "Document Kinds",
+          "type": "array"
+        },
+        "entity_hints": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Entity Hints",
+          "type": "array"
+        },
+        "limit": {
+          "default": 8,
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "principal_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "title": "Principal Id",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "principal_id"
+      ],
+      "title": "RetrievalRequest",
+      "type": "object"
+    },
+    "RetrievalScore": {
+      "additionalProperties": false,
+      "properties": {
+        "business_key_matches": {
+          "default": 0,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Business Key Matches",
+          "type": "integer"
+        },
+        "entity_matches": {
+          "default": 0,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Entity Matches",
+          "type": "integer"
+        },
+        "freshness_boost": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Freshness Boost",
+          "type": "number"
+        },
+        "lexical_rank": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lexical Rank"
+        },
+        "reciprocal_rank_score": {
+          "minimum": 0.0,
+          "title": "Reciprocal Rank Score",
+          "type": "number"
+        },
+        "semantic_rank": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Semantic Rank"
+        },
+        "source_authority_boost": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Source Authority Boost",
+          "type": "number"
+        },
+        "title_match": {
+          "default": false,
+          "title": "Title Match",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "reciprocal_rank_score"
+      ],
+      "title": "RetrievalScore",
+      "type": "object"
+    }
+  },
+  "title": "MeetingIntelligenceEvidenceContracts"
+}

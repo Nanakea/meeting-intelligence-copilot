@@ -1,0 +1,10 @@
+{
+  "sources": [
+    {"category":"data_mismatch","lang":"ko","fixture":"evals/fixtures/data-mismatch-ko.jsonl","golden":"evals/golden/data-mismatch-ko.json"},
+    {"category":"integration_failure","lang":"ko","fixture":"evals/fixtures/integration-failure-ko.jsonl","golden":"evals/golden/integration-failure-ko.json"},
+    {"category":"manual_work","lang":"ko","fixture":"evals/fixtures/manual-work-ko.jsonl","golden":"evals/golden/manual-work-ko.json"},
+    {"category":"process_delay","lang":"ko","fixture":"evals/fixtures/process-delay-ko.jsonl","golden":"evals/golden/process-delay-ko.json"},
+    {"category":"vague_requirement","lang":"ko","fixture":"evals/fixtures/vague-requirement-ko.jsonl","golden":"evals/golden/vague-requirement-ko.json"},
+    {"category":"unclear_ownership","lang":"ko","fixture":"evals/fixtures/unclear-ownership-ko.jsonl","golden":"evals/golden/unclear-ownership-ko.json"}
+  ]
+}

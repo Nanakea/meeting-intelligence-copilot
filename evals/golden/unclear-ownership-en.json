@@ -1,0 +1,46 @@
+{
+  "meeting_id": "unclear-ownership-en",
+  "fixture": "evals/fixtures/unclear-ownership-en.jsonl",
+  "lang": "en",
+  "pain_category": "unclear_ownership",
+  "checkpoints": [
+    {
+      "name": "unresolved_ownership_detected",
+      "after_event_seq": 0,
+      "pain_category": "unclear_ownership",
+      "known_facts_absent": ["owner"],
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "owner_question_does_not_self_answer",
+      "after_event_seq": 1,
+      "known_facts_absent": ["owner"],
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "impact_and_context_do_not_invent_owner",
+      "after_event_seq": 4,
+      "known_facts": {
+        "business_impact": "discount approvals stall and customers wait",
+        "stakeholders": "sales, finance, and operations",
+        "decision_process": "weekly pricing steering meeting",
+        "escalation_path": "COO"
+      },
+      "known_facts_absent": ["owner", "current_status"],
+      "ask_now_gap": "owner"
+    },
+    {
+      "name": "explicit_owner_promotes_status",
+      "after_event_seq": 5,
+      "known_facts": { "owner": "Mika Tanaka" },
+      "answered_gaps": ["owner"],
+      "ask_now_gap": "current_status"
+    },
+    {
+      "name": "all_ownership_slots_answered",
+      "after_event_seq": 6,
+      "known_facts": { "current_status": "awaiting the first steering review" },
+      "ask_now_gap": null
+    }
+  ]
+}

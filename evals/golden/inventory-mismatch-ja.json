@@ -1,0 +1,50 @@
+{
+  "meeting_id": "demo",
+  "fixture": "evals/fixtures/inventory-mismatch-ja.jsonl",
+  "lang": "ja",
+  "pain_category": "data_mismatch",
+  "checkpoints": [
+    {
+      "name": "after_pain_detection",
+      "after_event_seq": 0,
+      "pain_category": "data_mismatch",
+      "ask_now_gap": "source_of_truth"
+    },
+    {
+      "name": "after_manual_correction_known",
+      "after_event_seq": 2,
+      "known_facts": { "correction_process": "手動修正" },
+      "open_gaps_include": ["frequency", "source_of_truth"],
+      "open_gaps_exclude": ["correction_process"],
+      "ask_now_gap": "source_of_truth"
+    },
+    {
+      "name": "after_frequency_known",
+      "after_event_seq": 4,
+      "known_facts": { "correction_process": "手動修正", "frequency": "ほぼ毎朝" },
+      "open_gaps_include": ["source_of_truth"],
+      "open_gaps_exclude": ["frequency", "correction_process"],
+      "ask_now_gap": "source_of_truth",
+      "no_active_suggestion_gaps": ["frequency"]
+    },
+    {
+      "name": "pm_source_question_does_not_self_answer",
+      "after_event_seq": 5,
+      "known_facts_absent": ["source_of_truth"],
+      "open_gaps_include": ["source_of_truth"],
+      "ask_now_gap": "source_of_truth"
+    },
+    {
+      "name": "after_source_of_truth_answered",
+      "after_event_seq": 6,
+      "known_facts": {
+        "source_of_truth": "倉庫側",
+        "frequency": "ほぼ毎朝",
+        "correction_process": "手動修正"
+      },
+      "answered_gaps": ["source_of_truth"],
+      "no_active_suggestion_gaps": ["source_of_truth"],
+      "ask_now_gap": "business_impact"
+    }
+  ]
+}

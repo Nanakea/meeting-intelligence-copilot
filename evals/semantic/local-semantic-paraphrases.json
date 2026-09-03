@@ -1,0 +1,191 @@
+{
+  "name": "local-semantic-paraphrases",
+  "status": "annotation-only",
+  "purpose": "Eval cases for a future local semantic analyzer; not part of deterministic golden replay.",
+  "cases": [
+    {
+      "id": "ja-sem-01",
+      "lang": "ja",
+      "event_id": "ja-sem-01",
+      "related_demo_id": "manual-work-volume-en",
+      "text": "毎営業日の朝、在庫を別の表に転記する手作業が発生します。",
+      "expected_pain_template": "manual_work",
+      "expected_facts": [
+        {
+          "template_id": "manual_work",
+          "slot": "frequency",
+          "value": "毎営業日",
+          "kind": "evidence",
+          "evidence_event_ids": ["ja-sem-01"]
+        }
+      ]
+    },
+    {
+      "id": "ja-sem-02",
+      "lang": "ja",
+      "event_id": "ja-sem-02",
+      "related_demo_id": "owner-answer-ja",
+      "text": "倉庫側とEC側の在庫差異が原因で、出荷の締め作業が1時間ほど後ろ倒しになります。",
+      "expected_pain_template": "data_mismatch",
+      "expected_facts": [
+        {
+          "template_id": "data_mismatch",
+          "slot": "business_impact",
+          "value": "出荷締め作業が約1時間遅延",
+          "kind": "evidence",
+          "evidence_event_ids": ["ja-sem-02"]
+        }
+      ]
+    },
+    {
+      "id": "ja-sem-03",
+      "lang": "ja",
+      "event_id": "ja-sem-03",
+      "related_demo_id": "owner-answer-ja",
+      "text": "一次対応は山田さん、最終判断は情シスです。",
+      "active_template_ids": ["data_mismatch"],
+      "expected_pain_template": null,
+      "expected_facts": [
+        {
+          "template_id": "data_mismatch",
+          "slot": "owner",
+          "value": "一次対応: 山田さん / 最終判断: 情シス",
+          "kind": "evidence",
+          "evidence_event_ids": ["ja-sem-03"]
+        }
+      ]
+    },
+    {
+      "id": "ja-sem-04",
+      "lang": "ja",
+      "event_id": "ja-sem-04",
+      "related_demo_id": "integration-transfer-details-ja",
+      "text": "EC側のCSVをSAPに取り込むところで止まります。",
+      "expected_pain_template": "integration_failure",
+      "expected_facts": [
+        {
+          "template_id": "integration_failure",
+          "slot": "source_system",
+          "value": "EC",
+          "kind": "inference",
+          "evidence_event_ids": ["ja-sem-04"]
+        },
+        {
+          "template_id": "integration_failure",
+          "slot": "target_system",
+          "value": "SAP",
+          "kind": "inference",
+          "evidence_event_ids": ["ja-sem-04"]
+        },
+        {
+          "template_id": "integration_failure",
+          "slot": "failure_point",
+          "value": "CSV取り込み",
+          "kind": "evidence",
+          "evidence_event_ids": ["ja-sem-04"]
+        }
+      ]
+    },
+    {
+      "id": "en-sem-01",
+      "lang": "en",
+      "event_id": "en-sem-01",
+      "related_demo_id": "manual-work-volume-en",
+      "text": "We have to transfer the inventory every workday, not just on reporting mornings.",
+      "expected_pain_template": "manual_work",
+      "expected_facts": [
+        {
+          "template_id": "manual_work",
+          "slot": "frequency",
+          "value": "every business day",
+          "kind": "evidence",
+          "evidence_event_ids": ["en-sem-01"]
+        }
+      ]
+    },
+    {
+      "id": "en-sem-02",
+      "lang": "en",
+      "event_id": "en-sem-02",
+      "related_demo_id": "manual-work-volume-en",
+      "text": "The shipping cutoff slips by about an hour because of the spreadsheet handoff.",
+      "expected_pain_template": "manual_work",
+      "expected_facts": [
+        {
+          "template_id": "manual_work",
+          "slot": "business_impact",
+          "value": "delays shipping cutoff by about 1h",
+          "kind": "evidence",
+          "evidence_event_ids": ["en-sem-02"]
+        }
+      ]
+    },
+    {
+      "id": "en-sem-03",
+      "lang": "en",
+      "event_id": "en-sem-03",
+      "related_demo_id": "manual-work-volume-en",
+      "text": "Yamada owns first response, while IT gives final approval.",
+      "active_template_ids": ["manual_work"],
+      "expected_pain_template": null,
+      "expected_facts": [
+        {
+          "template_id": "manual_work",
+          "slot": "owner",
+          "value": "first response: Yamada / final approval: IT",
+          "kind": "evidence",
+          "evidence_event_ids": ["en-sem-03"]
+        }
+      ]
+    },
+    {
+      "id": "en-sem-04",
+      "lang": "en",
+      "event_id": "en-sem-04",
+      "related_demo_id": "integration-transfer-details-en",
+      "text": "The CSV import from EC into SAP fails before the update reaches Salesforce.",
+      "expected_pain_template": "integration_failure",
+      "expected_facts": [
+        {
+          "template_id": "integration_failure",
+          "slot": "source_system",
+          "value": "EC",
+          "kind": "inference",
+          "evidence_event_ids": ["en-sem-04"]
+        },
+        {
+          "template_id": "integration_failure",
+          "slot": "target_system",
+          "value": "SAP",
+          "kind": "inference",
+          "evidence_event_ids": ["en-sem-04"]
+        },
+        {
+          "template_id": "integration_failure",
+          "slot": "failure_point",
+          "value": "CSV import",
+          "kind": "evidence",
+          "evidence_event_ids": ["en-sem-04"]
+        }
+      ]
+    },
+    {
+      "id": "ja-sem-neg-01",
+      "lang": "ja",
+      "event_id": "ja-sem-neg-01",
+      "related_demo_id": "owner-answer-ja",
+      "text": "担当はどなたですか？",
+      "expected_pain_template": null,
+      "expected_facts": []
+    },
+    {
+      "id": "en-sem-neg-01",
+      "lang": "en",
+      "event_id": "en-sem-neg-01",
+      "related_demo_id": "unclear-ownership-en",
+      "text": "Someone should probably own this later.",
+      "expected_pain_template": null,
+      "expected_facts": []
+    }
+  ]
+}

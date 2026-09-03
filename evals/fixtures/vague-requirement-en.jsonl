@@ -1,0 +1,7 @@
+{"speaker": "Sales", "text": "We need the search screen to be easier to use.", "offset_ms": 0}
+{"speaker": "PM", "text": "What should the ideal end state look like?", "offset_ms": 8000}
+{"speaker": "Sales", "text": "Right now there are too many results and it takes too long to find the right item.", "offset_ms": 16000}
+{"speaker": "PM", "text": "How will we know this is done?", "offset_ms": 24000}
+{"speaker": "Sales", "text": "Ideally we can filter the results and find the right item right away.", "offset_ms": 32000}
+{"speaker": "Sales Enablement", "text": "We'll call it done when new reps can find the item in under 10 seconds.", "offset_ms": 40000}
+{"speaker": "Sales", "text": "It slows quote preparation during customer calls.", "offset_ms": 48000}

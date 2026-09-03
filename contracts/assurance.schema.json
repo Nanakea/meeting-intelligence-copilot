@@ -1,0 +1,965 @@
+{
+  "$defs": {
+    "ArtifactLocator": {
+      "additionalProperties": false,
+      "properties": {
+        "cell_range": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cell Range"
+        },
+        "end_line": {
+          "anyOf": [
+            {
+              "maximum": 10000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Line"
+        },
+        "heading": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Heading"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "maximum": 100000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "paragraph": {
+          "anyOf": [
+            {
+              "maximum": 1000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Paragraph"
+        },
+        "sheet": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sheet"
+        },
+        "start_line": {
+          "anyOf": [
+            {
+              "maximum": 10000000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Line"
+        }
+      },
+      "title": "ArtifactLocator",
+      "type": "object"
+    },
+    "AssuranceFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "document_kind": {
+          "$ref": "#/$defs/DocumentKind"
+        },
+        "finding_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "fingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fingerprint",
+          "type": "string"
+        },
+        "locator": {
+          "$ref": "#/$defs/ArtifactLocator"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "revision_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Revision Id",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/AssuranceSeverity"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/AssuranceFindingStatus",
+          "default": "open"
+        },
+        "suggested_governance_kind": {
+          "anyOf": [
+            {
+              "enum": [
+                "risk",
+                "action",
+                "dependency",
+                "constraint",
+                "architecture_impact"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Suggested Governance Kind"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "fingerprint",
+        "run_id",
+        "rule_id",
+        "artifact_id",
+        "revision_id",
+        "source_reference",
+        "document_kind",
+        "title",
+        "description",
+        "severity"
+      ],
+      "title": "AssuranceFinding",
+      "type": "object"
+    },
+    "AssuranceFindingStatus": {
+      "enum": [
+        "open",
+        "confirmed",
+        "dismissed",
+        "resolved",
+        "superseded"
+      ],
+      "title": "AssuranceFindingStatus",
+      "type": "string"
+    },
+    "AssuranceRule": {
+      "additionalProperties": false,
+      "properties": {
+        "applies_to": {
+          "items": {
+            "$ref": "#/$defs/DocumentKind"
+          },
+          "maxItems": 16,
+          "minItems": 1,
+          "title": "Applies To",
+          "type": "array"
+        },
+        "description": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "parameters": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "maxProperties": 32,
+          "title": "Parameters",
+          "type": "object"
+        },
+        "rule_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_type": {
+          "$ref": "#/$defs/AssuranceRuleType"
+        },
+        "severity": {
+          "$ref": "#/$defs/AssuranceSeverity",
+          "default": "warning"
+        },
+        "terms": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "title": "Terms",
+          "type": "array"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_id",
+        "rule_type",
+        "title",
+        "description",
+        "applies_to"
+      ],
+      "title": "AssuranceRule",
+      "type": "object"
+    },
+    "AssuranceRulePack": {
+      "additionalProperties": false,
+      "properties": {
+        "installed_at": {
+          "format": "date-time",
+          "title": "Installed At",
+          "type": "string"
+        },
+        "issuer": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Issuer",
+          "type": "string"
+        },
+        "manifest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Manifest Sha256",
+          "type": "string"
+        },
+        "pack_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Pack Id",
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/AssuranceRule"
+          },
+          "maxItems": 2000,
+          "minItems": 1,
+          "title": "Rules",
+          "type": "array"
+        },
+        "signature": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Signature"
+        },
+        "trusted": {
+          "default": false,
+          "title": "Trusted",
+          "type": "boolean"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pack_id",
+        "version",
+        "issuer",
+        "rules",
+        "manifest_sha256"
+      ],
+      "title": "AssuranceRulePack",
+      "type": "object"
+    },
+    "AssuranceRuleType": {
+      "enum": [
+        "required_section",
+        "forbidden_placeholder",
+        "measurable_target",
+        "required_owner",
+        "acceptance_criteria",
+        "rollback_required",
+        "required_reference",
+        "terminology_consistency",
+        "traceability",
+        "erp_metadata",
+        "architecture_standard",
+        "vague_language",
+        "broken_reference",
+        "conflicting_statement"
+      ],
+      "title": "AssuranceRuleType",
+      "type": "string"
+    },
+    "AssuranceRun": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Artifact Count",
+          "type": "integer"
+        },
+        "changed_revision_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Changed Revision Count",
+          "type": "integer"
+        },
+        "completed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Connector Ids",
+          "type": "array"
+        },
+        "detail_code": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail Code"
+        },
+        "finding_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Finding Count",
+          "type": "integer"
+        },
+        "rule_pack_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Rule Pack Ids",
+          "type": "array"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/AssuranceRunStatus"
+        }
+      },
+      "required": [
+        "run_id",
+        "connector_ids",
+        "status"
+      ],
+      "title": "AssuranceRun",
+      "type": "object"
+    },
+    "AssuranceRunRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "changed_only": {
+          "default": true,
+          "title": "Changed Only",
+          "type": "boolean"
+        },
+        "connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Connector Ids",
+          "type": "array"
+        },
+        "rule_pack_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Rule Pack Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "connector_ids"
+      ],
+      "title": "AssuranceRunRequest",
+      "type": "object"
+    },
+    "AssuranceRunStatus": {
+      "enum": [
+        "queued",
+        "running",
+        "completed",
+        "degraded",
+        "failed"
+      ],
+      "title": "AssuranceRunStatus",
+      "type": "string"
+    },
+    "AssuranceSchedule": {
+      "additionalProperties": false,
+      "properties": {
+        "cadence": {
+          "enum": [
+            "daily",
+            "weekdays",
+            "weekly"
+          ],
+          "title": "Cadence",
+          "type": "string"
+        },
+        "connector_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "title": "Connector Ids",
+          "type": "array"
+        },
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "local_time": {
+          "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
+          "title": "Local Time",
+          "type": "string"
+        },
+        "rule_pack_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Rule Pack Ids",
+          "type": "array"
+        },
+        "run_if_missed": {
+          "default": true,
+          "title": "Run If Missed",
+          "type": "boolean"
+        },
+        "schedule_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Schedule Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schedule_id",
+        "connector_ids",
+        "cadence",
+        "local_time"
+      ],
+      "title": "AssuranceSchedule",
+      "type": "object"
+    },
+    "AssuranceSeverity": {
+      "enum": [
+        "info",
+        "warning",
+        "high",
+        "critical"
+      ],
+      "title": "AssuranceSeverity",
+      "type": "string"
+    },
+    "DocumentKind": {
+      "enum": [
+        "requirement",
+        "architecture",
+        "adr",
+        "interface",
+        "data_mapping",
+        "nfr_security",
+        "test",
+        "cutover",
+        "operations",
+        "general"
+      ],
+      "title": "DocumentKind",
+      "type": "string"
+    },
+    "ERPEntityMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "items": {
+            "$ref": "#/$defs/ERPFieldMetadata"
+          },
+          "maxItems": 2000,
+          "title": "Fields",
+          "type": "array"
+        },
+        "name": {
+          "pattern": "^[A-Za-z0-9_]{1,128}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "relationships": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 500,
+          "title": "Relationships",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "ERPEntityMetadata",
+      "type": "object"
+    },
+    "ERPFieldMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "code_values": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 500,
+          "title": "Code Values",
+          "type": "array"
+        },
+        "data_type": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Data Type",
+          "type": "string"
+        },
+        "key": {
+          "default": false,
+          "title": "Key",
+          "type": "boolean"
+        },
+        "name": {
+          "pattern": "^[A-Za-z0-9_]{1,128}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "required": {
+          "default": false,
+          "title": "Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "data_type"
+      ],
+      "title": "ERPFieldMetadata",
+      "type": "object"
+    },
+    "ERPMetadataCheckRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Artifact Ids",
+          "type": "array"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "connector_id"
+      ],
+      "title": "ERPMetadataCheckRequest",
+      "type": "object"
+    },
+    "ERPMetadataSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "api_version": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Api Version"
+        },
+        "connector_id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Connector Id",
+          "type": "string"
+        },
+        "entities": {
+          "items": {
+            "$ref": "#/$defs/ERPEntityMetadata"
+          },
+          "maxItems": 2000,
+          "title": "Entities",
+          "type": "array"
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Environment"
+        },
+        "metadata_hash": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Metadata Hash",
+          "type": "string"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "source_reference": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Source Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "connector_id",
+        "source_reference",
+        "metadata_hash"
+      ],
+      "title": "ERPMetadataSnapshot",
+      "type": "object"
+    },
+    "FindingReview": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "confirm",
+            "dismiss",
+            "resolve",
+            "reopen",
+            "propose_governance"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 1,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "finding_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "review_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Review Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "review_id",
+        "finding_id",
+        "expected_revision",
+        "action"
+      ],
+      "title": "FindingReview",
+      "type": "object"
+    },
+    "FindingReviewRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "confirm",
+            "dismiss",
+            "resolve",
+            "reopen",
+            "propose_governance"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 1,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "expected_revision",
+        "action"
+      ],
+      "title": "FindingReviewRequest",
+      "type": "object"
+    },
+    "MetadataValidationResult": {
+      "additionalProperties": false,
+      "properties": {
+        "findings": {
+          "items": {
+            "$ref": "#/$defs/AssuranceFinding"
+          },
+          "maxItems": 2000,
+          "title": "Findings",
+          "type": "array"
+        },
+        "persisted_remote_records": {
+          "default": 0,
+          "maximum": 0,
+          "minimum": 0,
+          "title": "Persisted Remote Records",
+          "type": "integer"
+        },
+        "snapshot_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Snapshot Id"
+        },
+        "status": {
+          "enum": [
+            "current",
+            "unavailable",
+            "timeout"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "MetadataValidationResult",
+      "type": "object"
+    },
+    "TrustedRuleSigningKey": {
+      "additionalProperties": false,
+      "properties": {
+        "fingerprint_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Fingerprint Sha256",
+          "type": "string"
+        },
+        "key_id": {
+          "pattern": "^[a-z0-9][a-z0-9_.-]{0,127}$",
+          "title": "Key Id",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "public_key_base64": {
+          "maxLength": 128,
+          "minLength": 40,
+          "title": "Public Key Base64",
+          "type": "string"
+        },
+        "trusted_at": {
+          "format": "date-time",
+          "title": "Trusted At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key_id",
+        "label",
+        "public_key_base64",
+        "fingerprint_sha256"
+      ],
+      "title": "TrustedRuleSigningKey",
+      "type": "object"
+    }
+  },
+  "title": "MeetingIntelligenceAssuranceContracts"
+}

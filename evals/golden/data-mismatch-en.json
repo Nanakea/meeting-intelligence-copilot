@@ -1,0 +1,52 @@
+{
+  "meeting_id": "data-mismatch-en",
+  "fixture": "evals/fixtures/data-mismatch-en.jsonl",
+  "lang": "en",
+  "pain_category": "data_mismatch",
+  "checkpoints": [
+    {
+      "name": "after_pain_detection",
+      "after_event_seq": 0,
+      "pain_category": "data_mismatch",
+      "ask_now_gap": "source_of_truth"
+    },
+    {
+      "name": "after_manual_correction_known",
+      "after_event_seq": 1,
+      "known_facts": {
+        "correction_process": "manual correction",
+        "frequency": "every morning"
+      },
+      "known_facts_absent": ["source_of_truth"],
+      "open_gaps_exclude": ["correction_process", "frequency"],
+      "ask_now_gap": "source_of_truth",
+      "no_active_suggestion_gaps": ["frequency"]
+    },
+    {
+      "name": "pm_source_question_does_not_self_answer",
+      "after_event_seq": 2,
+      "known_facts_absent": ["source_of_truth"],
+      "ask_now_gap": "source_of_truth"
+    },
+    {
+      "name": "after_source_of_truth_answered",
+      "after_event_seq": 3,
+      "known_facts": {
+        "source_of_truth": "warehouse side",
+        "correction_process": "manual correction",
+        "frequency": "every morning"
+      },
+      "answered_gaps": ["source_of_truth"],
+      "no_active_suggestion_gaps": ["source_of_truth"],
+      "ask_now_gap": "business_impact"
+    },
+    {
+      "name": "after_business_impact_answered",
+      "after_event_seq": 4,
+      "known_facts": { "business_impact": "shipping delay" },
+      "answered_gaps": ["business_impact"],
+      "no_active_suggestion_gaps": ["business_impact"],
+      "ask_now_gap": "owner"
+    }
+  ]
+}
