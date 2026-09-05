@@ -71,7 +71,7 @@ The desktop capture layer is derived from the MIT-licensed Meetily project. Its 
 and license remain in [`apps/desktop/LICENSE.md`](apps/desktop/LICENSE.md), and the modification
 boundary is documented in [`apps/desktop/NOTICE.md`](apps/desktop/NOTICE.md). The product integration,
 meeting-intelligence backend, governance, assurance, connector, and reconciliation work in this
-repository are maintained by Nanakea.
+repository are being maintained.
 
 ## Windows development
 
