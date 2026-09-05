@@ -1,6 +1,6 @@
 # Meeting Intelligence Copilot
 
-Nanakea's local-first Windows workbench for live meeting questions, solution governance,
+Local-first Windows workbench for live meeting questions, solution governance,
 enterprise evidence, document assurance, and ERP reconciliation. It supports explicit Japanese,
 English, and Korean language paths and is designed for business and IT solution-lead work.
 
