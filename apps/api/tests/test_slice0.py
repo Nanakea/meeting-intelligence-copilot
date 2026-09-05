@@ -304,6 +304,6 @@ def test_compatibility_health_is_versioned_without_expanding_basic_health() -> N
         "status": "ok",
         "product": "meeting-intelligence-copilot",
         "api_version": 13,
-        "backend_version": "0.6.1",
+        "backend_version": "0.6.2",
         "capability_auth": False,
     }

@@ -7,9 +7,10 @@ English, and Korean language paths and is designed for business and IT solution-
 The product is a **question copilot, not primarily a summarizer**. It maintains deterministic
 meeting state and shows one **ASK NOW** question plus at most two **FOLLOW UP** questions.
 
-> **Release status:** API v13 source candidate. Source verification is green. The Windows package is
-> unsigned and real-company tenants, routed Korean audio, clean-machine installation, and consented
-> human use remain acceptance gates.
+> **Release target:** 0.6.2 / API v13, unsigned internal candidate. Source checks do not approve an
+> installer. See [current status](docs/PROJECT_STATUS.md) and the
+> [exact-candidate acceptance checklist](docs/PACKAGED_ACCEPTANCE_CHECKLIST.md). Real tenants,
+> routed audio, clean-machine lifecycle, and consented human use remain separate gates.
 
 ## What is implemented
 

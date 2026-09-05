@@ -35,6 +35,7 @@ import type {
 } from '@/services/intelligenceContracts';
 import { EnterpriseConnectionsCenter } from './EnterpriseConnectionsCenter';
 import { EnterpriseEvidenceSearch } from './EnterpriseEvidenceSearch';
+import { ConnectorReadiness } from './ConnectorReadiness';
 
 type DesktopConnectorKind = Exclude<ConnectorKind,
   'github' | 'gitlab' | 'jira' | 'confluence' | 'azure_devops' | 'servicenow' | 'sql' | 'sftp' | 'openapi'>;
@@ -906,7 +907,7 @@ export function ContextConnectorSettings() {
                       ? KIND_LABELS[connector.kind as DesktopConnectorKind]
                       : connector.kind.replaceAll('_', ' ')}
                   </p>
-                  <p className="mt-1 text-xs font-medium text-gray-700">{connector.phase.replace('_', ' ')}</p>
+                  <ConnectorReadiness health={connector} />
                   {connector.scope_summary && (
                     <p className="mt-1 text-xs text-gray-500">{connector.scope_summary}</p>
                   )}

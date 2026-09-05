@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { getVersion } from '@tauri-apps/api/app';
 import Image from 'next/image';
+import packageMetadata from '../../package.json';
 
 
 export function About() {
-    const [currentVersion, setCurrentVersion] = useState<string>('0.6.1');
+    const [currentVersion, setCurrentVersion] = useState<string>(packageMetadata.version);
 
     useEffect(() => {
         // Get current version on mount
-        getVersion().then(setCurrentVersion).catch(console.error);
+        getVersion().then(setCurrentVersion).catch(() => { /* Browser preview uses build metadata. */ });
     }, []);
 
     return (

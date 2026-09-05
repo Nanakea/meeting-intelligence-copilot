@@ -15,6 +15,14 @@ $tauriRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
 $frontendRoot = (Resolve-Path -LiteralPath (Join-Path $tauriRoot "..")).Path
 $workspaceRoot = (Resolve-Path -LiteralPath (Join-Path $frontendRoot "..")).Path
 $expectedWorkspaceRoot = (Resolve-Path -LiteralPath (Join-Path $tauriRoot "..\..")).Path
+$repoRoot = (Resolve-Path -LiteralPath (Join-Path $workspaceRoot "../..")).Path
+. (Join-Path $repoRoot "scripts/release-metadata.ps1")
+$release = Get-ReleaseMetadata -Root $repoRoot
+Assert-ReleaseVersions -Root $repoRoot -Release $release
+# Set this before invoking Cargo, not merely when locating the resulting artifacts.
+if ([string]::IsNullOrWhiteSpace($env:CARGO_TARGET_DIR)) {
+    $env:CARGO_TARGET_DIR = $release.default_cargo_target
+}
 if ($workspaceRoot -ne $expectedWorkspaceRoot) {
     throw "Could not resolve the Meeting Intelligence Copilot workspace safely."
 }
@@ -56,14 +64,7 @@ if (-not (Test-Path -LiteralPath $backendProvenancePath -PathType Leaf)) {
 $backendProvenance = Get-Content -LiteralPath $backendProvenancePath -Raw | ConvertFrom-Json
 $packagedBackendPath = Join-Path $binaryRoot "meeting-intelligence-backend-x86_64-pc-windows-msvc.exe"
 $packagedBackendHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $packagedBackendPath).Hash
-if (
-    $backendProvenance.schema_version -ne 1 -or
-    $backendProvenance.api_version -ne 13 -or
-    $backendProvenance.backend_version -ne "0.6.1" -or
-    $backendProvenance.artifact.sha256 -ne $packagedBackendHash
-) {
-    throw "Packaged Meeting Intelligence backend provenance is invalid."
-}
+Assert-BackendProvenance -Root $repoRoot -Release $release -Provenance $backendProvenance -SourceCommit $sourceCommit -ArtifactHash $packagedBackendHash
 
 $bundles = if ($Bundle -eq "both") { "nsis,msi" } else { $Bundle }
 $configPath = Join-Path $tauriRoot "tauri.unsigned.conf.json"
@@ -83,12 +84,7 @@ finally {
     Pop-Location
 }
 
-$targetRoot = if ([string]::IsNullOrWhiteSpace($env:CARGO_TARGET_DIR)) {
-    Join-Path $workspaceRoot "target"
-}
-else {
-    [System.IO.Path]::GetFullPath($env:CARGO_TARGET_DIR)
-}
+$targetRoot = [System.IO.Path]::GetFullPath($env:CARGO_TARGET_DIR)
 $bundleRoot = Join-Path $targetRoot "release\bundle"
 $extensions = if ($Bundle -eq "nsis") { @(".exe") } elseif ($Bundle -eq "msi") { @(".msi") } else { @(".exe", ".msi") }
 $artifacts = Get-ChildItem -LiteralPath $bundleRoot -Recurse -File | Where-Object {
@@ -150,8 +146,9 @@ $applicationRecord = [ordered]@{
 $provenance = [ordered]@{
     schema_version = 1
     product = "meeting-intelligence-copilot"
-    version = "0.6.1"
-    compatibility_api_version = 13
+    version = $release.version
+    compatibility_api_version = $release.api_version
+    release_inputs = Get-ReleaseInputHashes -Root $repoRoot
     source_commit = $sourceCommit
     backend_source_commit = $backendProvenance.source_commit
     backend_sha256 = $backendProvenance.artifact.sha256

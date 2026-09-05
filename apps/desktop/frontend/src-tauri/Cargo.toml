@@ -1,6 +1,6 @@
 [package]
 name = "meeting-intelligence-desktop"
-version = "0.6.1"
+version = "0.6.2"
 description = "Local-first meeting question copilot desktop application"
 authors = ["Nanakea"]
 license = "MIT"

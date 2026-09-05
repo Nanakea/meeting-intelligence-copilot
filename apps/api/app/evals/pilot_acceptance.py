@@ -8,6 +8,7 @@ from datetime import datetime
 from typing import Any
 
 from app.evals.pilot_matrix import platform_path_matrix, routed_audio_matrix
+from app.release import API_VERSION, VERSION
 
 SCHEMA_VERSION = 2
 REQUIRED_CHECKS = (
@@ -321,8 +322,8 @@ def validate_release_binding(
     ):
         raise ValueError("pilot manifest release classification is invalid")
     if (
-        manifest.get("product_version") != "0.6.1"
-        or manifest.get("compatibility_api_version") != 13
+        manifest.get("product_version") != VERSION
+        or manifest.get("compatibility_api_version") != API_VERSION
         or manifest.get("supported_languages") != ["ja", "en", "ko"]
         or manifest.get("korean_acceptance") != "synthetic_only"
     ):

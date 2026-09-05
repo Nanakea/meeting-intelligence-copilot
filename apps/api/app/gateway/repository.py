@@ -27,6 +27,7 @@ from app.domain.enterprise import (
     SyncCursor,
 )
 from app.gateway.connector_plans import ReadOnlyRequest, build_search_plan
+from app.release import VERSION
 
 _HTTP_KINDS = {
     ConnectorKind.github,
@@ -123,7 +124,7 @@ def execute_read(request: ReadOnlyRequest, credential: str) -> object:
         headers={
             "Accept": "application/json",
             "Authorization": f"Bearer {credential}",
-            "User-Agent": "meeting-intelligence-gateway/0.6.1",
+            "User-Agent": f"meeting-intelligence-gateway/{VERSION}",
         },
     )
     try:

@@ -12,6 +12,10 @@ $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
+$productRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot "../.."))
+. (Join-Path $productRoot "scripts/release-metadata.ps1")
+$release = Get-ReleaseMetadata -Root $productRoot
+Assert-ReleaseVersions -Root $productRoot -Release $release
 $helperManifest = Join-Path $repoRoot "llama-helper\Cargo.toml"
 
 if (-not (Test-Path -LiteralPath $helperManifest -PathType Leaf)) {
@@ -48,7 +52,7 @@ if ($Configuration -eq "Release") {
 }
 
 if ([string]::IsNullOrWhiteSpace($CargoTargetDirectory)) {
-    $cargoTargetRoot = Join-Path $repoRoot "target"
+    $cargoTargetRoot = $release.default_cargo_target
 } elseif ([System.IO.Path]::IsPathRooted($CargoTargetDirectory)) {
     $cargoTargetRoot = [System.IO.Path]::GetFullPath($CargoTargetDirectory)
 } else {
@@ -161,11 +165,13 @@ if (
     $backendProvenance.schema_version -ne 1 -or
     $backendProvenance.product -ne "meeting-intelligence-copilot" -or
     $backendProvenance.api_version -ne 13 -or
-    $backendProvenance.backend_version -ne "0.6.1" -or
+    $backendProvenance.backend_version -ne $release.version -or
     $backendProvenance.artifact.sha256 -ne $backendSourceHash
 ) {
     throw "Meeting Intelligence backend provenance does not match the accepted API v13 artifact."
 }
+$sourceCommit = (& git -C $productRoot rev-parse HEAD).Trim()
+Assert-BackendProvenance -Root $productRoot -Release $release -Provenance $backendProvenance -SourceCommit $sourceCommit -ArtifactHash $backendSourceHash
 Copy-Item -LiteralPath $backendSource -Destination $backendDestination -Force
 Copy-Item -LiteralPath $backendProvenanceSource -Destination $backendProvenanceDestination -Force
 

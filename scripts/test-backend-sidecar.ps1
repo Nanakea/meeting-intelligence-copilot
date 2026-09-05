@@ -13,6 +13,8 @@ param(
 $ErrorActionPreference = "Stop"
 
 $repo = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+. (Join-Path $PSScriptRoot "release-metadata.ps1")
+$release = Get-ReleaseMetadata -Root $repo
 if ([string]::IsNullOrWhiteSpace($ArtifactPath)) {
     $ArtifactPath = Join-Path $repo "dist\backend-sidecar\meeting-intelligence-backend-x86_64-pc-windows-msvc.exe"
 }
@@ -205,7 +207,7 @@ try {
         $compatibility.status -eq "ok" -and
         $compatibility.product -eq "meeting-intelligence-copilot" -and
         [int]$compatibility.api_version -eq 13 -and
-        $compatibility.backend_version -eq "0.6.1" -and
+        $compatibility.backend_version -eq $release.version -and
         $compatibility.capability_auth -eq $true
     ) "Compatibility contract is not the expected product/API/backend version."
 

@@ -8,6 +8,14 @@ module.exports = {
   ],
   theme: {
   	extend: {
+        fontSize: {
+            display: ['32px', { lineHeight: '1.2', fontWeight: '700' }],
+            h1: ['24px', { lineHeight: '1.3', fontWeight: '600' }],
+            h2: ['18px', { lineHeight: '1.4', fontWeight: '500' }],
+            body: ['16px', { lineHeight: '1.6', fontWeight: '400' }],
+            small: ['14px', { lineHeight: '1.5', fontWeight: '400' }],
+            caption: ['12px', { lineHeight: '1.4', fontWeight: '400' }],
+        },
   		fontFamily: {
   			sans: [
   				'var(--font-source-sans-3)'
@@ -85,5 +93,5 @@ module.exports = {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography')],
 }

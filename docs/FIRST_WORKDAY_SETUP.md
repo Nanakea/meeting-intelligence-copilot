@@ -13,20 +13,22 @@ contract is API v13. The product remains single-user and local-first.
    workday readiness** once in every language you plan to use: English, Japanese, and/or Korean.
 3. Run **Test transcript to panel** for each locally installed STT model. A failed copilot test must
    not prevent local recording, but it must be corrected before relying on ASK NOW.
-4. Choose a retention period. Use 7 or 30 days unless there is a documented reason to retain local
-   meetings longer. Confirm BitLocker and Microsoft Defender are enabled.
+4. Review the retention setting explicitly: 7/30/90 days or forever. Saved meetings default to
+   forever until changed; transient intelligence recovery data is purged on normal stop or after
+   its crash-recovery TTL. Confirm BitLocker and Microsoft Defender are enabled.
 5. Run the source/artifact audit after every candidate rebuild:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\check-precompany-readiness.ps1 `
   -CargoTargetRoot $env:CARGO_TARGET_DIR `
-  -SandboxPackage $env:MEETING_INTELLIGENCE_EVIDENCE_ROOT\meetily-v0.6.0-sandbox-20260826 `
-  -OutputPath $env:MEETING_INTELLIGENCE_EVIDENCE_ROOT\meetily-0.6.0-precompany-readiness.json
+  -EvidenceRoot $env:MEETING_INTELLIGENCE_EVIDENCE_ROOT `
+  -OutputPath $env:MEETING_INTELLIGENCE_EVIDENCE_ROOT\readiness-0.6.2.json
 ```
 
-`precompany_ready: true` means locally actionable engineering is complete. It does not mean the
-software is authorized for company data. `ready_for_company_data` remains false until all company
-gates are evidenced.
+Run this from the monorepo root. Build outputs default to the external Cargo cache, not a second
+desktop repository. A readiness report is an inventory, not proof of audio, Sandbox lifecycle,
+or human acceptance. Those require the exact-candidate evidence in the packaged checklist.
+`ready_for_company_data` remains false while company gates are pending.
 
 ## First day with company IT
 
@@ -37,8 +39,11 @@ gates are evidenced.
    carry forward the unsigned preparation installer onto a company device.
 3. Register delegated Microsoft Graph access for the signed-in user's OneDrive and explicitly
    selected SharePoint drives. Do not request application-wide or write permissions.
-4. Configure a non-production, read-only Dynamics 365 identity and review the versioned entity
-   mappings. Keep create, update, delete, workflow, and administrative permissions disabled.
+4. Configure a sandbox NetSuite read-only integration role and certificate, then review selected
+   SuiteTalk/SuiteQL mappings. WMS and Amazon FBA require separate approved read-only credentials
+   and field mappings. Keep create, update, delete, workflow, and administrative permissions disabled.
+   For Notion, share only approved selected pages with the integration; the current connector reads
+   page Markdown, not an unrestricted workspace crawl. Test revocation and meeting-only fallback.
 5. Ask company IT whether the optional enterprise gateway is approved. Its OIDC application,
    mTLS device certificate, source allow-list, GitHub/GitLab projects, Jira/Confluence spaces,
    Azure DevOps projects, ServiceNow tables, SQL views, SFTP roots, and OpenAPI GET operations must

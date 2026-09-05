@@ -58,6 +58,18 @@ test('keeps backend unavailability nonblocking for local recording', () => {
   assert.equal(result.checks.find((check) => check.id === 'backend')?.state, 'warning');
 });
 
+test('unknown retention warns without claiming verification or blocking recording', () => {
+  for (const retention of [undefined, null, '', 'unexpected']) {
+    const result = evaluateWorkdayReadiness(preflight({ retention }));
+    assert.equal(result.checks.find((check) => check.id === 'retention').state, 'warning');
+    assert.equal(result.localRecordingReady, true);
+    assert.equal(result.hasWarnings, true);
+  }
+  for (const retention of ['seven_days', 'thirty_days', 'ninety_days', 'forever']) {
+    assert.equal(evaluateWorkdayReadiness(preflight({ retention })).checks.at(-1).state, 'pass');
+  }
+});
+
 test('requires local STT, both audio paths, and adequate known storage', () => {
   const result = evaluateWorkdayReadiness(preflight({
     localSttReady: false,

@@ -6,6 +6,9 @@ param(
 $ErrorActionPreference = "Stop"
 
 $repo = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+. (Join-Path $PSScriptRoot "release-metadata.ps1")
+$release = Get-ReleaseMetadata -Root $repo
+Assert-ReleaseVersions -Root $repo -Release $release
 $api = Join-Path $repo "apps\api"
 $python = Join-Path $api ".venv\Scripts\python.exe"
 $entryPoint = Join-Path $api "app\sidecar_main.py"
@@ -14,7 +17,7 @@ $packagingRequirements = Join-Path $api "requirements-packaging.txt"
 $distRoot = Join-Path $repo "dist\backend-sidecar"
 $workRoot = Join-Path $repo "tmp\pyinstaller\work"
 $specRoot = Join-Path $repo "tmp\pyinstaller\spec"
-$artifactName = "meeting-intelligence-backend-x86_64-pc-windows-msvc"
+$artifactName = [IO.Path]::GetFileNameWithoutExtension($release.backend_artifact)
 $artifact = Join-Path $distRoot "$artifactName.exe"
 
 $arguments = @(
@@ -27,6 +30,8 @@ $arguments = @(
     $artifactName,
     "--paths",
     $api,
+    "--add-data",
+    "$(Join-Path $api 'app/release.json');app",
     "--distpath",
     $distRoot,
     "--workpath",
@@ -138,8 +143,9 @@ $provenanceTemporary = Join-Path $distRoot "build-provenance.$([Guid]::NewGuid()
 $provenance = [ordered]@{
     schema_version = 1
     product = "meeting-intelligence-copilot"
-    api_version = 13
-    backend_version = "0.6.1"
+    api_version = $release.api_version
+    backend_version = $release.version
+    release_inputs = Get-ReleaseInputHashes -Root $repo
     source_commit = $sourceCommit
     source_date_epoch = [long]$sourceDateEpoch
     python_version = (& $python -c "import platform; print(platform.python_version())").Trim()

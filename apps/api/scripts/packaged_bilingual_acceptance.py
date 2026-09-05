@@ -22,6 +22,7 @@ from typing import Any
 from websockets.asyncio.client import connect
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
+RELEASE = json.loads((REPO_ROOT / "apps/api/app/release.json").read_text(encoding="utf-8"))
 DEFAULT_ARTIFACT = (
     REPO_ROOT
     / "dist"
@@ -261,7 +262,7 @@ def wait_for_compatibility(
                 "status": "ok",
                 "product": "meeting-intelligence-copilot",
                 "api_version": 13,
-                "backend_version": "0.6.1",
+                "backend_version": RELEASE["version"],
                 "capability_auth": True,
             }
             return round((time.monotonic() - started) * 1000)

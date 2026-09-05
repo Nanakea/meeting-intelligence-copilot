@@ -1,6 +1,6 @@
 [project]
 name = "meeting-copilot-api"
-version = "0.6.1"
+version = "0.6.2"
 description = "Meeting Intelligence Copilot — API (local-first question copilot)"
 requires-python = ">=3.12"
 dependencies = [

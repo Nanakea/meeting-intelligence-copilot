@@ -154,7 +154,7 @@ def test_release_binding_requires_exact_candidate_and_source_provenance() -> Non
     manifest = {
         "schema_version": 2,
         "candidate_kind": "unsigned_synthetic_tested_internal_pilot",
-        "product_version": "0.6.1",
+        "product_version": "0.6.2",
         "compatibility_api_version": 13,
         "supported_languages": ["ja", "en", "ko"],
         "korean_acceptance": "synthetic_only",
@@ -195,7 +195,7 @@ def test_release_binding_rejects_incomplete_acceptance() -> None:
     manifest = {
         "schema_version": 2,
         "candidate_kind": "unsigned_synthetic_tested_internal_pilot",
-        "product_version": "0.6.1",
+        "product_version": "0.6.2",
         "compatibility_api_version": 13,
         "supported_languages": ["ja", "en", "ko"],
         "korean_acceptance": "synthetic_only",

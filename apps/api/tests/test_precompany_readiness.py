@@ -8,7 +8,7 @@ GUIDE = REPO_ROOT / "docs" / "FIRST_WORKDAY_SETUP.md"
 def test_precompany_readiness_is_read_only_fail_closed_and_source_bound() -> None:
     source = SCRIPT.read_text(encoding="utf-8")
 
-    assert "--untracked-files=no" in source
+    assert "--untracked-files=all" in source
     assert "backendProvenance.source_commit -eq $sourceCommit" in source
     assert "bundleProvenance.source_commit -eq $sourceCommit" in source
     assert "bundleProvenance.backend_source_commit -eq $sourceCommit" in source
@@ -41,7 +41,7 @@ def test_first_workday_guide_preserves_company_only_gates() -> None:
         "organization-signed",
         "OneDrive",
         "SharePoint",
-        "Dynamics 365",
+        "NetSuite",
         "meeting-only",
         "Do not use company data",
     ]:

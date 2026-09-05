@@ -26,6 +26,7 @@ from app.domain.enterprise import (
     SourceSelection,
     SyncCursor,
 )
+from app.release import VERSION
 
 
 class _GatewayContract(BaseModel):
@@ -220,7 +221,7 @@ def create_gateway_app(
 
     app = FastAPI(
         title="Meeting Intelligence Enterprise Connector Gateway",
-        version="0.6.1",
+        version=VERSION,
         docs_url=None,
         redoc_url=None,
         openapi_url=None,

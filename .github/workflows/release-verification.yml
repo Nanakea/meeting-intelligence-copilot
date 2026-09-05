@@ -1,0 +1,108 @@
+name: release-verification
+
+on:
+  workflow_dispatch:
+    inputs:
+      ffmpeg_zip_sha256:
+        description: Reviewed SHA-256 of the Gyan essentials archive (required; never trust a fresh download implicitly)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  windows-candidate:
+    runs-on: windows-latest
+    timeout-minutes: 180
+    env:
+      CARGO_TARGET_DIR: ${{ github.workspace }}/../../cargo-targets/meeting-intelligence-copilot
+      LIBCLANG_PATH: C:/Program Files/LLVM/bin
+      FFMPEG_REVIEWED_HASH: ${{ inputs.ffmpeg_zip_sha256 }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.3.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - name: Install locked toolchains
+        shell: pwsh
+        run: |
+          python -m venv apps/api/.venv
+          apps/api/.venv/Scripts/python.exe -m pip install --require-hashes -r apps/api/requirements-dev.lock -r apps/api/requirements-packaging.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          pnpm --dir apps/web install --frozen-lockfile
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          pnpm --dir apps/desktop/frontend install --frozen-lockfile
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          rustup toolchain install stable --profile minimal
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Stage only the independently hash-reviewed FFmpeg executable
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($env:FFMPEG_REVIEWED_HASH -notmatch '^[0-9a-fA-F]{64}$') { throw 'Reviewed FFmpeg hash required' }
+          $zip = Join-Path $env:RUNNER_TEMP 'ffmpeg-reviewed.zip'
+          curl.exe --fail --proto '=https' --max-time 180 --max-filesize 268435456 --output $zip 'https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip'
+          if ($LASTEXITCODE -ne 0) { throw 'FFmpeg acquisition failed' }
+          if ((Get-FileHash $zip -Algorithm SHA256).Hash -ne $env:FFMPEG_REVIEWED_HASH) { throw 'FFmpeg hash mismatch' }
+          $archive = [IO.Compression.ZipFile]::OpenRead($zip)
+          try {
+            $entries = @($archive.Entries | Where-Object { $_.FullName -match '^[^/]+/bin/ffmpeg\.exe$' })
+            if ($entries.Count -ne 1 -or $entries[0].Length -gt 268435456) { throw 'Unexpected FFmpeg archive' }
+            $output = 'apps/desktop/frontend/src-tauri/binaries/ffmpeg-x86_64-pc-windows-msvc.exe'
+            [IO.Directory]::CreateDirectory((Split-Path $output)) | Out-Null
+            [IO.Compression.ZipFileExtensions]::ExtractToFile($entries[0], $output, $false)
+          } finally { $archive.Dispose() }
+      - name: Product and packaged-backend gates
+        shell: pwsh
+        run: |
+          ./scripts/check.ps1
+          ./scripts/build-backend-sidecar.ps1
+          ./scripts/test-backend-sidecar.ps1
+          ./scripts/run-packaged-acceptance.ps1
+          ./apps/desktop/scripts/setup-meetily-sidecars.ps1 -MeetingIntelligenceBackendPath dist/backend-sidecar/meeting-intelligence-backend-x86_64-pc-windows-msvc.exe
+      - name: Locked Windows Rust tests
+        working-directory: apps/desktop
+        shell: pwsh
+        run: cargo +stable test --locked
+      - name: Audit Rust dependencies under the reviewed platform exclusions
+        working-directory: apps/desktop
+        shell: pwsh
+        run: |
+          cargo install cargo-audit --version 0.22.2 --locked
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cargo audit
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Desktop behavior, types, lint and build
+        working-directory: apps/desktop/frontend
+        shell: pwsh
+        run: |
+          pnpm test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          pnpm exec tsc --noEmit
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          pnpm lint:release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          pnpm build
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Deterministic fault gate (not the four-hour audio soak)
+        shell: pwsh
+        run: apps/api/.venv/Scripts/python.exe scripts/run-pilot-fault-test.py --events 10000
+      - name: Build unsigned NSIS and MSI
+        shell: pwsh
+        run: ./apps/desktop/frontend/src-tauri/scripts/build-unsigned-windows.ps1 -Bundle both
+      - name: Retain candidate artifacts, not release approval
+        uses: actions/upload-artifact@v7
+        with:
+          name: unsigned-candidate-${{ github.sha }}
+          path: |
+            dist/backend-sidecar/*
+            ${{ env.CARGO_TARGET_DIR }}/release/bundle/**
+          if-no-files-found: error
+          retention-days: 14
