@@ -135,5 +135,5 @@ private key, local index, model weight, or packaged binary belongs in Git.
 ## Licensing
 
 Unless a file or component states otherwise, no license is granted for reuse or redistribution of
-the Nanakea-authored product source. `apps/desktop` contains MIT-licensed Meetily-derived code and
+the authored product source. `apps/desktop` contains MIT-licensed Meetily-derived code and
 must retain its component license and notice. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
