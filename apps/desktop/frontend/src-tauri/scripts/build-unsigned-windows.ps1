@@ -33,6 +33,7 @@ $requiredSidecars = @(
     "meeting-intelligence-backend-x86_64-pc-windows-msvc.exe"
 )
 $binaryRoot = Join-Path $tauriRoot "binaries"
+$initialSidecarHashes = @{}
 foreach ($name in $requiredSidecars) {
     $path = Join-Path $binaryRoot $name
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
@@ -41,6 +42,7 @@ foreach ($name in $requiredSidecars) {
     if ((Get-Item -LiteralPath $path).Length -le 0) {
         throw "Required sidecar is empty: $name"
     }
+    $initialSidecarHashes[$name] = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash
 }
 
 if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
@@ -49,7 +51,7 @@ if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     throw "Git is required to bind the installer to reviewed source."
 }
-$worktreeStatus = (& git -C $workspaceRoot status --porcelain=v1 --untracked-files=all | Out-String).Trim()
+$worktreeStatus = Get-ReleaseSourceStatus -Root $repoRoot
 if ($LASTEXITCODE -ne 0) {
     throw "Product source status could not be inspected."
 }
@@ -57,6 +59,7 @@ if (-not [string]::IsNullOrWhiteSpace($worktreeStatus)) {
     throw "Refusing to build Windows installers from a dirty product worktree."
 }
 $sourceCommit = (& git -C $workspaceRoot rev-parse HEAD).Trim()
+$releaseInputHashes = Get-ReleaseInputHashes -Root $repoRoot
 $backendProvenancePath = Join-Path $binaryRoot "meeting-intelligence-backend-provenance.json"
 if (-not (Test-Path -LiteralPath $backendProvenancePath -PathType Leaf)) {
     throw "Reviewed Meeting Intelligence backend provenance is missing."
@@ -85,6 +88,12 @@ finally {
 }
 
 $targetRoot = [System.IO.Path]::GetFullPath($env:CARGO_TARGET_DIR)
+Assert-ReleaseCheckout -Root $repoRoot -SourceCommit $sourceCommit
+foreach ($name in $requiredSidecars) {
+    if ((Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $binaryRoot $name)).Hash -ne $initialSidecarHashes[$name]) {
+        throw "Sidecar changed during the build; discard the unaccepted installers."
+    }
+}
 $bundleRoot = Join-Path $targetRoot "release\bundle"
 $extensions = if ($Bundle -eq "nsis") { @(".exe") } elseif ($Bundle -eq "msi") { @(".msi") } else { @(".exe", ".msi") }
 $artifacts = Get-ChildItem -LiteralPath $bundleRoot -Recurse -File | Where-Object {
@@ -148,7 +157,7 @@ $provenance = [ordered]@{
     product = "meeting-intelligence-copilot"
     version = $release.version
     compatibility_api_version = $release.api_version
-    release_inputs = Get-ReleaseInputHashes -Root $repoRoot
+    release_inputs = $releaseInputHashes
     source_commit = $sourceCommit
     backend_source_commit = $backendProvenance.source_commit
     backend_sha256 = $backendProvenance.artifact.sha256

@@ -37,6 +37,29 @@ function Get-ReleaseInputHashes {
     return $hashes
 }
 
+function Get-ReleaseSourceStatus {
+    param([string]$Root)
+    # Tauri rewrites Cargo.toml with unchanged normalized contents. Compare blobs,
+    # not Git's stat-only dirty hint, and still reject staged or untracked source.
+    $changed = (& git -C $Root diff --name-only HEAD -- | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0) { throw "Unable to compare release source." }
+    $untracked = (& git -C $Root ls-files --others --exclude-standard | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0) { throw "Unable to inspect untracked release source." }
+    return ($changed + $untracked).Trim()
+}
+
+function Assert-ReleaseCheckout {
+    param([string]$Root, [string]$SourceCommit)
+    $currentCommit = (& git -C $Root rev-parse HEAD | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0 -or $currentCommit -ne $SourceCommit) {
+        throw "Release source revision changed during the build."
+    }
+    $status = Get-ReleaseSourceStatus -Root $Root
+    if (-not [string]::IsNullOrWhiteSpace($status)) {
+        throw "Release source changed during the build; no acceptance provenance was issued."
+    }
+}
+
 function Assert-BackendProvenance {
     param([string]$Root, $Release, $Provenance, [string]$SourceCommit, [string]$ArtifactHash)
     if ($SourceCommit -notmatch '^[0-9a-f]{40}$' -or

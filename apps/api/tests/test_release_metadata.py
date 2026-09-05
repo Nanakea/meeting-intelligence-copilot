@@ -111,3 +111,48 @@ def test_readiness_rejects_misaligned_component(tmp_path: Path) -> None:
         timeout=30,
     )
     assert result.returncode != 0
+
+
+@pytest.mark.parametrize(
+    "change", ["none", "tracked", "staged", "untracked", "revision", "line_endings"]
+)
+def test_end_of_build_rejects_changed_checkout(tmp_path: Path, change: str) -> None:
+    shell = shutil.which("pwsh") or shutil.which("powershell")
+    if shell is None:
+        pytest.skip("Windows packaging requires PowerShell")
+
+    def git(*args: str) -> str:
+        return subprocess.check_output(["git", "-C", str(tmp_path), *args], text=True).strip()
+
+    git("init", "--quiet")
+    git("config", "user.name", "Release guard test")
+    git("config", "user.email", "test@example.invalid")
+    source = tmp_path / "source.txt"
+    source.write_text("initial\n", encoding="utf-8")
+    (tmp_path / ".gitattributes").write_text("*.txt text eol=lf\n", encoding="utf-8")
+    git("add", "source.txt", ".gitattributes")
+    git("commit", "--quiet", "-m", "fixture")
+    commit = git("rev-parse", "HEAD")
+    if change in {"tracked", "staged"}:
+        source.write_text("changed\n", encoding="utf-8")
+        if change == "staged":
+            git("add", "source.txt")
+    elif change == "line_endings":
+        source.write_bytes(b"initial\r\n")
+    elif change == "untracked":
+        (tmp_path / "new.txt").write_text("unreviewed\n", encoding="utf-8")
+    elif change == "revision":
+        git("commit", "--quiet", "--allow-empty", "-m", "another revision")
+    result = subprocess.run(
+        [
+            shell,
+            "-NoProfile",
+            "-NonInteractive",
+            "-Command",
+            f"$ErrorActionPreference='Stop'; . '{HELPER}'; "
+            f"Assert-ReleaseCheckout -Root '{tmp_path}' -SourceCommit '{commit}'",
+        ],
+        capture_output=True,
+        timeout=30,
+    )
+    assert (result.returncode == 0) == (change in {"none", "line_endings"})

@@ -47,8 +47,8 @@ function Get-SourceCommit {
 
 function Test-TrackedSourceClean {
     param([string]$Repository)
-    $status = (& git -C $Repository status --porcelain=v1 --untracked-files=all 2>$null | Out-String).Trim()
-    $LASTEXITCODE -eq 0 -and [string]::IsNullOrWhiteSpace($status)
+    $status = Get-ReleaseSourceStatus -Root $Repository
+    [string]::IsNullOrWhiteSpace($status)
 }
 
 function Read-JsonFile {

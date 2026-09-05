@@ -52,16 +52,7 @@ if ($DryRun) {
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     throw "Git is required to prove the backend sidecar source revision."
 }
-$workspaceOnlyPaths = @(
-    ":(exclude).claude/**",
-    ":(exclude)apps/api/.claude/**",
-    ":(exclude)AGENTS.md",
-    ":(exclude)Plans.md"
-)
-$worktreeStatus = (
-    & git -C $repo status --porcelain=v1 --untracked-files=all -- "." @workspaceOnlyPaths |
-        Out-String
-).Trim()
+$worktreeStatus = Get-ReleaseSourceStatus -Root $repo
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to inspect the product worktree before packaging."
 }
@@ -117,6 +108,7 @@ $previousPythonHashSeed = [Environment]::GetEnvironmentVariable("PYTHONHASHSEED"
 $previousPythonUtf8 = [Environment]::GetEnvironmentVariable("PYTHONUTF8", "Process")
 $previousSourceDateEpoch = [Environment]::GetEnvironmentVariable("SOURCE_DATE_EPOCH", "Process")
 $sourceCommit = (& git -C $repo rev-parse HEAD).Trim()
+$releaseInputHashes = Get-ReleaseInputHashes -Root $repo
 $sourceDateEpoch = (& git -C $repo log -1 --format=%ct).Trim()
 try {
     [Environment]::SetEnvironmentVariable("PYTHONHASHSEED", "0", "Process")
@@ -136,6 +128,7 @@ if (-not (Test-Path $artifact)) {
     throw "PyInstaller completed without the expected artifact: $artifact"
 }
 
+Assert-ReleaseCheckout -Root $repo -SourceCommit $sourceCommit
 $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $artifact).Hash
 $size = (Get-Item -LiteralPath $artifact).Length
 $provenancePath = Join-Path $distRoot "build-provenance.json"
@@ -145,7 +138,7 @@ $provenance = [ordered]@{
     product = "meeting-intelligence-copilot"
     api_version = $release.api_version
     backend_version = $release.version
-    release_inputs = Get-ReleaseInputHashes -Root $repo
+    release_inputs = $releaseInputHashes
     source_commit = $sourceCommit
     source_date_epoch = [long]$sourceDateEpoch
     python_version = (& $python -c "import platform; print(platform.python_version())").Trim()

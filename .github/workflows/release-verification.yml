@@ -18,6 +18,7 @@ jobs:
     env:
       CARGO_TARGET_DIR: ${{ github.workspace }}/../../cargo-targets/meeting-intelligence-copilot
       LIBCLANG_PATH: C:/Program Files/LLVM/bin
+      CMAKE_GENERATOR: Visual Studio 17 2022
       FFMPEG_REVIEWED_HASH: ${{ inputs.ffmpeg_zip_sha256 }}
     steps:
       - uses: actions/checkout@v7

@@ -98,15 +98,12 @@ def test_packaging_toolchain_is_pinned_and_hashed() -> None:
     assert "build-provenance.json" in build_script
     assert "api_version = $release.api_version" in build_script
     assert "backend_version = $release.version" in build_script
-    assert "release_inputs = Get-ReleaseInputHashes" in build_script
+    assert "$releaseInputHashes = Get-ReleaseInputHashes" in build_script
+    assert "Assert-ReleaseCheckout -Root $repo -SourceCommit $sourceCommit" in build_script
     assert "runtime_lock_sha256" in build_script
     assert "packaging_lock_sha256" in build_script
     assert "Get-AuthenticodeSignature" in build_script
-    assert "status --porcelain=v1 --untracked-files=all" in build_script
-    assert ":(exclude).claude/**" in build_script
-    assert ":(exclude)apps/api/.claude/**" in build_script
-    assert ":(exclude)AGENTS.md" in build_script
-    assert ":(exclude)Plans.md" in build_script
+    assert "Get-ReleaseSourceStatus -Root $repo" in build_script
     assert "Refusing to build a backend sidecar from a dirty product worktree" in build_script
     assert "Refusing to replace an artifact outside" in build_script
     assert "pip install" not in build_script.split("if ($DryRun)", maxsplit=1)[0]

@@ -43,6 +43,11 @@ remain disabled. Uninstall behavior must match the accepted retention/deletion t
 
 ## Editor Maintenance
 
+For source builds, pair CMake with an installed Visual Studio generator. A machine with Visual Studio
+2026 and older CMake may auto-select an unsupported generator; when the 2022 build tools are installed,
+set `CMAKE_GENERATOR=Visual Studio 17 2022` explicitly. Do not replace sidecars with placeholders to
+bypass compiler failures. This build-machine prerequisite does not apply to installer users.
+
 Tailwind 4 uses its dedicated PostCSS plugin and explicit legacy theme configuration, following
 [the official migration guide](https://tailwindcss.com/docs/upgrade-guide). Run real editor tests
 and a packaged WebView visual/IME check whenever BlockNote or its editor dependencies change.

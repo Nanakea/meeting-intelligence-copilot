@@ -117,7 +117,7 @@ test('release builds refuse dirty source and bind backend provenance', async () 
     readFile(new URL('../../../scripts/setup-meetily-sidecars.ps1', import.meta.url), 'utf8'),
   ]);
 
-  assert.match(buildScript, /status --porcelain=v1 --untracked-files=all/);
+  assert.match(buildScript, /Get-ReleaseSourceStatus -Root \$repoRoot/);
   assert.match(buildScript, /Refusing to build Windows installers from a dirty product worktree/);
   assert.match(buildScript, /precompany-build-provenance\.json/);
   assert.match(buildScript, /backend_source_commit/);

@@ -17,7 +17,7 @@ Third-party licensing notices remain mandatory.
 Source implementation and tests are **not** packaged acceptance. No 0.6.2 installer, live company
 tenant, routed-audio matrix, or human usability result is approved by this status file.
 
-Local verification on September 5: 600 backend tests passed (1 skipped), 24 golden fixtures passed,
+Local verification on September 5: 606 backend tests passed (1 skipped), 24 golden fixtures passed,
 300 Korean deterministic cases met thresholds, and the 22-test demo UI passed. Desktop behavior,
 TypeScript, production build, and zero-warning scoped lint passed. Rust: 306 application tests,
 2 helper tests, and 1 documentation test passed; 12 real-STT tests remain ignored.
