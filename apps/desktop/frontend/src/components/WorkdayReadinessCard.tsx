@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   AlertTriangle,
   Building2,
@@ -47,7 +47,7 @@ const COPY = {
     action: 'Action required before a real meeting',
     actionDetail: 'Fix the marked local recording items, then run the check again.',
     companyTitle: 'Complete with company IT later',
-    companyDetail: 'Confirm the recording policy, install the organization-signed build, then add delegated OneDrive/SharePoint and read-only Dynamics access. Connectors are optional; meeting-only ASK NOW remains available.',
+    companyDetail: 'Confirm recording and retention policy with IT before company use. Request only selected-source, read-only access to NetSuite, Notion, or OneDrive/SharePoint. Connectors are optional; meeting-only ASK NOW remains available.',
     statuses: { pass: 'Ready', warning: 'Warning', action_required: 'Action required' },
     labels: {
       language: 'Japanese, English, or Korean selected',
@@ -76,10 +76,10 @@ const COPY = {
     action: '実際の会議の前に対応が必要です',
     actionDetail: '対応が必要なローカル録音項目を修正し、もう一度確認してください。',
     companyTitle: '入社後に社内ITと完了する項目',
-    companyDetail: '録音ポリシーを確認し、組織署名済みビルドを導入してから、委任されたOneDrive/SharePointと読み取り専用Dynamicsを設定します。コネクターは任意で、会議のみのASK NOWは引き続き利用できます。',
+    companyDetail: '会社で使用する前に録音と保存期間の方針を社内ITに確認してください。NetSuite、Notion、OneDrive/SharePointは選択したソースへの読み取り専用アクセスのみ申請します。接続なしでも会議のASK NOWは利用できます。',
     statuses: { pass: '準備完了', warning: '要確認', action_required: '対応が必要' },
     labels: {
-      language: '日本語または英語の選択',
+      language: '日本語・英語・韓国語の選択',
       local_stt: 'ローカル文字起こしモデル',
       microphone: 'マイク入力',
       system_audio: '会議出力の取り込み',
@@ -133,10 +133,20 @@ export function WorkdayReadinessCard({
   const [preflight, setPreflight] = useState<PilotPreflight | null>(null);
   const [checkState, setCheckState] = useState<ActivityState>('idle');
   const [spokenState, setSpokenState] = useState<ActivityState>('idle');
+  const requestGeneration = useRef(0);
+  useEffect(() => {
+    requestGeneration.current += 1;
+    setPreflight(null);
+    setCheckState('idle');
+    setSpokenState('idle');
+    return () => { requestGeneration.current += 1; };
+  }, [language, microphoneDevice, systemAudioDevice]);
   const t = COPY[language];
   const summary = preflight ? evaluateWorkdayReadiness(preflight) : null;
 
   const runCheck = async () => {
+    const generation = ++requestGeneration.current;
+    setPreflight(null);
     setCheckState('running');
     setSpokenState('idle');
     try {
@@ -145,20 +155,25 @@ export function WorkdayReadinessCard({
         microphoneDevice,
         systemAudioDevice,
       );
+      if (generation !== requestGeneration.current) return;
       setPreflight(result);
       setCheckState('passed');
     } catch {
+      if (generation !== requestGeneration.current) return;
       setPreflight(null);
       setCheckState('failed');
     }
   };
 
   const runSpokenTest = async () => {
+    const generation = requestGeneration.current;
     setSpokenState('running');
     try {
       await runSpokenPipelinePreflight(language);
+      if (generation !== requestGeneration.current) return;
       setSpokenState('passed');
     } catch {
+      if (generation !== requestGeneration.current) return;
       setSpokenState('failed');
     }
   };
@@ -187,6 +202,7 @@ export function WorkdayReadinessCard({
             <select
               value={language}
               onChange={(event) => {
+                requestGeneration.current += 1;
                 setLanguage(event.target.value as PilotLanguage);
                 setPreflight(null);
                 setCheckState('idle');

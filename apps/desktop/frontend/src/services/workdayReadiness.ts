@@ -61,7 +61,11 @@ export function evaluateWorkdayReadiness(
       state: preflight.backend.phase === 'ready' ? 'pass' : 'warning',
     },
     { id: 'storage', state: storageState(preflight) },
-    { id: 'retention', state: 'pass' },
+    {
+      id: 'retention',
+      state: ['seven_days', 'thirty_days', 'ninety_days', 'forever'].includes(preflight.retention)
+        ? 'pass' : 'warning',
+    },
   ];
   const localRecordingReady = checks
     .filter((check) => check.id !== 'backend' && check.id !== 'retention')

@@ -96,16 +96,14 @@ def test_packaging_toolchain_is_pinned_and_hashed() -> None:
     assert "PYTHONHASHSEED" in build_script
     assert "SOURCE_DATE_EPOCH" in build_script
     assert "build-provenance.json" in build_script
-    assert "api_version = 13" in build_script
-    assert 'backend_version = "0.6.1"' in build_script
+    assert "api_version = $release.api_version" in build_script
+    assert "backend_version = $release.version" in build_script
+    assert "$releaseInputHashes = Get-ReleaseInputHashes" in build_script
+    assert "Assert-ReleaseCheckout -Root $repo -SourceCommit $sourceCommit" in build_script
     assert "runtime_lock_sha256" in build_script
     assert "packaging_lock_sha256" in build_script
     assert "Get-AuthenticodeSignature" in build_script
-    assert "status --porcelain=v1 --untracked-files=all" in build_script
-    assert ":(exclude).claude/**" in build_script
-    assert ":(exclude)apps/api/.claude/**" in build_script
-    assert ":(exclude)AGENTS.md" in build_script
-    assert ":(exclude)Plans.md" in build_script
+    assert "Get-ReleaseSourceStatus -Root $repo" in build_script
     assert "Refusing to build a backend sidecar from a dirty product worktree" in build_script
     assert "Refusing to replace an artifact outside" in build_script
     assert "pip install" not in build_script.split("if ($DryRun)", maxsplit=1)[0]
@@ -153,7 +151,13 @@ def test_packaged_acceptance_harness_guards_runtime_contract() -> None:
 
 
 def test_packaged_acceptance_checklist_preserves_release_boundary() -> None:
-    checklist = ACCEPTANCE_CHECKLIST.read_text(encoding="utf-8")
+    current = ACCEPTANCE_CHECKLIST.read_text(encoding="utf-8")
+    assert "# 0.6.2 Packaged Acceptance" in current
+    assert "**pending**" in current
+    assert "Preparing a Sandbox package does not mean executing it passed" in current
+    checklist = (
+        ACCEPTANCE_CHECKLIST.parent / "history" / "PACKAGED_ACCEPTANCE_THROUGH_0.6.1.md"
+    ).read_text(encoding="utf-8")
 
     assert "API v13 / 0.6.1 JA/EN/KO pilot source" in checklist
     assert "23DEEEF91EB7BF53C1D747242AF1A2037384D265F6EC46D696A8F0211470B31F" in checklist
@@ -185,7 +189,7 @@ def test_packaged_bilingual_harness_is_local_authenticated_and_bounded() -> None
     assert "X-Meeting-Intelligence-Token" in runner
     assert "token.{token}" in runner
     assert '"state_version": sequence_id + 1' in runner
-    assert '"backend_version": "0.6.1"' in runner
+    assert '"backend_version": RELEASE["version"]' in runner
     assert '"transcript" not in snapshot' in runner
     assert "remove_acceptance_tree" in runner
     assert "assert_context_cache_encrypted" in runner
@@ -219,8 +223,6 @@ def test_packaged_bilingual_harness_skips_initial_reset_snapshot() -> None:
         async def recv(self) -> str:
             return next(self.messages)
 
-    snapshot = asyncio.run(
-        receive_snapshot_at_least(FakeWebSocket(), expected_version=1)
-    )
+    snapshot = asyncio.run(receive_snapshot_at_least(FakeWebSocket(), expected_version=1))
 
     assert snapshot["version"] == 1

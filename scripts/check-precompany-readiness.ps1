@@ -5,6 +5,7 @@ param(
     [string]$CargoTargetRoot = "$env:CARGO_TARGET_DIR",
     [string]$EvidenceRoot = $env:MEETING_INTELLIGENCE_EVIDENCE_ROOT,
     [string]$SandboxPackage,
+    [string]$AcceptanceManifest,
     [string]$OutputPath,
     [switch]$Force
 )
@@ -13,13 +14,15 @@ $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
 $assistantRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+. (Join-Path $PSScriptRoot "release-metadata.ps1")
+$release = Get-ReleaseMetadata -Root $assistantRoot
 if ([string]::IsNullOrWhiteSpace($DesktopRoot)) {
     $DesktopRoot = [IO.Path]::GetFullPath(
         (Join-Path $assistantRoot "apps\desktop")
     )
 }
 if ([string]::IsNullOrWhiteSpace($CargoTargetRoot)) {
-    $CargoTargetRoot = Join-Path $env:LOCALAPPDATA "meeting-intelligence\cargo-target"
+    $CargoTargetRoot = $release.default_cargo_target
 }
 $checks = [System.Collections.Generic.List[object]]::new()
 
@@ -44,8 +47,8 @@ function Get-SourceCommit {
 
 function Test-TrackedSourceClean {
     param([string]$Repository)
-    $status = (& git -C $Repository status --porcelain=v1 --untracked-files=no 2>$null | Out-String).Trim()
-    $LASTEXITCODE -eq 0 -and [string]::IsNullOrWhiteSpace($status)
+    $status = Get-ReleaseSourceStatus -Root $Repository
+    [string]::IsNullOrWhiteSpace($status)
 }
 
 function Read-JsonFile {
@@ -119,34 +122,23 @@ try {
     Add-ReadinessCheck "clean_sources" "action_required" "The release monorepo and source commit must be available."
 }
 
-$assistantVersionSource = Get-Content -LiteralPath (Join-Path $assistantRoot "apps\api\pyproject.toml") -Raw
-$desktopPackagePath = Join-Path $DesktopRoot "frontend\package.json"
-$desktopTauriPath = Join-Path $DesktopRoot "frontend\src-tauri\tauri.conf.json"
 try {
-    $desktopPackage = Read-JsonFile $desktopPackagePath
-    $desktopTauri = Read-JsonFile $desktopTauriPath
-    if (
-        $assistantVersionSource -match '(?m)^version = "0\.6\.0"$' -and
-        $desktopPackage.version -eq "0.6.1" -and
-        $desktopTauri.version -eq "0.6.1"
-    ) {
-        Add-ReadinessCheck "version_alignment" "pass" "Monorepo components are aligned at 0.6.1 / compatibility API v13."
-    } else {
-        Add-ReadinessCheck "version_alignment" "action_required" "Align all release versions at 0.6.1 before rebuilding."
-    }
+    Assert-ReleaseVersions -Root $assistantRoot -Release $release
+    Add-ReadinessCheck "version_alignment" "pass" "Monorepo components match release $($release.version) / API v$($release.api_version)."
 } catch {
     Add-ReadinessCheck "version_alignment" "action_required" "Release version alignment could not be verified."
 }
 
-$backendPath = Join-Path $assistantRoot "dist\backend-sidecar\meeting-intelligence-backend-x86_64-pc-windows-msvc.exe"
+$backendPath = Join-Path $assistantRoot "dist\backend-sidecar\$($release.backend_artifact)"
 $backendProvenancePath = Join-Path $assistantRoot "dist\backend-sidecar\build-provenance.json"
 $backendRecord = Get-FileRecord $backendPath
 try {
     $backendProvenance = Read-JsonFile $backendProvenancePath
+    Assert-BackendProvenance -Root $assistantRoot -Release $release -Provenance $backendProvenance -SourceCommit $sourceCommit -ArtifactHash $backendRecord.sha256
     if (
         $null -ne $backendRecord -and
         $backendProvenance.api_version -eq 13 -and
-        $backendProvenance.backend_version -eq "0.6.1" -and
+        $backendProvenance.backend_version -eq $release.version -and
         $backendProvenance.source_commit -eq $sourceCommit -and
         $backendProvenance.artifact.sha256 -eq $backendRecord.sha256
     ) {
@@ -158,18 +150,26 @@ try {
     Add-ReadinessCheck "backend_provenance" "action_required" "Backend artifact provenance is missing or invalid."
 }
 
-$nsisPath = Join-Path $CargoTargetRoot "release\bundle\nsis\Meeting Intelligence Copilot_0.6.1_x64-setup.exe"
-$msiPath = Join-Path $CargoTargetRoot "release\bundle\msi\Meeting Intelligence Copilot_0.6.1_x64_en-US.msi"
-$desktopExePath = Join-Path $CargoTargetRoot "release\meeting-intelligence-desktop.exe"
+$nsisPath = Join-Path $CargoTargetRoot "release\bundle\nsis\$($release.product_name)_$($release.version)_x64-setup.exe"
+$msiPath = Join-Path $CargoTargetRoot "release\bundle\msi\$($release.product_name)_$($release.version)_x64_en-US.msi"
+$desktopExePath = Join-Path $CargoTargetRoot "release\$($release.desktop_artifact)"
 $bundleProvenancePath = Join-Path $CargoTargetRoot "release\bundle\precompany-build-provenance.json"
 $nsisRecord = Get-FileRecord $nsisPath
 $msiRecord = Get-FileRecord $msiPath
 $desktopRecord = Get-FileRecord $desktopExePath
 try {
     $bundleProvenance = Read-JsonFile $bundleProvenancePath
+    $expectedInputs = Get-ReleaseInputHashes -Root $assistantRoot
+    foreach ($key in $expectedInputs.Keys) {
+        if ($bundleProvenance.release_inputs.PSObject.Properties[$key].Value -ne $expectedInputs[$key]) {
+            throw "Installer input hashes do not match."
+        }
+    }
     $artifactHashes = @($bundleProvenance.artifacts | ForEach-Object { $_.sha256 })
     if (
         $null -ne $nsisRecord -and $null -ne $msiRecord -and $null -ne $desktopRecord -and
+        $bundleProvenance.version -eq $release.version -and
+        $bundleProvenance.compatibility_api_version -eq $release.api_version -and
         $bundleProvenance.source_commit -eq $sourceCommit -and
         $bundleProvenance.backend_source_commit -eq $sourceCommit -and
         $bundleProvenance.backend_sha256 -eq $backendRecord.sha256 -and
@@ -219,6 +219,29 @@ if ($matchingSandbox) {
 }
 
 $artifactRecords = @($backendRecord, $desktopRecord, $nsisRecord, $msiRecord) | Where-Object { $null -ne $_ }
+try {
+    if ([string]::IsNullOrWhiteSpace($AcceptanceManifest)) { throw "Acceptance manifest required" }
+    $acceptance = Read-JsonFile $AcceptanceManifest
+    if ($acceptance.schema_version -ne 1 -or
+        $acceptance.source_commit -ne $sourceCommit -or
+        $acceptance.product_version -ne $release.version -or
+        $acceptance.compatibility_api_version -ne $release.api_version -or
+        $acceptance.engineering_accepted -ne $true -or
+        $acceptance.artifacts.backend -ne $backendRecord.sha256 -or
+        $acceptance.artifacts.desktop -ne $desktopRecord.sha256 -or
+        $acceptance.artifacts.nsis -ne $nsisRecord.sha256 -or
+        $acceptance.artifacts.msi -ne $msiRecord.sha256) { throw "Acceptance mismatch" }
+    foreach ($gate in @('source_checks', 'desktop_checks', 'rust_tests', 'packaged_backend',
+        'fault_10000', 'soak_four_hour', 'routed_audio_108', 'platform_paths_24',
+        'sandbox_lifecycle', 'accessibility', 'dependency_audit', 'secret_scan', 'defender')) {
+        if ($acceptance.gates.PSObject.Properties[$gate].Value.status -ne 'passed') {
+            throw "Acceptance gate incomplete"
+        }
+    }
+    Add-ReadinessCheck "candidate_acceptance" "pass" "The aggregate acceptance manifest matches this candidate."
+} catch {
+    Add-ReadinessCheck "candidate_acceptance" "action_required" "Complete the exact-candidate lifecycle, audio, reliability, accessibility, and security acceptance manifest."
+}
 if ($artifactRecords.Count -eq 4 -and @($artifactRecords | Where-Object { $_.authenticode -ne "Valid" }).Count -eq 0) {
     Add-ReadinessCheck "organization_signing" "pass" "All executable release artifacts have valid Authenticode signatures."
 } elseif (@($artifactRecords | Where-Object { $_.authenticode -notin @("Valid", "NotSigned") }).Count -gt 0) {
@@ -229,17 +252,17 @@ if ($artifactRecords.Count -eq 4 -and @($artifactRecords | Where-Object { $_.aut
 
 Add-ReadinessCheck "recording_policy" "pending_company" "Confirm company recording, consent, retention, and approved-device policy."
 Add-ReadinessCheck "microsoft_365_acceptance" "pending_company" "Configure delegated OneDrive and selected SharePoint access in the real tenant."
-Add-ReadinessCheck "netsuite_acceptance" "pending_company" "Configure a sandbox NetSuite read-only integration role, certificate, mappings, and custom review-record target."
+Add-ReadinessCheck "netsuite_acceptance" "pending_company" "Validate sandbox NetSuite read-only permissions, certificate, selected records, and mappings. Direct writes remain disabled."
 Add-ReadinessCheck "teams_rsc_acceptance" "pending_company" "Install the approved Teams app and verify resource-specific consent for each selected team, channel, and meeting chat."
-Add-ReadinessCheck "slack_acceptance" "pending_company" "Approve the internal Slack app, rotating PKCE user search, selected channels, and separately enrolled bot posting credentials."
+Add-ReadinessCheck "slack_acceptance" "pending_company" "Approve read-only Slack search for explicitly selected channels. Do not enroll posting credentials."
 Add-ReadinessCheck "human_pilot" "pending_company" "Complete the consented 5-10 user, two-week JA/EN/KO pilot before team promotion."
 
 $actionCount = @($checks | Where-Object { $_.state -eq "action_required" }).Count
 $pendingCount = @($checks | Where-Object { $_.state -eq "pending_company" }).Count
 $report = [ordered]@{
     schema_version = 1
-    product_version = "0.6.1"
-    compatibility_api_version = 13
+    product_version = $release.version
+    compatibility_api_version = $release.api_version
     source_commit = $sourceCommit
     precompany_ready = $actionCount -eq 0
     ready_for_company_data = $actionCount -eq 0 -and $pendingCount -eq 0

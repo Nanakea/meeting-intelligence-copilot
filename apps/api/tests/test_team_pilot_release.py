@@ -120,7 +120,7 @@ def test_final_manifest_generator_is_signed_and_fail_closed() -> None:
         encoding="utf-8"
     )
     assert '"signed_ja_en_team_pilot"' in source
-    assert '"product_version": "0.6.1"' in source
+    assert '"product_version": VERSION' in source
     assert 'value.get("Status") != "Valid"' in source
     assert "require_complete=True, require_all_passed=True" in source
     assert "validate_connector_acceptance" in source

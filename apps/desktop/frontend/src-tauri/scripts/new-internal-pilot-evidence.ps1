@@ -229,7 +229,7 @@ try {
     $manifest = [ordered]@{
         schema_version = 2
         candidate_kind = "unsigned_synthetic_tested_internal_pilot"
-        product_version = "0.6.1"
+        product_version = (Get-Content -LiteralPath (Join-Path $AssistantRepository 'apps/api/app/release.json') -Raw | ConvertFrom-Json).version
         compatibility_api_version = 13
         supported_languages = @("ja", "en", "ko")
         korean_acceptance = "synthetic_only"

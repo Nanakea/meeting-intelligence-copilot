@@ -16,6 +16,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "apps" / "api"))
 
 from app.evals.pilot_acceptance import validate_acceptance_ledger  # noqa: E402
+from app.release import API_VERSION, VERSION  # noqa: E402
 from app.evals.team_pilot_release import (  # noqa: E402
     validate_connector_acceptance,
     validate_human_pilot_summary,
@@ -217,8 +218,8 @@ def main() -> int:
     manifest = {
         "schema_version": 2,
         "candidate_kind": "signed_ja_en_team_pilot",
-        "product_version": "0.6.1",
-        "compatibility_api_version": 13,
+        "product_version": VERSION,
+        "compatibility_api_version": API_VERSION,
         "generated_at_utc": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "public_distribution_approved": False,
         "source": {

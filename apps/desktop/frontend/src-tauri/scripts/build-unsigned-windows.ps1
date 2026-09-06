@@ -15,6 +15,14 @@ $tauriRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
 $frontendRoot = (Resolve-Path -LiteralPath (Join-Path $tauriRoot "..")).Path
 $workspaceRoot = (Resolve-Path -LiteralPath (Join-Path $frontendRoot "..")).Path
 $expectedWorkspaceRoot = (Resolve-Path -LiteralPath (Join-Path $tauriRoot "..\..")).Path
+$repoRoot = (Resolve-Path -LiteralPath (Join-Path $workspaceRoot "../..")).Path
+. (Join-Path $repoRoot "scripts/release-metadata.ps1")
+$release = Get-ReleaseMetadata -Root $repoRoot
+Assert-ReleaseVersions -Root $repoRoot -Release $release
+# Set this before invoking Cargo, not merely when locating the resulting artifacts.
+if ([string]::IsNullOrWhiteSpace($env:CARGO_TARGET_DIR)) {
+    $env:CARGO_TARGET_DIR = $release.default_cargo_target
+}
 if ($workspaceRoot -ne $expectedWorkspaceRoot) {
     throw "Could not resolve the Meeting Intelligence Copilot workspace safely."
 }
@@ -25,6 +33,7 @@ $requiredSidecars = @(
     "meeting-intelligence-backend-x86_64-pc-windows-msvc.exe"
 )
 $binaryRoot = Join-Path $tauriRoot "binaries"
+$initialSidecarHashes = @{}
 foreach ($name in $requiredSidecars) {
     $path = Join-Path $binaryRoot $name
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
@@ -33,6 +42,7 @@ foreach ($name in $requiredSidecars) {
     if ((Get-Item -LiteralPath $path).Length -le 0) {
         throw "Required sidecar is empty: $name"
     }
+    $initialSidecarHashes[$name] = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash
 }
 
 if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
@@ -41,7 +51,7 @@ if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     throw "Git is required to bind the installer to reviewed source."
 }
-$worktreeStatus = (& git -C $workspaceRoot status --porcelain=v1 --untracked-files=all | Out-String).Trim()
+$worktreeStatus = Get-ReleaseSourceStatus -Root $repoRoot
 if ($LASTEXITCODE -ne 0) {
     throw "Product source status could not be inspected."
 }
@@ -49,6 +59,7 @@ if (-not [string]::IsNullOrWhiteSpace($worktreeStatus)) {
     throw "Refusing to build Windows installers from a dirty product worktree."
 }
 $sourceCommit = (& git -C $workspaceRoot rev-parse HEAD).Trim()
+$releaseInputHashes = Get-ReleaseInputHashes -Root $repoRoot
 $backendProvenancePath = Join-Path $binaryRoot "meeting-intelligence-backend-provenance.json"
 if (-not (Test-Path -LiteralPath $backendProvenancePath -PathType Leaf)) {
     throw "Reviewed Meeting Intelligence backend provenance is missing."
@@ -56,14 +67,7 @@ if (-not (Test-Path -LiteralPath $backendProvenancePath -PathType Leaf)) {
 $backendProvenance = Get-Content -LiteralPath $backendProvenancePath -Raw | ConvertFrom-Json
 $packagedBackendPath = Join-Path $binaryRoot "meeting-intelligence-backend-x86_64-pc-windows-msvc.exe"
 $packagedBackendHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $packagedBackendPath).Hash
-if (
-    $backendProvenance.schema_version -ne 1 -or
-    $backendProvenance.api_version -ne 13 -or
-    $backendProvenance.backend_version -ne "0.6.1" -or
-    $backendProvenance.artifact.sha256 -ne $packagedBackendHash
-) {
-    throw "Packaged Meeting Intelligence backend provenance is invalid."
-}
+Assert-BackendProvenance -Root $repoRoot -Release $release -Provenance $backendProvenance -SourceCommit $sourceCommit -ArtifactHash $packagedBackendHash
 
 $bundles = if ($Bundle -eq "both") { "nsis,msi" } else { $Bundle }
 $configPath = Join-Path $tauriRoot "tauri.unsigned.conf.json"
@@ -83,11 +87,12 @@ finally {
     Pop-Location
 }
 
-$targetRoot = if ([string]::IsNullOrWhiteSpace($env:CARGO_TARGET_DIR)) {
-    Join-Path $workspaceRoot "target"
-}
-else {
-    [System.IO.Path]::GetFullPath($env:CARGO_TARGET_DIR)
+$targetRoot = [System.IO.Path]::GetFullPath($env:CARGO_TARGET_DIR)
+Assert-ReleaseCheckout -Root $repoRoot -SourceCommit $sourceCommit
+foreach ($name in $requiredSidecars) {
+    if ((Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $binaryRoot $name)).Hash -ne $initialSidecarHashes[$name]) {
+        throw "Sidecar changed during the build; discard the unaccepted installers."
+    }
 }
 $bundleRoot = Join-Path $targetRoot "release\bundle"
 $extensions = if ($Bundle -eq "nsis") { @(".exe") } elseif ($Bundle -eq "msi") { @(".msi") } else { @(".exe", ".msi") }
@@ -150,8 +155,9 @@ $applicationRecord = [ordered]@{
 $provenance = [ordered]@{
     schema_version = 1
     product = "meeting-intelligence-copilot"
-    version = "0.6.1"
-    compatibility_api_version = 13
+    version = $release.version
+    compatibility_api_version = $release.api_version
+    release_inputs = $releaseInputHashes
     source_commit = $sourceCommit
     backend_source_commit = $backendProvenance.source_commit
     backend_sha256 = $backendProvenance.artifact.sha256

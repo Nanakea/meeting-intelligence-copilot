@@ -6,6 +6,9 @@ param(
 $ErrorActionPreference = "Stop"
 
 $repo = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+. (Join-Path $PSScriptRoot "release-metadata.ps1")
+$release = Get-ReleaseMetadata -Root $repo
+Assert-ReleaseVersions -Root $repo -Release $release
 $api = Join-Path $repo "apps\api"
 $python = Join-Path $api ".venv\Scripts\python.exe"
 $entryPoint = Join-Path $api "app\sidecar_main.py"
@@ -14,7 +17,7 @@ $packagingRequirements = Join-Path $api "requirements-packaging.txt"
 $distRoot = Join-Path $repo "dist\backend-sidecar"
 $workRoot = Join-Path $repo "tmp\pyinstaller\work"
 $specRoot = Join-Path $repo "tmp\pyinstaller\spec"
-$artifactName = "meeting-intelligence-backend-x86_64-pc-windows-msvc"
+$artifactName = [IO.Path]::GetFileNameWithoutExtension($release.backend_artifact)
 $artifact = Join-Path $distRoot "$artifactName.exe"
 
 $arguments = @(
@@ -27,6 +30,8 @@ $arguments = @(
     $artifactName,
     "--paths",
     $api,
+    "--add-data",
+    "$(Join-Path $api 'app/release.json');app",
     "--distpath",
     $distRoot,
     "--workpath",
@@ -47,16 +52,7 @@ if ($DryRun) {
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     throw "Git is required to prove the backend sidecar source revision."
 }
-$workspaceOnlyPaths = @(
-    ":(exclude).claude/**",
-    ":(exclude)apps/api/.claude/**",
-    ":(exclude)AGENTS.md",
-    ":(exclude)Plans.md"
-)
-$worktreeStatus = (
-    & git -C $repo status --porcelain=v1 --untracked-files=all -- "." @workspaceOnlyPaths |
-        Out-String
-).Trim()
+$worktreeStatus = Get-ReleaseSourceStatus -Root $repo
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to inspect the product worktree before packaging."
 }
@@ -112,6 +108,7 @@ $previousPythonHashSeed = [Environment]::GetEnvironmentVariable("PYTHONHASHSEED"
 $previousPythonUtf8 = [Environment]::GetEnvironmentVariable("PYTHONUTF8", "Process")
 $previousSourceDateEpoch = [Environment]::GetEnvironmentVariable("SOURCE_DATE_EPOCH", "Process")
 $sourceCommit = (& git -C $repo rev-parse HEAD).Trim()
+$releaseInputHashes = Get-ReleaseInputHashes -Root $repo
 $sourceDateEpoch = (& git -C $repo log -1 --format=%ct).Trim()
 try {
     [Environment]::SetEnvironmentVariable("PYTHONHASHSEED", "0", "Process")
@@ -131,6 +128,7 @@ if (-not (Test-Path $artifact)) {
     throw "PyInstaller completed without the expected artifact: $artifact"
 }
 
+Assert-ReleaseCheckout -Root $repo -SourceCommit $sourceCommit
 $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $artifact).Hash
 $size = (Get-Item -LiteralPath $artifact).Length
 $provenancePath = Join-Path $distRoot "build-provenance.json"
@@ -138,8 +136,9 @@ $provenanceTemporary = Join-Path $distRoot "build-provenance.$([Guid]::NewGuid()
 $provenance = [ordered]@{
     schema_version = 1
     product = "meeting-intelligence-copilot"
-    api_version = 13
-    backend_version = "0.6.1"
+    api_version = $release.api_version
+    backend_version = $release.version
+    release_inputs = $releaseInputHashes
     source_commit = $sourceCommit
     source_date_epoch = [long]$sourceDateEpoch
     python_version = (& $python -c "import platform; print(platform.python_version())").Trim()

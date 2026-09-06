@@ -35,6 +35,9 @@ if (-not (Test-Path $py)) {
 Push-Location $api
 try {
     Invoke-Step "api: ruff lint (incl. import-boundary)" { & $py -m ruff check . }
+    Invoke-Step "release: metadata and manifest tooling lint" {
+        & $py -m ruff check "$repo\scripts\check-tracked-secrets.py" "$repo\scripts\create-internal-candidate-manifest.py"
+    }
     Invoke-Step "api: pytest (contracts + WS + purity + schema)" { & $py -m pytest -q }
     Invoke-Step "api: Korean synthetic pilot quality report" {
         & $py "$repo\scripts\eval-korean-pilot-corpus.py"

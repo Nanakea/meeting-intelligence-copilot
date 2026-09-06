@@ -72,23 +72,59 @@ jobs:
         working-directory: apps/desktop/frontend
         run: pnpm exec tsc --noEmit
 
-      - name: Lint changed desktop integration surfaces
+      - name: Verify editor peer compatibility
         shell: pwsh
         working-directory: apps/desktop/frontend
-        run: >-
-          pnpm exec eslint
-          src/components/ContextConnectorSettings.tsx
-          src/components/IntelligencePanel/IntelligencePanel.tsx
-          src/components/About.tsx
-          src/app/layout.tsx
-          src/services/contextConnectorService.ts
-          src/services/intelligenceContracts.ts
-          tests/lib/intelligence-context-connectors.test.mjs
-          tests/lib/intelligence-integrations-v9.test.mjs
-          tests/lib/intelligence-transport.test.ts
-          --max-warnings 0
+        run: pnpm peers check
+
+      - name: Lint product surfaces and ratchet inherited warnings
+        shell: pwsh
+        working-directory: apps/desktop/frontend
+        run: pnpm lint:release
 
       - name: Build desktop frontend
         shell: pwsh
         working-directory: apps/desktop/frontend
         run: pnpm build
+
+      - name: Audit frontend dependencies
+        shell: pwsh
+        run: |
+          pnpm --dir apps/web audit --audit-level moderate
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          pnpm --dir apps/desktop/frontend audit --audit-level moderate
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Scan tracked source for credential patterns
+        shell: pwsh
+        run: apps/api/.venv/Scripts/python.exe scripts/check-tracked-secrets.py
+
+      - name: Audit locked Python dependencies in an isolated tool environment
+        shell: pwsh
+        run: |
+          python -m venv tmp/audit-tool
+          tmp/audit-tool/Scripts/python.exe -m pip install pip-audit==2.10.1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          tmp/audit-tool/Scripts/python.exe -m pip_audit --disable-pip --no-deps -r apps/api/requirements-dev.lock
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+  packaged-backend:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install reviewed packaging toolchain
+        shell: pwsh
+        run: |
+          python -m venv apps/api/.venv
+          apps/api/.venv/Scripts/python.exe -m pip install --require-hashes -r apps/api/requirements-dev.lock -r apps/api/requirements-packaging.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Build and exercise the real executable
+        shell: pwsh
+        run: |
+          ./scripts/build-backend-sidecar.ps1
+          ./scripts/test-backend-sidecar.ps1
+          ./scripts/run-packaged-acceptance.ps1

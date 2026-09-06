@@ -230,15 +230,15 @@ from app.domain.solution_thread import (
     SolutionThreadImpact,
     SolutionThreadImpactRequest,
 )
+from app.release import API_VERSION as BACKEND_API_VERSION
+from app.release import VERSION as BACKEND_VERSION
 from app.services.external_action_exports import render_external_action_export
 from app.services.issue_drafts import build_issue_draft
 from app.services.meeting_engine import MeetingEngine
 from app.services.state_service import initial_snapshot
 
 DEFAULT_REPLAY_SPEED = 0.0  # 0.0 = stream instantly (keeps WS tests quick).
-BACKEND_API_VERSION = 13
 BACKEND_PRODUCT = "meeting-intelligence-copilot"
-BACKEND_VERSION = "0.6.1"
 CAPABILITY_TOKEN_ENV = "MEETING_INTELLIGENCE_TOKEN"
 CAPABILITY_TOKEN_HEADER = "X-Meeting-Intelligence-Token"
 WEBSOCKET_PROTOCOL = "meeting-intelligence-v1"

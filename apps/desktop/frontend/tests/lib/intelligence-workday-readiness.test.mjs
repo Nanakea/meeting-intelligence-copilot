@@ -58,6 +58,18 @@ test('keeps backend unavailability nonblocking for local recording', () => {
   assert.equal(result.checks.find((check) => check.id === 'backend')?.state, 'warning');
 });
 
+test('unknown retention warns without claiming verification or blocking recording', () => {
+  for (const retention of [undefined, null, '', 'unexpected']) {
+    const result = evaluateWorkdayReadiness(preflight({ retention }));
+    assert.equal(result.checks.find((check) => check.id === 'retention').state, 'warning');
+    assert.equal(result.localRecordingReady, true);
+    assert.equal(result.hasWarnings, true);
+  }
+  for (const retention of ['seven_days', 'thirty_days', 'ninety_days', 'forever']) {
+    assert.equal(evaluateWorkdayReadiness(preflight({ retention })).checks.at(-1).state, 'pass');
+  }
+});
+
 test('requires local STT, both audio paths, and adequate known storage', () => {
   const result = evaluateWorkdayReadiness(preflight({
     localSttReady: false,
@@ -105,7 +117,7 @@ test('release builds refuse dirty source and bind backend provenance', async () 
     readFile(new URL('../../../scripts/setup-meetily-sidecars.ps1', import.meta.url), 'utf8'),
   ]);
 
-  assert.match(buildScript, /status --porcelain=v1 --untracked-files=all/);
+  assert.match(buildScript, /Get-ReleaseSourceStatus -Root \$repoRoot/);
   assert.match(buildScript, /Refusing to build Windows installers from a dirty product worktree/);
   assert.match(buildScript, /precompany-build-provenance\.json/);
   assert.match(buildScript, /backend_source_commit/);

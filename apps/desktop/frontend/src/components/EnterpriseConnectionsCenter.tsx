@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 import { Cable, KeyRound, RefreshCw, ShieldOff, Trash2 } from 'lucide-react';
+import { ConnectorReadiness, connectorReadinessCopy } from './ConnectorReadiness';
 
 import {
   completeEnterpriseAuthorization,
@@ -47,12 +48,7 @@ const DEFAULT_ORIGINS: Partial<Record<EnterpriseKind, string>> = {
 };
 
 function safeHealthCopy(health: ConnectorHealth): string {
-  if (health.phase === 'ready') return 'Authorized and ready';
-  if (health.phase === 'auth_required') return 'Authorization or lease renewal required';
-  if (health.phase === 'degraded') return 'Partially available; meeting intelligence is unaffected';
-  if (health.phase === 'connecting') return 'Synchronizing selected sources';
-  if (health.phase === 'unavailable') return 'Unavailable; use meeting-only intelligence';
-  return 'Not connected';
+  return connectorReadinessCopy(health);
 }
 
 export function buildEnterpriseConnectorDefinition(values: {
@@ -305,7 +301,10 @@ export function EnterpriseConnectionsCenter() {
             {enterpriseConnectors.map((connector) => <option key={connector.connector_id} value={connector.connector_id}>{connector.display_name}</option>)}
           </select>
         </label>
-        {selectedHealth && <p className="mt-2 text-sm text-slate-700" role="status">{safeHealthCopy(selectedHealth)} · {selectedHealth.scope_summary ?? 'No sources selected'}</p>}
+        {selectedHealth && <>
+          <p className="mt-2 text-sm text-slate-700">{safeHealthCopy(selectedHealth)} · {selectedHealth.scope_summary ?? 'No sources selected'}</p>
+          <ConnectorReadiness health={selectedHealth} />
+        </>}
         <div className="mt-3 flex flex-wrap gap-2">
           <button type="button" onClick={() => void authorize(selectedConnector)} className="inline-flex items-center gap-2 rounded-lg border border-teal-700 px-3 py-2 text-sm font-semibold text-teal-900"><KeyRound className="h-4 w-4" aria-hidden="true" />Authorize</button>
           <button type="button" onClick={() => void refreshEnterpriseLease(selectedConnector).then(refresh).catch(() => setStatus('error'))} className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-800"><RefreshCw className="h-4 w-4" aria-hidden="true" />Refresh lease</button>

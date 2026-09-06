@@ -1,6 +1,6 @@
 {
     "name": "meeting-intelligence-desktop",
-    "version": "0.6.1",
+    "version": "0.6.2",
     "private": true,
     "main": "electron/main.js",
     "scripts": {
@@ -26,7 +26,7 @@
         "tauri:build:openblas": "tauri build -- --features openblas",
         "tauri:build:hipblas": "tauri build -- --features hipblas",
         "test": "pnpm run test:intelligence && pnpm run test:ui && pnpm run test:transport && pnpm run test:recording && pnpm run test:soak && pnpm run test:blocknote",
-        "test:blocknote": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/lib/blocknote-markdown.test.ts",
+        "test:blocknote": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/lib/blocknote-markdown.test.ts tests/lib/editor-peers.test.mjs",
         "test:intelligence": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/lib/intelligence-*.test.mjs",
         "test:ui": "vitest run",
         "test:transport": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/lib/intelligence-transport.test.ts tests/lib/issue-draft-review.test.ts",
@@ -34,6 +34,7 @@
         "test:soak": "node --test tests/lib/meeting-intelligence-soak.test.mjs",
         "pilot:soak": "node scripts/meeting-intelligence-soak.mjs",
         "lint": "eslint src tests",
+        "lint:release": "node scripts/lint-release.mjs",
         "lint:all": "eslint ."
     },
     "dependencies": {
@@ -85,6 +86,7 @@
     "devDependencies": {
         "@eslint/eslintrc": "3.3.1",
         "@tailwindcss/typography": "^0.5.15",
+        "@tailwindcss/postcss": "4.3.3",
         "@tauri-apps/cli": "^2.1.0",
         "@testing-library/jest-dom": "^7.0.1",
         "@testing-library/react": "^16.3.3",
@@ -99,7 +101,7 @@
         "eslint-config-next": "15.5.21",
         "jsdom": "^30.0.1",
         "postcss": "^8",
-        "tailwindcss": "^3.4.1",
+        "tailwindcss": "4.3.3",
         "typescript": "^5.7.2",
         "vitest": "^4.1.11",
         "wait-on": "^7.2.0"
